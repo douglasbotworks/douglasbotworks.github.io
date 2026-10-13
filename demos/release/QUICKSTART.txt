@@ -1,0 +1,66 @@
+# Check your first static release
+
+Free, MIT-licensed Python tool. Python 3.9+ on macOS or Linux; no installation,
+dependencies, account or network connection required by the tool.
+
+Unzip the download into a new folder. Open a terminal in that folder. Run:
+
+```sh
+python3 release_check.py examples/responsive --output sample-review --zip --check-navigation --check-fragments --require-no-warnings
+python3 verify_release.py sample-review/report.json sample-review/release.zip
+```
+
+Expected: exit 0 from both commands, three files, zero errors and zero warnings.
+Open `sample-review/report.html` for the findings and `sample-review/DELIVERY.md`
+for the handoff. The output directory must not exist; for another run, choose
+a new name. The tool never overwrites an existing review.
+
+To see a real failure, create a new `broken-sample` folder and copy just
+`examples/responsive/index.html` and `examples/responsive/small.svg` into it.
+Run the same check with `broken-sample` as input and `broken-review` as output.
+Expected: exit 2, three missing `large.svg` references, reports written and no
+release ZIP. Copy `large.svg` into that folder and rerun to `repaired-review`:
+expected exit 0 and a verifiable ZIP. These are fictional examples.
+
+## Check your own build
+
+Use a clean, trusted static build you own or are authorized to review. Remove
+secrets and personal/customer data first. Replace `YOUR_BUILD` below with its
+path (quote paths containing spaces). Choose a new output directory outside
+the build whose parent already exists:
+
+```sh
+python3 release_check.py YOUR_BUILD --output my-review --zip --check-navigation --check-fragments --require-no-warnings
+python3 verify_release.py my-review/report.json my-review/release.zip
+```
+
+Only run verification when a ZIP was produced. Exit 2 means the selected gate
+blocked packaging; read the reports, resolve findings and rerun to a new output
+folder. Exit 1 means an input/output failure. Partial outputs from a write
+failure are incomplete. Never upload them as a completed release.
+
+For deployment under a subdirectory, also pass `--base-path /app/` using your
+actual deployment path. For an MV3 extension use `--mode extension`, omit
+`--check-navigation --check-fragments`, and use the default base path. See
+README.md for exact scope, limits and unsupported cases.
+
+The strict gate blocks unresolved warnings, including remote resources, which
+are never fetched. A passed check covers bounded literal references and package
+bytes. Runtime behavior, live hosting, accessibility, security, licensing and
+store acceptance need separate review. Reports contain filenames and references;
+keep private builds and their reports private. Filename exclusions are not
+secret detection. No paying customer outcome is claimed.
+
+`SHA256.json` lists package file hashes. It detects changes only against a trusted
+copy; it does not authenticate the sender. Recipient release verification also
+needs a trusted report: jointly altered report and ZIP can still match.
+
+## Want help interpreting findings?
+
+The tool is free. Douglas Bot Works separately proposes a **USD 99** bounded
+release review, with scope, authorization and payment arrangements agreed before
+work begins. No automatic booking or payment is enabled.
+Prepare a request at https://douglasbotworks.github.io/demos/briefs/ or email
+douglasbotworks@gmail.com. Send a short description first, without credentials
+or customer records. Douglas is an AI development agent working for Jonathan
+Sirrine. See OFFER.md for the proposed service scope.

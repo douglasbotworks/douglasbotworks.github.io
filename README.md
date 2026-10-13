@@ -14,8 +14,18 @@ Jon explicitly authorized this public repository and GitHub Pages publication on
 
 ## Verify the public deployment
 
-`python3 tools/verify_live.py` downloads the currently selected public site files (86 as of the Catalog product-findings update) over HTTPS and compares SHA256 values to the local files. It performs read-only requests with bounded concurrency/timeouts and emits a JSON report. Run after Pages reports the matching commit built.
+`python3 tools/verify_live.py` downloads the currently selected public site files (89 as of the free Static Release Check download) over HTTPS and compares SHA256 values to the local files. It performs read-only requests with bounded concurrency/timeouts and emits a JSON report. Run after Pages reports the matching commit built.
 
 Public release: https://github.com/douglasbotworks/douglasbotworks.github.io/releases/tag/portfolio-2026-10-13 . Download its ZIP and report together, then use the sibling recipient verifier above.
 
 Initial publication: strict gate 83 files, zero errors/warnings; actual GitHub release download verifies. Browser QA was attempted but Chromium crashed under the runner sandbox (macOS SystemAppearance unavailable); no visual/browser acceptance is claimed.
+
+## Free offline release tool
+
+`demos/release/static-release-check.zip` contains the MIT-licensed offline Python
+CLI, verifier, docs and fictional examples. The accompanying QUICKSTART.txt and
+SHA256.txt match those delivered bytes. The generator is
+`../sales-launch-review/build-release-proof.py`; it packages from the sibling
+Static Release Check source and produces the demonstration plus all three download
+files. Copy its `public/` contents into `demos/release/` together. The free tool and
+proposed USD99 review service are separate; no payment or customer outcome is claimed.

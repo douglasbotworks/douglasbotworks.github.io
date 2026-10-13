@@ -1,0 +1,35 @@
+{
+  "format": "catalog-product-findings",
+  "version": 1,
+  "scope": "Exact Handle spellings with findings only. Counts overlap and are not risk scores. Grouped image and option findings appear once under each participating exact spelling. Renamed Handles appear under both spellings. Global warnings, headers, columns and ambiguous SKUs require the full report. Handles and counts may be commercially sensitive.",
+  "products": [
+    {
+      "handle": "sample-mug",
+      "changedCells": 0,
+      "blankedCells": 0,
+      "addedVariants": 0,
+      "absentVariants": 0,
+      "packedSizeIssues": 0,
+      "imageChanges": 1,
+      "optionChanges": 0,
+      "optionValueChanges": 0,
+      "handleChanges": 0,
+      "duplicateIdentities": 0,
+      "orphanImages": 0
+    },
+    {
+      "handle": "sample-shirt",
+      "changedCells": 1,
+      "blankedCells": 1,
+      "addedVariants": 0,
+      "absentVariants": 1,
+      "packedSizeIssues": 0,
+      "imageChanges": 0,
+      "optionChanges": 1,
+      "optionValueChanges": 0,
+      "handleChanges": 0,
+      "duplicateIdentities": 0,
+      "orphanImages": 0
+    }
+  ]
+}

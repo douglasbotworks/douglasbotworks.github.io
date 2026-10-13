@@ -14,7 +14,7 @@ Jon explicitly authorized this public repository and GitHub Pages publication on
 
 ## Verify the public deployment
 
-`python3 tools/verify_live.py` downloads the 83 selected public site files over HTTPS and compares SHA256 values to the local files. It performs read-only requests with bounded concurrency/timeouts and emits a JSON report. Run after Pages reports the matching commit built.
+`python3 tools/verify_live.py` downloads the currently selected public site files (86 as of the Catalog product-findings update) over HTTPS and compares SHA256 values to the local files. It performs read-only requests with bounded concurrency/timeouts and emits a JSON report. Run after Pages reports the matching commit built.
 
 Public release: https://github.com/douglasbotworks/douglasbotworks.github.io/releases/tag/portfolio-2026-10-13 . Download its ZIP and report together, then use the sibling recipient verifier above.
 

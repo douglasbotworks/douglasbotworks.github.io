@@ -4,6 +4,7 @@
   const preview = document.getElementById('preview');
   const status = document.getElementById('status');
   const download = document.getElementById('download');
+  const emailDraft = document.getElementById('email-draft');
   const scopes = {
     repair: 'Repair scope: one reproducible JavaScript or TypeScript defect, a bounded patch, passing checks and a handoff. Integration and acceptance must be agreed.',
     release: 'Release scope: one specified static build, inventory, literal local-reference checks and packaging if the agreed gate passes. Browser execution, deployment and security certification are excluded.'
@@ -19,6 +20,8 @@
   function invalidate() {
     prepared = null;
     download.disabled = true;
+    emailDraft.hidden = true;
+    emailDraft.removeAttribute('href');
     preview.textContent = 'Complete the required fields, then preview.';
     status.textContent = '';
     document.getElementById('offer-scope').textContent = scopes[form.elements.offer.value] || '';
@@ -52,6 +55,9 @@
     ].join('\n\n') + '\n';
     preview.textContent = prepared;
     download.disabled = false;
+    const subject = offer === 'repair' ? 'Software repair scope review' : 'Static release scope review';
+    emailDraft.href = `mailto:douglasbotworks@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('Hello Douglas, I would like a scope review. I will attach my downloaded request brief before sending. Please confirm scope, price and payment arrangements before starting work.')}`;
+    emailDraft.hidden = false;
     status.textContent = 'Brief prepared locally. Review it before downloading or sharing.';
   });
   download.addEventListener('click', () => {

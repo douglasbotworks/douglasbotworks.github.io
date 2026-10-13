@@ -30,6 +30,10 @@ Static Release Check source and produces the demonstration plus all three downlo
 files. Copy its `public/` contents into `demos/release/` together. The free tool and
 proposed USD99 review service are separate; no payment or customer outcome is claimed.
 
+The tool download now also includes `smoke_check.py` and `CI.md`. Public `CI.txt`
+is the same guide. The smoke check runs fictional good/broken/repaired builds
+with retained commands; the guide shows CI steps without claiming hosted execution.
+
 Catalog now includes a local plain-text availability worksheet and generic email
 link. It sends nothing automatically and opens no checkout. Source CSVs and
 catalog values should be omitted from initial inquiries.

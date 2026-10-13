@@ -1,0 +1,75 @@
+# Gate a static build in CI
+
+Keep an unpacked, reviewed tool copy in `tools/static-release-check/` in your own
+repository. Commit it with your project instead of downloading mutable tool
+bytes during each build. The tool needs Python 3.9+ and has no dependencies.
+
+First check the downloaded installation locally:
+
+```sh
+python3 tools/static-release-check/smoke_check.py smoke-evidence
+```
+
+Choose a new output directory each time. This executes the real checker and
+verifier: a complete fictional build passes, removing an image blocks packaging
+with three findings, and restoring it produces a verified ZIP. `commands.json`
+retains the actual commands and outcomes; `RESULT.txt` is written only on success.
+Failed runs may leave partial evidence. This is an installation smoke check,
+not a browser test or a complete test suite.
+
+After your ordinary build command produces `dist/`, add these shell commands to
+your CI job. They work locally too, when the output parent exists:
+
+```sh
+python3 tools/static-release-check/release_check.py dist --output release-review --zip --check-navigation --check-fragments --require-no-warnings
+python3 tools/static-release-check/verify_release.py release-review/report.json release-review/release.zip
+```
+
+Run the verifier only if the first command succeeds. Use CI's fail-on-error
+behavior; do not add `continue-on-error`, `|| true`, or deploy after a failed
+gate. Exit 2 leaves reports but no ZIP; exit 1 indicates an input/output failure.
+The output must be fresh and outside `dist/`. For reusable workspaces choose a
+unique run directory rather than deleting an earlier review. For deployment at
+`/app/`, add `--base-path /app/`. Strict mode also blocks remote-resource warnings;
+review your build's expected scope before adopting it.
+
+## GitHub.com Actions step example
+
+Insert these steps **after checkout, Python setup and your project's build** in
+an existing job. The example does not install or build your project. GitHub's
+Ubuntu runners have Python, but use your existing Python setup to select a
+supported version explicitly. A fresh checkout makes `release-review` new.
+
+```yaml
+- name: Check static release
+  run: python3 tools/static-release-check/release_check.py dist --output release-review --zip --check-navigation --check-fragments --require-no-warnings
+- name: Verify packaged bytes
+  run: python3 tools/static-release-check/verify_release.py release-review/report.json release-review/release.zip
+- name: Retain findings even when the gate fails
+  if: ${{ !cancelled() }}
+  uses: actions/upload-artifact@v4
+  with:
+    name: static-release-review
+    path: release-review/
+    if-no-files-found: warn
+    retention-days: 7
+```
+
+Use job-level `permissions: contents: read` when no other operation needs write
+access. Review and pin third-party actions according to your repository policy.
+The artifact-upload step preserves findings without turning a failed check into
+success. Keep deployment steps under their normal success condition. A retained
+artifact is not evidence that packaging passed. GitHub Actions consumes your
+account's runner/storage allowances; check its billing settings before enabling.
+This example is for GitHub.com; upload-artifact v4 does not support GitHub
+Enterprise Server. No hosted workflow execution is claimed for this guide.
+
+Official references: [workflow syntax and conditions](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax),
+[artifact retention](https://docs.github.com/en/actions/tutorials/store-and-share-data),
+[upload-artifact v4](https://github.com/actions/upload-artifact/tree/v4).
+
+The checker makes no network requests. GitHub's artifact step uploads your
+reports and ZIP to GitHub: use only sanitized builds and authorized repositories.
+Reports contain filenames and references. A passing gate covers bounded literal
+references and byte consistency, not runtime behavior, security, accessibility,
+license rights or successful hosting. See README.md for exact limits.

@@ -24,6 +24,11 @@ expected exit 0 and a verifiable ZIP. These are fictional examples.
 
 ## Check your own build
 
+For one-command good/broken/repaired installation evidence, run
+`python3 smoke_check.py smoke-evidence` with a new output folder.
+See [CI.md](CI.md) for build-gate commands and a GitHub Actions step example.
+The smoke check executes fictional files locally; it does not launch a browser.
+
 Use a clean, trusted static build you own or are authorized to review. Remove
 secrets and personal/customer data first. Replace `YOUR_BUILD` below with its
 path (quote paths containing spaces). Choose a new output directory outside

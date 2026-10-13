@@ -46,6 +46,9 @@
   "optionCombinationDifferences": [
     {
       "handle": "sample-shirt",
+      "handles": [
+        "sample-shirt"
+      ],
       "original": 2,
       "proposed": 1,
       "proposedHandle": "sample-shirt",
@@ -84,6 +87,9 @@
   "imageContinuationChanges": [
     {
       "handle": "sample-mug",
+      "handles": [
+        "sample-mug"
+      ],
       "originalRows": [
         3
       ],
@@ -92,6 +98,7 @@
       ],
       "originalImages": [
         {
+          "handle": "sample-mug",
           "url": "https://example.invalid/mug-side.jpg",
           "position": "2",
           "altText": "Side of blue mug",
@@ -100,6 +107,7 @@
       ],
       "proposedImages": [
         {
+          "handle": "sample-mug",
           "url": "https://example.invalid/mug-side.jpg",
           "position": "2",
           "altText": "Side profile of blue mug",

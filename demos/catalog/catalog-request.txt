@@ -1,0 +1,18 @@
+CATALOG CHANGE GUARD — CLI AVAILABILITY REQUEST
+
+Complete this locally. Review before sending to douglasbotworks@gmail.com.
+This is an inquiry, not a booking, contract, payment or import approval.
+Do not include merchant CSVs, Handles, SKUs, cell values, credentials or customer records.
+
+Operating system and Node.js version:
+Approximate original/proposed file sizes and row counts:
+Single pair or independent batch (up to 25 pairs):
+Reports needed (HTML, JSON, counts, product findings, changed-cell CSV):
+Review workflow and intended internal users:
+Requested timeline for discussion:
+Questions about availability or license:
+
+The CLI is a local comparison aid, not complete Shopify schema validation.
+No Shopify connection or import is performed. A clean report cannot guarantee
+import safety. Reports with Handles or cell values must stay private.
+License, delivery, scope, source access and payment must be agreed separately.

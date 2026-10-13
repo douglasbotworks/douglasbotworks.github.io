@@ -1,0 +1,384 @@
+{
+  "synthetic": true,
+  "version": 1,
+  "nodeVersion": "v26.8.2",
+  "contractSha256": "669c602d28c8615572a28307d697fc6b238489fbc8e26f320f53c55bc17c98ce",
+  "verified": true,
+  "summary": {
+    "beforeFailures": 5,
+    "afterPasses": 8,
+    "caseCount": 8,
+    "executionErrors": false
+  },
+  "implementations": [
+    {
+      "role": "before",
+      "entrySha256": "2a9fb596d9969fc4e63ab08fee7a9f7c4c9e2401e10ab0177d889a0d09873cfb",
+      "cases": [
+        {
+          "name": "older success cannot overwrite newer result",
+          "expected": {
+            "value": {
+              "requestId": 2,
+              "status": "success",
+              "data": "new",
+              "error": null
+            }
+          },
+          "status": "failed",
+          "actual": {
+            "value": {
+              "requestId": 1,
+              "status": "success",
+              "data": "old",
+              "error": null
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "older error cannot replace newer loading",
+          "expected": {
+            "value": {
+              "requestId": 2,
+              "status": "loading",
+              "data": null,
+              "error": null
+            }
+          },
+          "status": "failed",
+          "actual": {
+            "value": {
+              "requestId": 1,
+              "status": "error",
+              "data": null,
+              "error": "old failure"
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "canceled request stays idle",
+          "expected": {
+            "value": {
+              "requestId": 1,
+              "status": "idle",
+              "data": null,
+              "error": null
+            }
+          },
+          "status": "failed",
+          "actual": {
+            "value": {
+              "requestId": 1,
+              "status": "success",
+              "data": "late",
+              "error": null
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "duplicate completion stays settled",
+          "expected": {
+            "value": {
+              "requestId": 1,
+              "status": "success",
+              "data": "first",
+              "error": null
+            }
+          },
+          "status": "failed",
+          "actual": {
+            "value": {
+              "requestId": 1,
+              "status": "error",
+              "data": null,
+              "error": "duplicate"
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "older start cannot rewind stream",
+          "expected": {
+            "value": {
+              "requestId": 2,
+              "status": "success",
+              "data": "new",
+              "error": null
+            }
+          },
+          "status": "failed",
+          "actual": {
+            "value": {
+              "requestId": 1,
+              "status": "loading",
+              "data": null,
+              "error": null
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "normal success",
+          "expected": {
+            "value": {
+              "requestId": 1,
+              "status": "success",
+              "data": {
+                "items": [
+                  "demo"
+                ]
+              },
+              "error": null
+            }
+          },
+          "status": "passed",
+          "actual": {
+            "value": {
+              "requestId": 1,
+              "status": "success",
+              "data": {
+                "items": [
+                  "demo"
+                ]
+              },
+              "error": null
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "normal error",
+          "expected": {
+            "value": {
+              "requestId": 1,
+              "status": "error",
+              "data": null,
+              "error": "synthetic outage"
+            }
+          },
+          "status": "passed",
+          "actual": {
+            "value": {
+              "requestId": 1,
+              "status": "error",
+              "data": null,
+              "error": "synthetic outage"
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "empty trace",
+          "expected": {
+            "value": {
+              "requestId": 0,
+              "status": "idle",
+              "data": null,
+              "error": null
+            }
+          },
+          "status": "passed",
+          "actual": {
+            "value": {
+              "requestId": 0,
+              "status": "idle",
+              "data": null,
+              "error": null
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    {
+      "role": "after",
+      "entrySha256": "55d6c4d86e75e90132db805907f1f77daf1badbe88e6bd79341c7dadf552f57a",
+      "cases": [
+        {
+          "name": "older success cannot overwrite newer result",
+          "expected": {
+            "value": {
+              "requestId": 2,
+              "status": "success",
+              "data": "new",
+              "error": null
+            }
+          },
+          "status": "passed",
+          "actual": {
+            "value": {
+              "requestId": 2,
+              "status": "success",
+              "data": "new",
+              "error": null
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "older error cannot replace newer loading",
+          "expected": {
+            "value": {
+              "requestId": 2,
+              "status": "loading",
+              "data": null,
+              "error": null
+            }
+          },
+          "status": "passed",
+          "actual": {
+            "value": {
+              "requestId": 2,
+              "status": "loading",
+              "data": null,
+              "error": null
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "canceled request stays idle",
+          "expected": {
+            "value": {
+              "requestId": 1,
+              "status": "idle",
+              "data": null,
+              "error": null
+            }
+          },
+          "status": "passed",
+          "actual": {
+            "value": {
+              "requestId": 1,
+              "status": "idle",
+              "data": null,
+              "error": null
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "duplicate completion stays settled",
+          "expected": {
+            "value": {
+              "requestId": 1,
+              "status": "success",
+              "data": "first",
+              "error": null
+            }
+          },
+          "status": "passed",
+          "actual": {
+            "value": {
+              "requestId": 1,
+              "status": "success",
+              "data": "first",
+              "error": null
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "older start cannot rewind stream",
+          "expected": {
+            "value": {
+              "requestId": 2,
+              "status": "success",
+              "data": "new",
+              "error": null
+            }
+          },
+          "status": "passed",
+          "actual": {
+            "value": {
+              "requestId": 2,
+              "status": "success",
+              "data": "new",
+              "error": null
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "normal success",
+          "expected": {
+            "value": {
+              "requestId": 1,
+              "status": "success",
+              "data": {
+                "items": [
+                  "demo"
+                ]
+              },
+              "error": null
+            }
+          },
+          "status": "passed",
+          "actual": {
+            "value": {
+              "requestId": 1,
+              "status": "success",
+              "data": {
+                "items": [
+                  "demo"
+                ]
+              },
+              "error": null
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "normal error",
+          "expected": {
+            "value": {
+              "requestId": 1,
+              "status": "error",
+              "data": null,
+              "error": "synthetic outage"
+            }
+          },
+          "status": "passed",
+          "actual": {
+            "value": {
+              "requestId": 1,
+              "status": "error",
+              "data": null,
+              "error": "synthetic outage"
+            },
+            "type": "object"
+          }
+        },
+        {
+          "name": "empty trace",
+          "expected": {
+            "value": {
+              "requestId": 0,
+              "status": "idle",
+              "data": null,
+              "error": null
+            }
+          },
+          "status": "passed",
+          "actual": {
+            "value": {
+              "requestId": 0,
+              "status": "idle",
+              "data": null,
+              "error": null
+            },
+            "type": "object"
+          }
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Runs authorized trusted code with current-user filesystem/network access; workers are not a security sandbox.",
+    "Each case uses a fresh module instance; no shared-state, browser, deployment or caller-integration acceptance.",
+    "Hashes cover contract bytes and entry modules only; dependencies and files must remain unchanged during the run."
+  ]
+}

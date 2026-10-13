@@ -1,0 +1,3 @@
+"Handle","Original source line","Proposed source line","Matched by","Column","Before","After","Change"
+"mug","2","2","handle-options","Requires shipping","true","false","edited"
+"box","3","3","handle-options","Packed product length","10","12","edited"

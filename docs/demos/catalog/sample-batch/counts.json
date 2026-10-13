@@ -1,0 +1,205 @@
+{
+  "format": "catalog-batch-counts",
+  "version": 1,
+  "pairCount": 3,
+  "scope": "Independent comparisons; totals sum findings, not unique products. No cross-pair matching or SKU checks. IDs and counts may be sensitive.",
+  "totals": {
+    "rows": {
+      "original": 7,
+      "proposed": 6,
+      "originalImageOnly": 1,
+      "proposedImageOnly": 1,
+      "matchedVariants": 5,
+      "uniqueSkuMatches": 1
+    },
+    "findings": {
+      "addedRows": 0,
+      "absentRows": 1,
+      "changedRows": 4,
+      "blankedCells": 2,
+      "packedSizeIssues": 2,
+      "changedOptionValues": 0,
+      "changedHandles": 1,
+      "optionCombinationDifferences": 1,
+      "omittedColumns": 3,
+      "addedColumns": 0,
+      "headerSpellingChanges": 0,
+      "rawHeaderIssues": 0,
+      "imageContinuationChanges": 1,
+      "changedCells": 6,
+      "ambiguousSkus": {
+        "original": 0,
+        "proposed": 0
+      },
+      "duplicateKeys": {
+        "original": 0,
+        "proposed": 0
+      },
+      "orphanImageRows": {
+        "original": 0,
+        "proposed": 0
+      }
+    },
+    "warnings": {
+      "total": 8,
+      "high": 6,
+      "medium": 2,
+      "other": 0
+    }
+  },
+  "pairs": [
+    {
+      "id": "legacy",
+      "reviewSha256": "ba121af0c3176e0b0da00a4d13d7ba88a22f7d5b9e73279dbfb96918d1922613",
+      "counts": {
+        "format": "catalog-count-summary",
+        "version": 1,
+        "scope": "Counts only; review the full report before importing. Counts may still be commercially sensitive.",
+        "rows": {
+          "original": 4,
+          "proposed": 3,
+          "originalImageOnly": 1,
+          "proposedImageOnly": 1,
+          "matchedVariants": 2,
+          "uniqueSkuMatches": 0
+        },
+        "findings": {
+          "addedRows": 0,
+          "absentRows": 1,
+          "changedRows": 1,
+          "blankedCells": 1,
+          "packedSizeIssues": 0,
+          "changedOptionValues": 0,
+          "changedHandles": 0,
+          "optionCombinationDifferences": 1,
+          "omittedColumns": 0,
+          "addedColumns": 0,
+          "headerSpellingChanges": 0,
+          "rawHeaderIssues": 0,
+          "imageContinuationChanges": 1,
+          "changedCells": 1,
+          "ambiguousSkus": {
+            "original": 0,
+            "proposed": 0
+          },
+          "duplicateKeys": {
+            "original": 0,
+            "proposed": 0
+          },
+          "orphanImageRows": {
+            "original": 0,
+            "proposed": 0
+          }
+        },
+        "warnings": {
+          "total": 4,
+          "high": 2,
+          "medium": 2,
+          "other": 0
+        }
+      }
+    },
+    {
+      "id": "current",
+      "reviewSha256": "d74bbcde1ad78c2754e741140e243e93acfe4b86c5aa32b5f66b9f8c1f269722",
+      "counts": {
+        "format": "catalog-count-summary",
+        "version": 1,
+        "scope": "Counts only; review the full report before importing. Counts may still be commercially sensitive.",
+        "rows": {
+          "original": 1,
+          "proposed": 1,
+          "originalImageOnly": 0,
+          "proposedImageOnly": 0,
+          "matchedVariants": 1,
+          "uniqueSkuMatches": 1
+        },
+        "findings": {
+          "addedRows": 0,
+          "absentRows": 0,
+          "changedRows": 1,
+          "blankedCells": 1,
+          "packedSizeIssues": 0,
+          "changedOptionValues": 0,
+          "changedHandles": 1,
+          "optionCombinationDifferences": 0,
+          "omittedColumns": 0,
+          "addedColumns": 0,
+          "headerSpellingChanges": 0,
+          "rawHeaderIssues": 0,
+          "imageContinuationChanges": 0,
+          "changedCells": 3,
+          "ambiguousSkus": {
+            "original": 0,
+            "proposed": 0
+          },
+          "duplicateKeys": {
+            "original": 0,
+            "proposed": 0
+          },
+          "orphanImageRows": {
+            "original": 0,
+            "proposed": 0
+          }
+        },
+        "warnings": {
+          "total": 2,
+          "high": 2,
+          "medium": 0,
+          "other": 0
+        }
+      }
+    },
+    {
+      "id": "packed",
+      "reviewSha256": "9cea7284988daf1f3239193e2c570208def2a5aa073f4e72c6351be161b8bc70",
+      "counts": {
+        "format": "catalog-count-summary",
+        "version": 1,
+        "scope": "Counts only; review the full report before importing. Counts may still be commercially sensitive.",
+        "rows": {
+          "original": 2,
+          "proposed": 2,
+          "originalImageOnly": 0,
+          "proposedImageOnly": 0,
+          "matchedVariants": 2,
+          "uniqueSkuMatches": 0
+        },
+        "findings": {
+          "addedRows": 0,
+          "absentRows": 0,
+          "changedRows": 2,
+          "blankedCells": 0,
+          "packedSizeIssues": 2,
+          "changedOptionValues": 0,
+          "changedHandles": 0,
+          "optionCombinationDifferences": 0,
+          "omittedColumns": 3,
+          "addedColumns": 0,
+          "headerSpellingChanges": 0,
+          "rawHeaderIssues": 0,
+          "imageContinuationChanges": 0,
+          "changedCells": 2,
+          "ambiguousSkus": {
+            "original": 0,
+            "proposed": 0
+          },
+          "duplicateKeys": {
+            "original": 0,
+            "proposed": 0
+          },
+          "orphanImageRows": {
+            "original": 0,
+            "proposed": 0
+          }
+        },
+        "warnings": {
+          "total": 2,
+          "high": 2,
+          "medium": 0,
+          "other": 0
+        }
+      }
+    }
+  ]
+}

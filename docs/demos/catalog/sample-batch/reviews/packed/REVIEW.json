@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "format": "catalog-review-directory",
+  "complete": true,
+  "failOnHigh": false,
+  "highWarnings": 2,
+  "files": {
+    "report.json": "f3585ea57ab8a07cb1da404d128fb9c9578fef0e11b17695b44ae302692f81a3",
+    "report.html": "5456ac66b1989112837d19b508c02112a5a314dc0d7a0508891eb72d73afe1a8",
+    "changed-cells.csv": "ec607eeba9adf0fd07a2ded6abefce3b68b111b236899ec037cb44edc2eb057b",
+    "counts.json": "fcfdf9c03e24e0ef4082e616abcaccbd507e715dd2cda9a99e0d597d69e04342",
+    "README.txt": "62bc924a4733fcaa7f358de96016d61270dc342df384300260bb8b802eff0796"
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "synthetic": true,
+  "environment": "React 18.3.1 development build + jsdom; Node",
+  "scope": "Real component renders and controlled injected promises; no fetch, native browser, layout, customer code or integration acceptance",
+  "before": [
+    {
+      "id": "late-success",
+      "expected": {
+        "status": "ready",
+        "value": "new value"
+      },
+      "actual": {
+        "status": "ready",
+        "value": "old value"
+      },
+      "passed": false
+    },
+    {
+      "id": "late-error",
+      "expected": {
+        "status": "ready",
+        "value": "new value"
+      },
+      "actual": {
+        "status": "error",
+        "value": "old failure"
+      },
+      "passed": false
+    },
+    {
+      "id": "current-pending",
+      "expected": {
+        "status": "loading",
+        "value": ""
+      },
+      "actual": {
+        "status": "ready",
+        "value": "old value"
+      },
+      "passed": false
+    },
+    {
+      "id": "query-change-abort",
+      "expected": true,
+      "actual": false,
+      "passed": false
+    },
+    {
+      "id": "unmount-abort",
+      "expected": true,
+      "actual": false,
+      "passed": false
+    },
+    {
+      "id": "strict-effect-cleanup",
+      "expected": 1,
+      "actual": 2,
+      "passed": false
+    },
+    {
+      "id": "loader-replacement",
+      "expected": {
+        "status": "ready",
+        "value": "replacement"
+      },
+      "actual": {
+        "status": "ready",
+        "value": "old value"
+      },
+      "passed": false
+    },
+    {
+      "id": "current-success",
+      "expected": {
+        "status": "ready",
+        "value": "current"
+      },
+      "actual": {
+        "status": "ready",
+        "value": "current"
+      },
+      "passed": true
+    },
+    {
+      "id": "current-error",
+      "expected": {
+        "status": "error",
+        "value": "current failure"
+      },
+      "actual": {
+        "status": "error",
+        "value": "current failure"
+      },
+      "passed": true
+    },
+    {
+      "id": "synchronous-loader-error",
+      "expected": {
+        "status": "error",
+        "value": "sync failure"
+      },
+      "actual": {
+        "status": "error",
+        "value": "sync failure"
+      },
+      "passed": true
+    },
+    {
+      "id": "inert-result-text",
+      "expected": {
+        "value": "<img src=x onerror=alert(1)>",
+        "imageCount": 0
+      },
+      "actual": {
+        "value": "<img src=x onerror=alert(1)>",
+        "imageCount": 0
+      },
+      "passed": true
+    }
+  ],
+  "after": [
+    {
+      "id": "late-success",
+      "expected": {
+        "status": "ready",
+        "value": "new value"
+      },
+      "actual": {
+        "status": "ready",
+        "value": "new value"
+      },
+      "passed": true
+    },
+    {
+      "id": "late-error",
+      "expected": {
+        "status": "ready",
+        "value": "new value"
+      },
+      "actual": {
+        "status": "ready",
+        "value": "new value"
+      },
+      "passed": true
+    },
+    {
+      "id": "current-pending",
+      "expected": {
+        "status": "loading",
+        "value": ""
+      },
+      "actual": {
+        "status": "loading",
+        "value": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "query-change-abort",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "id": "unmount-abort",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "id": "strict-effect-cleanup",
+      "expected": 1,
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "id": "loader-replacement",
+      "expected": {
+        "status": "ready",
+        "value": "replacement"
+      },
+      "actual": {
+        "status": "ready",
+        "value": "replacement"
+      },
+      "passed": true
+    },
+    {
+      "id": "current-success",
+      "expected": {
+        "status": "ready",
+        "value": "current"
+      },
+      "actual": {
+        "status": "ready",
+        "value": "current"
+      },
+      "passed": true
+    },
+    {
+      "id": "current-error",
+      "expected": {
+        "status": "error",
+        "value": "current failure"
+      },
+      "actual": {
+        "status": "error",
+        "value": "current failure"
+      },
+      "passed": true
+    },
+    {
+      "id": "synchronous-loader-error",
+      "expected": {
+        "status": "error",
+        "value": "sync failure"
+      },
+      "actual": {
+        "status": "error",
+        "value": "sync failure"
+      },
+      "passed": true
+    },
+    {
+      "id": "inert-result-text",
+      "expected": {
+        "value": "<img src=x onerror=alert(1)>",
+        "imageCount": 0
+      },
+      "actual": {
+        "value": "<img src=x onerror=alert(1)>",
+        "imageCount": 0
+      },
+      "passed": true
+    }
+  ],
+  "summary": {
+    "beforeFailed": 7,
+    "afterPassed": 11,
+    "cases": 11
+  },
+  "verified": true
+}

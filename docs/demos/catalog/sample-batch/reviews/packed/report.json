@@ -1,0 +1,139 @@
+{
+  "originalRows": 2,
+  "proposedRows": 2,
+  "originalImageOnlyRows": 0,
+  "proposedImageOnlyRows": 0,
+  "matchedRows": 2,
+  "addedRows": [],
+  "absentRows": [],
+  "changedRows": [
+    {
+      "handle": "mug",
+      "row": 2,
+      "originalRow": 2,
+      "matchType": "handle-options",
+      "changes": [
+        {
+          "column": "Requires shipping",
+          "before": "true",
+          "after": "false"
+        }
+      ]
+    },
+    {
+      "handle": "box",
+      "row": 3,
+      "originalRow": 3,
+      "matchType": "handle-options",
+      "changes": [
+        {
+          "column": "Packed product length",
+          "before": "10",
+          "after": "12"
+        }
+      ]
+    }
+  ],
+  "uniqueSkuMatches": 0,
+  "ambiguousSkus": {
+    "original": [],
+    "proposed": []
+  },
+  "blankedCells": [],
+  "packedSizeIssues": [
+    {
+      "handle": "mug",
+      "row": 2,
+      "reason": "shipping-disabled-clears-size",
+      "requiresShipping": "false",
+      "fields": [
+        {
+          "column": "Packed product length",
+          "included": true,
+          "value": "10"
+        },
+        {
+          "column": "Packed product width",
+          "included": false,
+          "value": ""
+        },
+        {
+          "column": "Packed product height",
+          "included": false,
+          "value": ""
+        },
+        {
+          "column": "Packed product dimension unit",
+          "included": false,
+          "value": ""
+        }
+      ]
+    },
+    {
+      "handle": "box",
+      "row": 3,
+      "reason": "incomplete-packed-size",
+      "requiresShipping": "true",
+      "fields": [
+        {
+          "column": "Packed product length",
+          "included": true,
+          "value": "12"
+        },
+        {
+          "column": "Packed product width",
+          "included": false,
+          "value": ""
+        },
+        {
+          "column": "Packed product height",
+          "included": false,
+          "value": ""
+        },
+        {
+          "column": "Packed product dimension unit",
+          "included": false,
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "changedOptionValues": [],
+  "changedHandles": [],
+  "optionCombinationDifferences": [],
+  "omittedColumns": [
+    "Packed product width",
+    "Packed product height",
+    "Packed product dimension unit"
+  ],
+  "addedColumns": [],
+  "headerSpellingChanges": [],
+  "rawHeaderIssues": [],
+  "duplicateKeys": {
+    "original": [],
+    "proposed": []
+  },
+  "imageContinuationChanges": [],
+  "orphanImageRows": {
+    "original": [],
+    "proposed": []
+  },
+  "warnings": [
+    {
+      "level": "high",
+      "title": "Some proposed packed product sizes are incomplete",
+      "detail": "Shopify requires all four packed product size fields together, or all four blank. Partial values can reject the affected product. Review the listed proposed source lines and omitted fields."
+    },
+    {
+      "level": "high",
+      "title": "Requires shipping is false: saved packed product size can be cleared",
+      "detail": "Shopify clears saved packed size when Requires shipping is false, even when the four packed size columns are omitted. Any included size values are ignored. These findings do not prove a saved size exists in the store; confirm the intended result before importing."
+    }
+  ],
+  "notes": [
+    "Packed size checks cover partial proposed values and Requires shipping=false using current header names only. Units, numeric validity, shipping aliases, all-blank size clearing and the complete import schema are not validated.",
+    "This compares files locally; it does not connect to Shopify or upload either file.",
+    "Column names are normalized for comparison. Shopify requires exact template headers, including case; verify both files against the current Shopify CSV format.",
+    "A report is a review aid, not a guarantee that an import is safe. Verify against Shopify's current documentation and your import settings."
+  ]
+}

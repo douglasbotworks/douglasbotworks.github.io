@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Prepare a software request — Douglas Bot Works</title>
+  <link rel="stylesheet" href="../hub.css">
+  <script src="brief.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header>DOUGLAS BOT WORKS <span>AI-assisted development</span></header>
+  <main id="main" tabindex="-1">
+    <p><a href="../index.html">Back to demonstrations</a></p>
+    <h1>Make the defect reviewable.</h1>
+    <p class="lead">Describe one repair or one static build. Preview and download a plain-text brief to share through an agreed channel.</p>
+    <p>Everything stays on this page until you download it. Nothing is sent or saved by this tool. Use sanitized examples; leave out passwords, tokens and personal customer records. Reloading clears the form.</p>
+    <p>JavaScript is needed for the builder. <a href="service-scope.txt" download>Download the plain-text worksheet</a> instead.</p>
+    <form id="brief-form">
+      <label for="offer">What do you need?</label>
+      <select id="offer" name="offer">
+        <option value="repair">One JavaScript / TypeScript defect — proposed USD 150</option>
+        <option value="release">One static build release review — proposed USD 99</option>
+      </select>
+      <p id="offer-scope" class="small"></p>
+      <label for="expected">What should happen? (required)</label>
+      <textarea id="expected" name="expected" required maxlength="4000" rows="3"></textarea>
+      <label for="actual">What happens now? (required)</label>
+      <textarea id="actual" name="actual" required maxlength="4000" rows="3"></textarea>
+      <label for="steps">Minimal reproduction steps (required)</label>
+      <textarea id="steps" name="steps" required maxlength="4000" rows="4" placeholder="1. Start with…&#10;2. Run…&#10;3. Observe…"></textarea>
+      <label for="runtime">Runtime, version and relevant files</label>
+      <textarea id="runtime" name="runtime" maxlength="4000" rows="2" placeholder="For example: Node version, browser, component or build path"></textarea>
+      <label for="sample">Sanitized sample input and output</label>
+      <textarea id="sample" name="sample" maxlength="4000" rows="3"></textarea>
+      <label for="acceptance">How will you check completion? (required)</label>
+      <textarea id="acceptance" name="acceptance" required maxlength="4000" rows="3" placeholder="Command or check, with the exact expected result"></textarea>
+      <label for="boundaries">Included files and explicit exclusions</label>
+      <textarea id="boundaries" name="boundaries" maxlength="4000" rows="3"></textarea>
+      <label for="delivery">Preferred delivery format and timeline for discussion</label>
+      <textarea id="delivery" name="delivery" maxlength="4000" rows="2"></textarea>
+      <button class="button" type="submit">Preview brief</button>
+      <button type="button" id="download" disabled>Download brief (.txt)</button>
+      <button type="reset">Clear</button>
+    </form>
+    <p id="status" role="status" aria-live="polite"></p>
+    <section aria-labelledby="preview-heading">
+      <h2 id="preview-heading">Your local preview</h2>
+      <pre id="preview">Complete the required fields, then preview.</pre>
+    </section>
+    <p class="small">This is a request worksheet, not a booking or contract. No payment or customer intake is active. Source access, scope, acceptance checks, timeline and payment must be agreed before work begins. Proposed prices are subject to reproduction and scope review.</p>
+  </main>
+  <footer><a href="service-scope.txt" download>Plain-text worksheet</a> · No tracking · No submission</footer>
+</body>
+</html>

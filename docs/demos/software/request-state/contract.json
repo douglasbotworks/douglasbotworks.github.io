@@ -1,0 +1,223 @@
+{
+  "version": 1,
+  "exportName": "requestTrace",
+  "timeoutMs": 2000,
+  "cases": [
+    {
+      "name": "older success cannot overwrite newer result",
+      "args": [
+        [
+          {
+            "type": "start",
+            "id": 1
+          },
+          {
+            "type": "start",
+            "id": 2
+          },
+          {
+            "type": "success",
+            "id": 2,
+            "data": "new"
+          },
+          {
+            "type": "success",
+            "id": 1,
+            "data": "old"
+          }
+        ]
+      ],
+      "expected": {
+        "value": {
+          "requestId": 2,
+          "status": "success",
+          "data": "new",
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "older error cannot replace newer loading",
+      "args": [
+        [
+          {
+            "type": "start",
+            "id": 1
+          },
+          {
+            "type": "start",
+            "id": 2
+          },
+          {
+            "type": "failure",
+            "id": 1,
+            "error": "old failure"
+          }
+        ]
+      ],
+      "expected": {
+        "value": {
+          "requestId": 2,
+          "status": "loading",
+          "data": null,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "canceled request stays idle",
+      "args": [
+        [
+          {
+            "type": "start",
+            "id": 1
+          },
+          {
+            "type": "cancel",
+            "id": 1
+          },
+          {
+            "type": "success",
+            "id": 1,
+            "data": "late"
+          }
+        ]
+      ],
+      "expected": {
+        "value": {
+          "requestId": 1,
+          "status": "idle",
+          "data": null,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "duplicate completion stays settled",
+      "args": [
+        [
+          {
+            "type": "start",
+            "id": 1
+          },
+          {
+            "type": "success",
+            "id": 1,
+            "data": "first"
+          },
+          {
+            "type": "failure",
+            "id": 1,
+            "error": "duplicate"
+          }
+        ]
+      ],
+      "expected": {
+        "value": {
+          "requestId": 1,
+          "status": "success",
+          "data": "first",
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "older start cannot rewind stream",
+      "args": [
+        [
+          {
+            "type": "start",
+            "id": 2
+          },
+          {
+            "type": "success",
+            "id": 2,
+            "data": "new"
+          },
+          {
+            "type": "start",
+            "id": 1
+          }
+        ]
+      ],
+      "expected": {
+        "value": {
+          "requestId": 2,
+          "status": "success",
+          "data": "new",
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "normal success",
+      "args": [
+        [
+          {
+            "type": "start",
+            "id": 1
+          },
+          {
+            "type": "success",
+            "id": 1,
+            "data": {
+              "items": [
+                "demo"
+              ]
+            }
+          }
+        ]
+      ],
+      "expected": {
+        "value": {
+          "requestId": 1,
+          "status": "success",
+          "data": {
+            "items": [
+              "demo"
+            ]
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "normal error",
+      "args": [
+        [
+          {
+            "type": "start",
+            "id": 1
+          },
+          {
+            "type": "failure",
+            "id": 1,
+            "error": "synthetic outage"
+          }
+        ]
+      ],
+      "expected": {
+        "value": {
+          "requestId": 1,
+          "status": "error",
+          "data": null,
+          "error": "synthetic outage"
+        }
+      }
+    },
+    {
+      "name": "empty trace",
+      "args": [
+        []
+      ],
+      "expected": {
+        "value": {
+          "requestId": 0,
+          "status": "idle",
+          "data": null,
+          "error": null
+        }
+      }
+    }
+  ]
+}

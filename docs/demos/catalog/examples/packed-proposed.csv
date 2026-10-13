@@ -1,0 +1,3 @@
+URL handle,Title,Option1 name,Option1 value,Packed product length,Requires shipping
+mug,Mug,Title,Default Title,10,false
+box,Box,Title,Default Title,12,true

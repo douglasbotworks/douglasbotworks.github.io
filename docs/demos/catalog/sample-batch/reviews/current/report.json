@@ -1,0 +1,90 @@
+{
+  "originalRows": 1,
+  "proposedRows": 1,
+  "originalImageOnlyRows": 0,
+  "proposedImageOnlyRows": 0,
+  "matchedRows": 1,
+  "addedRows": [],
+  "absentRows": [],
+  "changedRows": [
+    {
+      "handle": "mug-new",
+      "row": 2,
+      "originalRow": 2,
+      "matchType": "unique-sku",
+      "changes": [
+        {
+          "column": "URL handle",
+          "before": "mug",
+          "after": "mug-new"
+        },
+        {
+          "column": "Price",
+          "before": "12.00",
+          "after": ""
+        },
+        {
+          "column": "Weight value (grams)",
+          "before": "200",
+          "after": "250"
+        }
+      ]
+    }
+  ],
+  "uniqueSkuMatches": 1,
+  "ambiguousSkus": {
+    "original": [],
+    "proposed": []
+  },
+  "blankedCells": [
+    {
+      "handle": "mug-new",
+      "column": "Price",
+      "row": 2,
+      "originalRow": 2,
+      "matchType": "unique-sku"
+    }
+  ],
+  "packedSizeIssues": [],
+  "changedOptionValues": [],
+  "changedHandles": [
+    {
+      "before": "mug",
+      "after": "mug-new",
+      "sku": "MUG-1",
+      "row": 2
+    }
+  ],
+  "optionCombinationDifferences": [],
+  "omittedColumns": [],
+  "addedColumns": [],
+  "headerSpellingChanges": [],
+  "rawHeaderIssues": [],
+  "duplicateKeys": {
+    "original": [],
+    "proposed": []
+  },
+  "imageContinuationChanges": [],
+  "orphanImageRows": {
+    "original": [],
+    "proposed": []
+  },
+  "warnings": [
+    {
+      "level": "high",
+      "title": "1 existing nonblank value(s) become blank",
+      "detail": "If you import with “Overwrite products with matching handles,” included blank columns can overwrite existing values. Review every listed cell before importing."
+    },
+    {
+      "level": "high",
+      "title": "1 row(s) have a changed Handle despite a matching unique SKU",
+      "detail": "Shopify uses Handle to match products when overwriting. A changed Handle may be imported as a new product instead of updating the original. Confirm the intended product identity in Shopify before importing."
+    }
+  ],
+  "notes": [
+    "Packed size checks cover partial proposed values and Requires shipping=false using current header names only. Units, numeric validity, shipping aliases, all-blank size clearing and the complete import schema are not validated.",
+    "This compares files locally; it does not connect to Shopify or upload either file.",
+    "Column names are normalized for comparison. Shopify requires exact template headers, including case; verify both files against the current Shopify CSV format.",
+    "A report is a review aid, not a guarantee that an import is safe. Verify against Shopify's current documentation and your import settings."
+  ]
+}

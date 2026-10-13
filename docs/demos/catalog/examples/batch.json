@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "pairs": [
+    { "id": "legacy", "original": "original-products.csv", "proposed": "proposed-import.csv" },
+    { "id": "current", "original": "current-original.csv", "proposed": "current-proposed.csv" },
+    { "id": "packed", "original": "packed-original.csv", "proposed": "packed-proposed.csv" }
+  ]
+}

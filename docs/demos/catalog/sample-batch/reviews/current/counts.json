@@ -1,0 +1,47 @@
+{
+  "format": "catalog-count-summary",
+  "version": 1,
+  "scope": "Counts only; review the full report before importing. Counts may still be commercially sensitive.",
+  "rows": {
+    "original": 1,
+    "proposed": 1,
+    "originalImageOnly": 0,
+    "proposedImageOnly": 0,
+    "matchedVariants": 1,
+    "uniqueSkuMatches": 1
+  },
+  "findings": {
+    "addedRows": 0,
+    "absentRows": 0,
+    "changedRows": 1,
+    "blankedCells": 1,
+    "packedSizeIssues": 0,
+    "changedOptionValues": 0,
+    "changedHandles": 1,
+    "optionCombinationDifferences": 0,
+    "omittedColumns": 0,
+    "addedColumns": 0,
+    "headerSpellingChanges": 0,
+    "rawHeaderIssues": 0,
+    "imageContinuationChanges": 0,
+    "changedCells": 3,
+    "ambiguousSkus": {
+      "original": 0,
+      "proposed": 0
+    },
+    "duplicateKeys": {
+      "original": 0,
+      "proposed": 0
+    },
+    "orphanImageRows": {
+      "original": 0,
+      "proposed": 0
+    }
+  },
+  "warnings": {
+    "total": 2,
+    "high": 2,
+    "medium": 0,
+    "other": 0
+  }
+}

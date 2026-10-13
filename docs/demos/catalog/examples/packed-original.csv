@@ -1,0 +1,3 @@
+URL handle,Title,Option1 name,Option1 value,Packed product length,Packed product width,Packed product height,Packed product dimension unit,Requires shipping
+mug,Mug,Title,Default Title,10,8,6,cm,true
+box,Box,Title,Default Title,10,8,6,cm,true

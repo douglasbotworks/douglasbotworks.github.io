@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "mode": "static",
+  "base_path": "/",
+  "check_navigation": true,
+  "check_fragments": false,
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 253,
+      "sha256": "77c59619cac504c016597590c8b706d2d730e124ad7c1cc1c74447512c9f8e19"
+    }
+  ],
+  "total_bytes": 253,
+  "findings": [
+    {
+      "level": "error",
+      "code": "missing-asset",
+      "source": "index.html",
+      "value": "style.css"
+    },
+    {
+      "level": "error",
+      "code": "missing-asset",
+      "source": "index.html",
+      "value": "mark.svg"
+    },
+    {
+      "level": "error",
+      "code": "missing-navigation-target",
+      "source": "index.html",
+      "value": "guide.html"
+    }
+  ],
+  "errors": 3,
+  "warnings": 0,
+  "limits": "Literal HTML src/poster/link href, ordinary img/source srcset and link imagesrcset candidates, and CSS url/import in stylesheets, style attributes and closed CSS style elements only; duplicate HTML attributes warn and keep their first value; srcset sizes/media/selection and unsupported descriptors require manual review; CSS escapes require manual review and other CSS asset functions are not analyzed. Extension mode additionally checks basic MV3 name/version and asset paths in icons, background service_worker, action popup/icon, options pages, side_panel, chrome_url_overrides and content_scripts js/css. Other manifest fields, resource globs, locale files, permissions and store policies are not validated. Optional a/area href file-target checks: enabled; trailing-slash paths require index.html. Optional literal HTML ID/named-anchor checks: disabled; raw and UTF-8 percent-decoded fragments and top supported; template contents excluded; text directives, non-HTML fragments and unsupported parsing contexts require manual review. DOM-generated targets, browser tree reconstruction, query behavior, extensionless rewrites, server routes and remote navigation availability are not validated. No JavaScript execution, module imports, fetch calls, browser gameplay, accessibility, license or security validation. Deployment base path: /. References outside this path cannot be verified from the supplied build. External URLs are not fetched.",
+  "snapshot_limits": {
+    "max_files": 10000,
+    "max_file_bytes": 33554432,
+    "max_total_bytes": 268435456
+  },
+  "release_gate": {
+    "require_no_warnings": true,
+    "passed": false
+  }
+}

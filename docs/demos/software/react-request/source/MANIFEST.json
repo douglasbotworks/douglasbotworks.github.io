@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "files": {
+    "BeforePanel.js": "56fc4f5749bd6fcb36aaca5df3d5dd12cfc529cc998714ae45de72eae9a56e8d",
+    "ResultPanel.js": "61cd5248ee1e99351dec4b69ea311d7cd4a436d840c1fc0db9e79daf2b5f0b6b",
+    "scenarios.js": "b7551fac1fba3081abbfa8ad5c5d5859707de780ab48cdd94f07c1e8dbfe636f",
+    "proof.js": "f6c7e1d58591a56d86a8482705a630df2b0c1a4568926459123285a639a5ca79",
+    "build-proof.js": "ed4b21c5c4d1aed32bb612d6d5f9ff08853f695aee3a6b0ea8462f111d927a6f",
+    "README.md": "0457b59e03ca519cfbe0d8be1891a4348dec07ce2c50124d3658bdc050d32bd3",
+    "LICENSE": "ab3d9563d704479448c225bcdaeb325f7347bdce1eb298099d219cd5753d20d7",
+    "package.json": "1f5cbe467e08fb4fd2bdd2cb0e86457ee1d0cd47755ff3362f1065a503fb6691",
+    "package-lock.json": "23d646221aa520ac15f684f9a0c9675cc22d61932377ac87e83210fdb614138e",
+    "tests/repair.test.js": "be2e8c3ad1a3b532a28ae8ff5adcaf1cee259b4693e5c21fcece012ca3d8cee1",
+    "tests/marketing.test.js": "82be4d325c240fd19be7119ccbcad60f9a3aa7dd711593bdd77b72e05bab76fe"
+  }
+}

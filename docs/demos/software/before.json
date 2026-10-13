@@ -1,0 +1,24 @@
+{
+  "synthetic": true,
+  "mode": "before",
+  "results": [
+    {
+      "name": "multiple form lines",
+      "expected": "32.99",
+      "actual": "253.004.990.00",
+      "passed": false
+    },
+    {
+      "name": "decimal cents",
+      "expected": "0.50",
+      "actual": "0.300000000000000040.20",
+      "passed": false
+    },
+    {
+      "name": "empty order",
+      "expected": "0.00",
+      "actual": 0,
+      "passed": false
+    }
+  ]
+}

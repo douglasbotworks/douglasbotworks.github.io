@@ -1,0 +1,4 @@
+Handle,Title,Vendor,Option1 Name,Option1 Value,Variant SKU,Image Src,Image Position,Image Alt Text
+sample-mug,Blue Sample Mug,Example Supply,Size,12 oz,MUG-12,https://example.invalid/mug-front.jpg,1,Front of blue mug
+sample-mug,,,,,,https://example.invalid/mug-side.jpg,2,Side profile of blue mug
+sample-shirt,Sample Shirt,,Size,Small,SHIRT-S,https://example.invalid/shirt.jpg,1,Sample shirt

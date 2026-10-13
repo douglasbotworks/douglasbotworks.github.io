@@ -1,0 +1,150 @@
+{
+  "originalRows": 4,
+  "proposedRows": 3,
+  "originalImageOnlyRows": 1,
+  "proposedImageOnlyRows": 1,
+  "matchedRows": 2,
+  "addedRows": [],
+  "absentRows": [
+    {
+      "handle": "sample-shirt",
+      "row": 5
+    }
+  ],
+  "changedRows": [
+    {
+      "handle": "sample-shirt",
+      "row": 4,
+      "originalRow": 4,
+      "matchType": "handle-options",
+      "changes": [
+        {
+          "column": "Vendor",
+          "before": "Example Supply",
+          "after": ""
+        }
+      ]
+    }
+  ],
+  "uniqueSkuMatches": 0,
+  "ambiguousSkus": {
+    "original": [],
+    "proposed": []
+  },
+  "blankedCells": [
+    {
+      "handle": "sample-shirt",
+      "column": "Vendor",
+      "row": 4,
+      "originalRow": 4,
+      "matchType": "handle-options"
+    }
+  ],
+  "packedSizeIssues": [],
+  "changedOptionValues": [],
+  "changedHandles": [],
+  "optionCombinationDifferences": [
+    {
+      "handle": "sample-shirt",
+      "original": 2,
+      "proposed": 1,
+      "proposedHandle": "sample-shirt",
+      "removed": [
+        {
+          "options": [
+            {
+              "name": "Size",
+              "value": "Medium"
+            },
+            {
+              "name": "",
+              "value": ""
+            },
+            {
+              "name": "",
+              "value": ""
+            }
+          ],
+          "rows": [
+            5
+          ]
+        }
+      ],
+      "added": []
+    }
+  ],
+  "omittedColumns": [],
+  "addedColumns": [],
+  "headerSpellingChanges": [],
+  "rawHeaderIssues": [],
+  "duplicateKeys": {
+    "original": [],
+    "proposed": []
+  },
+  "imageContinuationChanges": [
+    {
+      "handle": "sample-mug",
+      "originalRows": [
+        3
+      ],
+      "proposedRows": [
+        3
+      ],
+      "originalImages": [
+        {
+          "url": "https://example.invalid/mug-side.jpg",
+          "position": "2",
+          "altText": "Side of blue mug",
+          "row": 3
+        }
+      ],
+      "proposedImages": [
+        {
+          "url": "https://example.invalid/mug-side.jpg",
+          "position": "2",
+          "altText": "Side profile of blue mug",
+          "row": 3
+        }
+      ],
+      "addedRows": [
+        3
+      ],
+      "removedRows": [
+        3
+      ],
+      "orderChanged": false
+    }
+  ],
+  "orphanImageRows": {
+    "original": [],
+    "proposed": []
+  },
+  "warnings": [
+    {
+      "level": "high",
+      "title": "1 existing nonblank value(s) become blank",
+      "detail": "If you import with “Overwrite products with matching handles,” included blank columns can overwrite existing values. Review every listed cell before importing."
+    },
+    {
+      "level": "high",
+      "title": "Variant option combinations differ for 1 existing product(s)",
+      "detail": "Changed, added, or missing variant option combinations need review. Shopify warns that changing option values can replace variant IDs; check downstream references before import."
+    },
+    {
+      "level": "medium",
+      "title": "Additional image rows differ for 1 product(s)",
+      "detail": "Shopify product CSVs can use extra rows containing a Handle and an image URL. Review the listed image-only row changes; they are excluded from variant identity matching."
+    },
+    {
+      "level": "medium",
+      "title": "1 original variant row(s) are absent from the proposed file",
+      "detail": "This reports rows missing from the file only. It does not mean Shopify will delete those products; confirm the intended scope and import behavior."
+    }
+  ],
+  "notes": [
+    "Packed size checks cover partial proposed values and Requires shipping=false using current header names only. Units, numeric validity, shipping aliases, all-blank size clearing and the complete import schema are not validated.",
+    "This compares files locally; it does not connect to Shopify or upload either file.",
+    "Column names are normalized for comparison. Shopify requires exact template headers, including case; verify both files against the current Shopify CSV format.",
+    "A report is a review aid, not a guarantee that an import is safe. Verify against Shopify's current documentation and your import settings."
+  ]
+}

@@ -1,0 +1,43 @@
+DOUGLAS BOT WORKS — SERVICE SCOPE BRIEF
+
+This is a local worksheet, not a booking or contract. No information is sent.
+Use fictional or sanitized examples during initial scope review. Do not include
+passwords, tokens, personal customer records or production credentials.
+
+1. Choose an offer
+[ ] One JavaScript/TypeScript defect (proposed USD 150 pilot)
+[ ] Static build release review (proposed USD 99 review)
+
+2. Describe the result
+What should happen?
+What happens now?
+What exact evidence will show the request is complete?
+
+3. Provide a safe reproduction
+Runtime/version:
+Minimal steps:
+Sanitized sample input:
+Expected output and type:
+Actual output and type:
+Source or build access you are authorized to provide:
+
+4. Agree boundaries before work
+One defect or one specified static build:
+Files/components included:
+Explicit exclusions:
+Acceptance command/check and expected result:
+Delivery format:
+Who may approve the result:
+Agreed timeline (only after reproduction):
+Agreed price and payment channel:
+
+Repair delivery: failing reproduction, bounded patch, passing check and handoff.
+Caller integration must be reviewed if the patch changes an API contract.
+
+Static review delivery: inventory, bounded local-reference report and packaging
+when the agreed gate passes. No browser/runtime validation, security or store
+certification, license clearance, deployment or unlimited code repair is included.
+
+No booking/payment is active on the demonstration site. Work starts only after
+an approved client, authorized source access, exact scope and payment arrangement
+are established. Prices are proposed, not a promise to accept every request.

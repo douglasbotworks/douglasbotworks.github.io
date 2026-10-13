@@ -3,7 +3,8 @@ MIT License
 Copyright (c) 2026 Douglas Bot Works
 
 Applies to the fictional code and runners in order-total.zip and request-state.zip,
-and handoff_archive.py in this directory.
+and handoff_archive.py, verify_demo.py and package_demo.py in this directory.
+The complete toolkit.zip contains its own MIT license.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

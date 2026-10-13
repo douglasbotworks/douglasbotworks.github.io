@@ -37,3 +37,13 @@ with retained commands; the guide shows CI steps without claiming hosted executi
 Catalog now includes a local plain-text availability worksheet and generic email
 link. It sends nothing automatically and opens no checkout. Source CSVs and
 catalog values should be omitted from initial inquiries.
+
+## Free fictional repair toolkit
+
+The software demonstration distributes toolkit.zip, installation instructions,
+its SHA256, and separately linked verify_demo.py/package_demo.py. All 32 archive
+members match the explicit licensed source inventory. Actual extracted recipient
+releases and pinned reruns pass for both fictional samples. Full E2E test execution
+in this worker is blocked at temporary-directory cleanup (rmdir EPERM); no full
+current-suite pass or browser/customer acceptance is claimed. The MIT source can
+be inspected and the documented E2E command run on a normal POSIX development runtime.

@@ -27,6 +27,9 @@ Detailed sections show 100 findings per page with Previous/Next controls. The pr
 
 Personal/internal business use under LICENSE.txt. This free browser preview
 is separate from the proposed paid CLI edition. Checkout is not enabled.
+A download request is not proof of a saved file. Check browser downloads and open
+the report. Preparation/request failures keep the comparison available for retry.
+This page cannot detect later browser cancellation or a blocked save.
 Native report downloads have not passed acceptance in our worker (canceled).
 Check actual downloaded reports before relying on them. Automated comparison
 checks do not establish import safety, full Shopify schema validation,

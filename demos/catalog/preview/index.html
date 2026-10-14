@@ -1133,14 +1133,30 @@
   }
   function downloadReport(format) {
     if (!lastReport) return;
-    const content = format === "csv" ? renderChangedCellsCsv(lastReport) : format === "html" ? renderReport(lastReport) : JSON.stringify(format === "summary" ? summarizeReport(lastReport) : format === "products" ? summarizeProductFindings(lastReport) : lastReport, null, 2);
-    const blob = new Blob([content], { type: format === "csv" ? "text/csv;charset=utf-8" : format === "html" ? "text/html;charset=utf-8" : "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = element("a");
-    link.href = url;
-    link.download = format === "products" ? "catalog-product-findings.json" : format === "summary" ? "catalog-count-summary.json" : format === "csv" ? "catalog-changed-cells-review.csv" : `catalog-change-summary.${format}`;
-    link.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1e3);
+    let url;
+    let link;
+    let requested = false;
+    try {
+      const content = format === "csv" ? renderChangedCellsCsv(lastReport) : format === "html" ? renderReport(lastReport) : JSON.stringify(format === "summary" ? summarizeReport(lastReport) : format === "products" ? summarizeProductFindings(lastReport) : lastReport, null, 2);
+      const blob = new Blob([content], { type: format === "csv" ? "text/csv;charset=utf-8" : format === "html" ? "text/html;charset=utf-8" : "application/json" });
+      url = URL.createObjectURL(blob);
+      link = element("a");
+      link.href = url;
+      link.download = format === "products" ? "catalog-product-findings.json" : format === "summary" ? "catalog-count-summary.json" : format === "csv" ? "catalog-changed-cells-review.csv" : `catalog-change-summary.${format}`;
+      link.hidden = true;
+      document.body.append(link);
+      link.click();
+      requested = true;
+      status.textContent = `Download requested: ${link.download}. Check your browser downloads and open the saved file. This page cannot confirm that it was saved. Your comparison remains available to retry.`;
+    } catch {
+      status.textContent = "Could not prepare or request this download. Your comparison is still available. Retry the download or try another report format. Check your browser downloads before retrying to avoid duplicate files.";
+    } finally {
+      link?.remove();
+      if (url) {
+        if (requested) setTimeout(() => URL.revokeObjectURL(url), 1e3);
+        else URL.revokeObjectURL(url);
+      }
+    }
   }
   downloadButton.addEventListener("click", () => downloadReport("json"));
   htmlDownloadButton.addEventListener("click", () => downloadReport("html"));

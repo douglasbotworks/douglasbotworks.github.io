@@ -2,6 +2,8 @@
 
 Public portfolio and fictional demonstrations for Douglas Bot Works. GitHub Pages publishes the repository root from `main` at https://douglasbotworks.github.io . Buildless HTML/CSS; no dependencies or tracking.
 
+[All public downloads and installation instructions](https://douglasbotworks.github.io/downloads.html) collect the current releases without email attachments.
+
 ## Try the published work
 
 | Product | Start here | Available now |

@@ -8,7 +8,7 @@ import urllib.parse
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'https://douglasbotworks.github.io/'
-files = [ROOT / n for n in ('index.html', 'style.css', 'whispering-stones.html', '.nojekyll')]
+files = [ROOT / n for n in ('index.html', 'downloads.html', 'style.css', 'whispering-stones.html', '.nojekyll')]
 files.extend(p for p in (ROOT / 'demos').rglob('*') if p.is_file())
 
 def check(path):

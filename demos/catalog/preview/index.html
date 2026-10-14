@@ -1,0 +1,1138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Privately compare two Shopify product CSV files before import. Runs locally in your browser; no files are uploaded.">
+  <link rel="icon" href="data:,">
+  <title>Catalog Change Guard — local CSV comparison preview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :root { color-scheme: light; font: 16px/1.5 system-ui, sans-serif; color: #202a36; background: #f3f6fa; }
+    body { margin: 0 auto; max-width: 1040px; padding: 36px 20px 64px; }
+    header, main { background: white; border: 1px solid #dfe5ec; border-radius: 16px; padding: clamp(20px,4vw,34px); margin-bottom: 20px; box-shadow: 0 8px 24px #26364a0a; }
+    header { background: linear-gradient(135deg,#fff 65%,#eef5fc); }
+    h1, h2, h3 { line-height: 1.25; } h1 { margin-top: 0; }
+    .privacy { background: #eef8f1; border-left: 4px solid #318653; padding: 12px 14px; }
+    .fields { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit,minmax(min(260px,100%),1fr)); }
+    label { display: grid; gap: 9px; font-weight: 650; min-width: 0; }
+    .drop-zone { display: block; min-height: 112px; align-content: center; padding: 16px; border: 1px dashed #97a8ba; border-radius: 12px; background: #f8fafc; color: #435265; transition: .15s ease; max-width: 100%; min-width: 0; overflow-wrap: anywhere; }
+    .drop-zone strong { color: #202a36; }
+    .drop-zone.dragover { border-color: #184f86; background: #edf5fd; box-shadow: 0 0 0 3px #184f8618; }
+    input[type=file] { display: block; width: 100%; max-width: 100%; min-width: 0; font: inherit; font-size: .92rem; margin-top: 5px; }
+    .actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
+    button { border: 0; border-radius: 9px; background: #184f86; color: white; font: inherit; font-weight: 700; padding: 12px 18px; margin-top: 18px; cursor: pointer; }
+    button.secondary { background: #e8eef5; color:#25374b; }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    #results[aria-busy="true"] { opacity: .65; }
+    button:focus-visible, input:focus-visible { outline: 3px solid #f2ac37; outline-offset: 2px; }
+    .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:10px; margin:18px 0; }
+    .metric { border:1px solid #e2e7ed; border-radius:10px; padding:12px 14px; background:#fbfcfe; }
+    .metric b { display:block; font-size:1.45rem; line-height:1.2; }
+    .metric span { color:#5d6875; font-size:.9rem; }
+    .result-block { padding:14px 0; }
+    .warning { border-left: 4px solid #c67b00; background: #fff7e7; padding: 12px 16px; margin: 10px 0; }
+    .warning.high { border-color: #b3261e; background: #fff1f0; }
+    .warning h3, .warning p { margin: 4px 0; }
+    .result-block, .notes { border-top: 1px solid #e2e7ed; padding: 8px 0; }
+    .muted { color: #5d6875; } #status { min-height: 1.5em; font-weight: 650; }
+    li { margin: 6px 0; overflow-wrap: anywhere; }
+    footer { color: #5d6875; font-size: .92rem; padding: 0 6px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Catalog Change Guard</h1>
+    <p>Compare an original Shopify product export with the CSV you plan to import. See blanked fields, row changes, and missing variants before you upload.</p>
+    <p class="privacy"><strong>Local preview:</strong> CSV contents are read in this browser tab and are never transmitted by the app. The checker makes no outbound network calls and has no Shopify connection.</p>
+  </header>
+  <main>
+    <section aria-labelledby="sample-heading">
+      <h2 id="sample-heading">Try it with fictional products.</h2>
+      <p>No file selection needed. Compare the included mug and shirt example: a vendor becomes blank, a Medium variant is absent and an image caption changes. This action clears any current file selections and results.</p>
+      <button id="try-sample" type="button">Try fictional CSVs</button>
+      <p class="muted">Browser preview with automated comparison checks. Report downloads have not passed native browser acceptance in our worker. Try fictional files first; review all findings and your downloaded reports before relying on them. No checkout or Shopify import is enabled.</p>
+    </section>
+    <form id="compare-form">
+      <div class="fields">
+        <label for="original">1. Original product export (CSV)
+          <span class="drop-zone" data-for="original"><strong>Drop the original CSV here</strong><br><span class="file-name">or choose a file below</span><input id="original" type="file" accept=".csv,text/csv" required></span>
+        </label>
+        <label for="proposed">2. Proposed import file (CSV)
+          <span class="drop-zone" data-for="proposed"><strong>Drop the proposed CSV here</strong><br><span class="file-name">or choose a file below</span><input id="proposed" type="file" accept=".csv,text/csv" required></span>
+        </label>
+      </div>
+      <div class="actions"><button type="submit">Compare files locally</button><button id="clear" class="secondary" type="button">Clear files and results</button><button id="download" class="secondary" type="button" disabled>Download full JSON</button><button id="download-html" class="secondary" type="button" disabled>Download readable HTML</button><button id="download-csv" class="secondary" type="button" disabled>Download changed-cell CSV</button><button id="download-summary" class="secondary" type="button" disabled>Download counts only</button><button id="download-products" class="secondary" type="button" disabled>Download product findings</button><span class="muted">Product findings JSON contains exact Handles and overlapping counts; full reports are still required. Counts-only JSON omits catalog values; counts may still be sensitive. CSV is a changed-cell review sheet, not an import file; formula-like values are prefixed with an apostrophe. Reports include changed cell values. Store them carefully. HTML is a summary; JSON contains the full comparison.</span></div>
+    </form>
+    <p id="status" role="status" aria-live="polite"></p>
+    <div id="results" aria-label="Comparison results" aria-busy="false"></div>
+  </main>
+  <footer><a href="https://douglasbotworks.github.io/demos/catalog/">About the CLI edition and availability</a><br>This is an early review aid, not an official Shopify tool and not a guarantee that an import is safe. Per file: 15 MiB, 500 columns, 50,000 data records and 1,000,000 cells including the header. Clear removes files and results from this tab, but does not delete previously downloaded reports. Keep backups and verify the latest Shopify instructions and import settings before making catalog changes.</footer>
+  <script>(() => {
+  // csv.js
+  var CSV_LIMITS = Object.freeze({ columns: 500, dataRows: 5e4, cells: 1e6 });
+  function parseCsv(input) {
+    const text = String(input).replace(/^\uFEFF/, "");
+    const records = [];
+    const recordLines = [];
+    let line = 1;
+    let recordLine = 1;
+    let record = [];
+    let field = "";
+    let quoted = false;
+    let closedQuote = false;
+    let retainedCells = 0;
+    const retainRecord = () => {
+      if (records.length >= CSV_LIMITS.dataRows + 1) {
+        throw new Error(`Each CSV must have at most ${CSV_LIMITS.dataRows.toLocaleString("en-US")} data rows.`);
+      }
+      if (retainedCells + record.length > CSV_LIMITS.cells) {
+        throw new Error(`Each CSV must have at most ${CSV_LIMITS.cells.toLocaleString("en-US")} cells, including the header.`);
+      }
+      retainedCells += record.length;
+      records.push(record);
+      recordLines.push(recordLine);
+    };
+    for (let i = 0; i < text.length; i += 1) {
+      const char = text[i];
+      if (quoted) {
+        if (char === "\n" || char === "\r" && text[i + 1] !== "\n") line += 1;
+        if (char === '"' && text[i + 1] === '"') {
+          field += '"';
+          i += 1;
+        } else if (char === '"') {
+          quoted = false;
+          closedQuote = true;
+        } else {
+          field += char;
+        }
+        continue;
+      }
+      if (closedQuote && char !== "," && char !== "\r" && char !== "\n" && char !== " " && char !== "	") {
+        throw new Error(`Unexpected character after closing quote near character ${i + 1}.`);
+      }
+      if (closedQuote && (char === " " || char === "	")) continue;
+      if (char === '"') {
+        if (field.length) throw new Error(`Unexpected quote inside an unquoted field near character ${i + 1}.`);
+        quoted = true;
+        continue;
+      }
+      if (char === ",") {
+        if (record.length + 2 > CSV_LIMITS.columns) {
+          throw new Error(`Each CSV record must have at most ${CSV_LIMITS.columns} columns (source line ${recordLine}).`);
+        }
+        record.push(field);
+        field = "";
+        closedQuote = false;
+        continue;
+      }
+      if (char === "\r" || char === "\n") {
+        if (char === "\r" && text[i + 1] === "\n") i += 1;
+        record.push(field);
+        if (record.length > 1 || closedQuote || record.some((value) => value.trim() !== "")) {
+          retainRecord();
+        }
+        line += 1;
+        recordLine = line;
+        record = [];
+        field = "";
+        closedQuote = false;
+        continue;
+      }
+      field += char;
+    }
+    if (quoted) throw new Error("The CSV ends inside a quoted field.");
+    if (field.length || record.length || closedQuote) {
+      record.push(field);
+      if (record.length > 1 || closedQuote || record.some((value) => value.trim() !== "")) {
+        retainRecord();
+      }
+    }
+    if (records.length < 2) throw new Error("The CSV needs a header row and at least one data row.");
+    const rawHeaders = records[0];
+    const headers = rawHeaders.map((value) => value.trim());
+    if (headers.some((value) => !value)) throw new Error("The header row contains an empty column name.");
+    const normalizedHeaders = headers.map(normalize);
+    if (new Set(normalizedHeaders).size !== normalizedHeaders.length) {
+      throw new Error("The header row contains duplicate column names (ignoring case and spaces).");
+    }
+    const rows = records.slice(1).map((values, index) => {
+      if (values.length > headers.length) throw new Error(`Data row ${recordLines[index + 1]} has more cells than the header.`);
+      if (values.length < headers.length) throw new Error(`Data row ${recordLines[index + 1]} has fewer cells than the header. Use explicit empty cells for blank values.`);
+      return Object.fromEntries(headers.map((header, column) => [header, values[column] ?? ""]));
+    });
+    return { headers, rawHeaders, rows, rowNumbers: recordLines.slice(1) };
+  }
+  function normalize(value) {
+    return String(value).trim().toLocaleLowerCase("en-US");
+  }
+
+  // analyze.js
+  var OPTIONS = [
+    ["Option1 Name", "Option1 Value"],
+    ["Option2 Name", "Option2 Value"],
+    ["Option3 Name", "Option3 Value"]
+  ];
+  var PACKED_SIZE = ["Packed product length", "Packed product width", "Packed product height", "Packed product dimension unit"];
+  function packedSizeFindings(parsed, parts, handleColumn) {
+    const columns = PACKED_SIZE.map((name) => columnName(parsed.headers, name));
+    const shipping = columnName(parsed.headers, "Requires shipping");
+    return parts.productRows.flatMap((row, index) => {
+      const values = columns.map((column) => column ? row[column] : "");
+      const filled = values.filter((value) => value.trim()).length;
+      let reason;
+      if (shipping && normalize(row[shipping]) === "false") reason = "shipping-disabled-clears-size";
+      else if (filled > 0 && filled < 4) reason = "incomplete-packed-size";
+      if (!reason) return [];
+      return [{
+        handle: row[handleColumn],
+        row: parts.productRowNumbers[index],
+        reason,
+        requiresShipping: shipping ? row[shipping] : null,
+        fields: PACKED_SIZE.map((column, index2) => ({ column, included: Boolean(columns[index2]), value: values[index2] }))
+      }];
+    });
+  }
+  var columnLookups = /* @__PURE__ */ new WeakMap();
+  function columnName(headers, expected) {
+    let lookup = columnLookups.get(headers);
+    if (!lookup) {
+      lookup = /* @__PURE__ */ new Map();
+      for (const header of headers) {
+        const key = headerKey(header);
+        if (!lookup.has(key)) lookup.set(key, []);
+        lookup.get(key).push(header);
+      }
+      columnLookups.set(headers, lookup);
+    }
+    const wanted = headerKey(expected);
+    const matches = lookup.get(wanted) ?? [];
+    if (matches.length > 1) throw new Error(`The CSV has multiple columns matching \u201C${expected}\u201D.`);
+    return matches[0];
+  }
+  function headerKey(value) {
+    const key = normalize(value);
+    if (key === "url handle") return "handle";
+    if (key === "product image url") return "image src";
+    if (key === "sku") return "variant sku";
+    if (key === "weight value (grams)") return "variant grams";
+    if (key === "price") return "variant price";
+    if (key === "compare-at price") return "variant compare at price";
+    return key;
+  }
+  function validateComparableHeaders(parsed) {
+    const seen = /* @__PURE__ */ new Map();
+    for (const header of parsed.headers) {
+      const key = headerKey(header);
+      const prior = seen.get(key);
+      if (prior) {
+        throw new Error(`The CSV has multiple columns that map to the same field: \u201C${prior}\u201D and \u201C${header}\u201D.`);
+      }
+      seen.set(key, header);
+    }
+  }
+  function variantKey(row, headers, handleColumn) {
+    return JSON.stringify([
+      normalize(row[handleColumn]),
+      ...OPTIONS.flatMap(([name, value]) => {
+        const nameColumn = columnName(headers, name);
+        const valueColumn = columnName(headers, value);
+        return [nameColumn ? normalize(row[nameColumn]) : "", valueColumn ? normalize(row[valueColumn]) : ""];
+      })
+    ]);
+  }
+  function optionSignature(row, headers) {
+    return JSON.stringify(OPTIONS.map(([name, value]) => {
+      const nameColumn = columnName(headers, name);
+      const valueColumn = columnName(headers, value);
+      return [nameColumn ? normalize(row[nameColumn]) : "", valueColumn ? normalize(row[valueColumn]) : ""];
+    }));
+  }
+  function indexRows(parsed, handleColumn) {
+    const index = /* @__PURE__ */ new Map();
+    const duplicates = [];
+    for (const [rowIndex, row] of parsed.rows.entries()) {
+      const rowNumber = parsed.rowNumbers[rowIndex];
+      const handle = row[handleColumn];
+      if (!handle.trim()) throw new Error(`Row ${rowNumber} has a blank Handle.`);
+      const key = variantKey(row, parsed.headers, handleColumn);
+      if (index.has(key)) duplicates.push({ row: rowNumber, handle });
+      else index.set(key, { row, rowNumber });
+    }
+    return { index, duplicates };
+  }
+  function splitImageContinuations(parsed, handleColumn) {
+    const imageColumn = columnName(parsed.headers, "Image Src");
+    const positionColumn = columnName(parsed.headers, "Image Position");
+    const altColumn = columnName(parsed.headers, "Image Alt Text");
+    const allowedContinuationColumns = new Set([
+      handleColumn,
+      imageColumn,
+      positionColumn,
+      altColumn
+    ].filter(Boolean));
+    const productRows = [];
+    const productRowNumbers = [];
+    const imagesByHandle = /* @__PURE__ */ new Map();
+    let imageOnlyRows = 0;
+    for (const [index, row] of parsed.rows.entries()) {
+      if (!row[handleColumn].trim()) throw new Error(`Row ${parsed.rowNumbers[index]} has a blank Handle.`);
+      const isContinuation = imageColumn && row[imageColumn].trim() && parsed.headers.every((column) => allowedContinuationColumns.has(column) || !row[column].trim());
+      if (!isContinuation) {
+        productRows.push(row);
+        productRowNumbers.push(parsed.rowNumbers[index]);
+        continue;
+      }
+      const handle = normalize(row[handleColumn]);
+      if (!imagesByHandle.has(handle)) imagesByHandle.set(handle, []);
+      imagesByHandle.get(handle).push({
+        handle: row[handleColumn],
+        url: row[imageColumn],
+        position: positionColumn ? row[positionColumn] : "",
+        altText: altColumn ? row[altColumn] : "",
+        row: parsed.rowNumbers[index]
+      });
+      imageOnlyRows += 1;
+    }
+    return { productRows, productRowNumbers, imagesByHandle, imageOnlyRows };
+  }
+  function analyzeCsvPair(originalText, proposedText) {
+    const original = parseCsv(originalText);
+    const proposed = parseCsv(proposedText);
+    validateComparableHeaders(original);
+    validateComparableHeaders(proposed);
+    const originalHandle = columnName(original.headers, "Handle");
+    const proposedHandle = columnName(proposed.headers, "Handle");
+    if (!originalHandle || !proposedHandle) throw new Error("Both files need Shopify's Handle column.");
+    const originalParts = splitImageContinuations(original, originalHandle);
+    const proposedParts = splitImageContinuations(proposed, proposedHandle);
+    const packedSizeIssues = packedSizeFindings(proposed, proposedParts, proposedHandle);
+    const findOrphanImages = (parsed, parts, handleColumn) => {
+      const productHandles = new Set(parts.productRows.map((row) => normalize(row[handleColumn])));
+      return [...parts.imagesByHandle.entries()].flatMap(([handle, images]) => productHandles.has(handle) ? [] : images.map((image) => ({ handle, ...image })));
+    };
+    const orphanImageRows = {
+      original: findOrphanImages(original, originalParts, originalHandle),
+      proposed: findOrphanImages(proposed, proposedParts, proposedHandle)
+    };
+    const before = indexRows({ ...original, rows: originalParts.productRows, rowNumbers: originalParts.productRowNumbers }, originalHandle);
+    const after = indexRows({ ...proposed, rows: proposedParts.productRows, rowNumbers: proposedParts.productRowNumbers }, proposedHandle);
+    const oldHeaders = new Map(original.headers.map((name) => [headerKey(name), name]));
+    const newHeaders = new Map(proposed.headers.map((name) => [headerKey(name), name]));
+    const commonColumns = proposed.headers.filter((name) => oldHeaders.has(headerKey(name)));
+    const comparisons = commonColumns.map((proposedColumn) => ({
+      proposedColumn,
+      originalColumn: oldHeaders.get(headerKey(proposedColumn)),
+      isHandle: headerKey(proposedColumn) === headerKey(proposedHandle),
+      isOptionValue: OPTIONS.some(([, value]) => normalize(value) === normalize(proposedColumn))
+    }));
+    const omittedColumns = original.headers.filter((name) => !newHeaders.has(headerKey(name)));
+    const addedColumns = proposed.headers.filter((name) => !oldHeaders.has(headerKey(name)));
+    const headerSpellingChanges = proposed.headers.flatMap((name) => {
+      const priorName = oldHeaders.get(headerKey(name));
+      return priorName && normalize(priorName) === normalize(name) && priorName !== name ? [{ before: priorName, after: name }] : [];
+    });
+    const rawHeaderIssues = [original, proposed].flatMap((parsed, fileIndex) => parsed.rawHeaders.flatMap((raw, index) => raw !== parsed.headers[index] ? [{ file: fileIndex === 0 ? "original" : "proposed", raw, trimmed: parsed.headers[index] }] : []));
+    const originalSku = columnName(original.headers, "Variant SKU");
+    const proposedSku = columnName(proposed.headers, "Variant SKU");
+    const originalSkus = /* @__PURE__ */ new Map();
+    const proposedSkus = /* @__PURE__ */ new Map();
+    const ambiguousSkus = { original: /* @__PURE__ */ new Set(), proposed: /* @__PURE__ */ new Set() };
+    const addSku = (map, ambiguous, skuColumn, key, item) => {
+      if (!skuColumn) return;
+      const sku = normalize(item.row[skuColumn]);
+      if (!sku) return;
+      if (map.has(sku)) ambiguous.add(sku);
+      map.set(sku, map.has(sku) ? null : { key, item });
+    };
+    const indexSkus = (parsed, parts, handleColumn, skuColumn, map, ambiguous) => {
+      for (const [index, row] of parts.productRows.entries()) {
+        addSku(
+          map,
+          ambiguous,
+          skuColumn,
+          variantKey(row, parsed.headers, handleColumn),
+          { row, rowNumber: parts.productRowNumbers[index] }
+        );
+      }
+    };
+    indexSkus(original, originalParts, originalHandle, originalSku, originalSkus, ambiguousSkus.original);
+    indexSkus(proposed, proposedParts, proposedHandle, proposedSku, proposedSkus, ambiguousSkus.proposed);
+    const pairs = [];
+    const matchedOriginalKeys = /* @__PURE__ */ new Set();
+    const matchedProposedKeys = /* @__PURE__ */ new Set();
+    for (const [key, current] of after.index) {
+      const prior = before.index.get(key);
+      if (!prior) continue;
+      pairs.push({ prior, current, matchType: "handle-options" });
+      matchedOriginalKeys.add(key);
+      matchedProposedKeys.add(key);
+    }
+    for (const [key, current] of after.index) {
+      if (matchedProposedKeys.has(key) || !proposedSku) continue;
+      const sku = normalize(current.row[proposedSku]);
+      const originalMatch = originalSkus.get(sku);
+      const proposedMatch = proposedSkus.get(sku);
+      if (!sku || !originalMatch?.item || !proposedMatch?.item || proposedMatch.key !== key || matchedOriginalKeys.has(originalMatch.key) || before.index.get(originalMatch.key)?.row !== originalMatch.item.row || after.index.get(key)?.row !== proposedMatch.item.row) continue;
+      pairs.push({ prior: originalMatch.item, current, matchType: "unique-sku" });
+      matchedOriginalKeys.add(originalMatch.key);
+      matchedProposedKeys.add(key);
+    }
+    const matched = [];
+    const blanked = [];
+    const changedOptionValues = [];
+    const changedHandles = [];
+    for (const { prior, current, matchType } of pairs) {
+      const changes = [];
+      for (const { proposedColumn, originalColumn, isHandle, isOptionValue } of comparisons) {
+        const from = prior.row[originalColumn] ?? "";
+        const to = current.row[proposedColumn] ?? "";
+        if (from === to) continue;
+        changes.push({ column: proposedColumn, before: from, after: to });
+        if (isHandle) {
+          changedHandles.push({
+            before: prior.row[originalHandle],
+            after: current.row[proposedHandle],
+            sku: proposedSku ? current.row[proposedSku] : "",
+            row: current.rowNumber
+          });
+        }
+        if (from.trim() && !to.trim()) blanked.push({
+          handle: current.row[proposedHandle],
+          column: proposedColumn,
+          row: current.rowNumber,
+          originalRow: prior.rowNumber,
+          matchType
+        });
+        if (isOptionValue) {
+          changedOptionValues.push({ handle: current.row[proposedHandle], column: proposedColumn, before: from, after: to });
+        }
+      }
+      if (changes.length) matched.push({ handle: current.row[proposedHandle], row: current.rowNumber, originalRow: prior.rowNumber, matchType, changes });
+    }
+    const added = [...after.index.entries()].filter(([key]) => !matchedProposedKeys.has(key)).map(([, item]) => ({ handle: item.row[proposedHandle], row: item.rowNumber }));
+    const absent = [...before.index.entries()].filter(([key]) => !matchedOriginalKeys.has(key)).map(([, item]) => ({ handle: item.row[originalHandle], row: item.rowNumber }));
+    const optionColumnsIncluded = OPTIONS.slice(0, 1).every(([name, value]) => columnName(proposed.headers, name) && columnName(proposed.headers, value));
+    const imageHandles = /* @__PURE__ */ new Set([
+      ...originalParts.imagesByHandle.keys(),
+      ...proposedParts.imagesByHandle.keys()
+    ]);
+    const imageContinuationChanges = [...imageHandles].flatMap((handle) => {
+      const originalImages = originalParts.imagesByHandle.get(handle) ?? [];
+      const proposedImages = proposedParts.imagesByHandle.get(handle) ?? [];
+      const unmatchedOriginal = /* @__PURE__ */ new Map();
+      for (const image of originalImages) {
+        const identity = JSON.stringify([image.handle, image.url, image.position, image.altText]);
+        if (!unmatchedOriginal.has(identity)) unmatchedOriginal.set(identity, { rows: [], consumed: 0 });
+        unmatchedOriginal.get(identity).rows.push(image.row);
+      }
+      const addedRows = [];
+      for (const image of proposedImages) {
+        const identity = JSON.stringify([image.handle, image.url, image.position, image.altText]);
+        const matchingRows = unmatchedOriginal.get(identity);
+        if (matchingRows && matchingRows.consumed < matchingRows.rows.length) matchingRows.consumed += 1;
+        else addedRows.push(image.row);
+      }
+      const removedRows = [...unmatchedOriginal.values()].flatMap(({ rows, consumed }) => rows.slice(consumed));
+      const orderChanged = !addedRows.length && !removedRows.length && JSON.stringify(originalImages.map(({ handle: handle2, url, position, altText }) => [handle2, url, position, altText])) !== JSON.stringify(proposedImages.map(({ handle: handle2, url, position, altText }) => [handle2, url, position, altText]));
+      return !addedRows.length && !removedRows.length && !orderChanged ? [] : [{
+        handle: (proposedImages[0] ?? originalImages[0]).handle,
+        handles: [...new Set([...originalImages, ...proposedImages].map((image) => image.handle))],
+        originalRows: originalImages.map((image) => image.row),
+        proposedRows: proposedImages.map((image) => image.row),
+        originalImages,
+        proposedImages,
+        addedRows,
+        removedRows,
+        orderChanged
+      }];
+    });
+    const warnings = [];
+    if (packedSizeIssues.some((item) => item.reason === "incomplete-packed-size")) warnings.push({
+      level: "high",
+      title: "Some proposed packed product sizes are incomplete",
+      detail: "Shopify requires all four packed product size fields together, or all four blank. Partial values can reject the affected product. Review the listed proposed source lines and omitted fields."
+    });
+    if (packedSizeIssues.some((item) => item.reason === "shipping-disabled-clears-size")) warnings.push({
+      level: "high",
+      title: "Requires shipping is false: saved packed product size can be cleared",
+      detail: "Shopify clears saved packed size when Requires shipping is false, even when the four packed size columns are omitted. Any included size values are ignored. These findings do not prove a saved size exists in the store; confirm the intended result before importing."
+    });
+    const collectOptions = (parsed, parts, handleColumn) => {
+      const groups = /* @__PURE__ */ new Map();
+      for (const [index, row] of parts.productRows.entries()) {
+        const handle = normalize(row[handleColumn]);
+        if (!groups.has(handle)) groups.set(handle, { handle: row[handleColumn], handles: /* @__PURE__ */ new Set(), combinations: /* @__PURE__ */ new Map() });
+        groups.get(handle).handles.add(row[handleColumn]);
+        const combinations = groups.get(handle).combinations;
+        const signature = optionSignature(row, parsed.headers);
+        if (!combinations.has(signature)) combinations.set(signature, {
+          options: OPTIONS.map(([name, value]) => {
+            const nameColumn = columnName(parsed.headers, name);
+            const valueColumn = columnName(parsed.headers, value);
+            return { name: nameColumn ? row[nameColumn] : "", value: valueColumn ? row[valueColumn] : "" };
+          }),
+          rows: []
+        });
+        combinations.get(signature).rows.push(parts.productRowNumbers[index]);
+      }
+      return groups;
+    };
+    const originalOptionsByHandle = collectOptions(original, originalParts, originalHandle);
+    const proposedOptionsByHandle = collectOptions(proposed, proposedParts, proposedHandle);
+    const optionCombinationDifferences = [];
+    for (const [key, oldGroup] of originalOptionsByHandle) {
+      const newGroup = proposedOptionsByHandle.get(key);
+      if (!newGroup) continue;
+      const removed = [...oldGroup.combinations].filter(([signature]) => !newGroup.combinations.has(signature)).map(([, item]) => item);
+      const added2 = [...newGroup.combinations].filter(([signature]) => !oldGroup.combinations.has(signature)).map(([, item]) => item);
+      if (!removed.length && !added2.length) continue;
+      optionCombinationDifferences.push({
+        handle: oldGroup.handle,
+        handles: [.../* @__PURE__ */ new Set([...oldGroup.handles, ...newGroup.handles])],
+        original: oldGroup.combinations.size,
+        proposed: newGroup.combinations.size,
+        proposedHandle: newGroup.handle,
+        removed,
+        added: added2
+      });
+    }
+    if (blanked.length) warnings.push({
+      level: "high",
+      title: `${blanked.length} existing nonblank value(s) become blank`,
+      detail: "If you import with \u201COverwrite products with matching handles,\u201D included blank columns can overwrite existing values. Review every listed cell before importing."
+    });
+    if (changedOptionValues.length || optionCombinationDifferences.length) warnings.push({
+      level: "high",
+      title: `Variant option combinations differ for ${optionCombinationDifferences.length} existing product(s)`,
+      detail: "Changed, added, or missing variant option combinations need review. Shopify warns that changing option values can replace variant IDs; check downstream references before import."
+    });
+    if (changedHandles.length) warnings.push({
+      level: "high",
+      title: `${changedHandles.length} row(s) have a changed Handle despite a matching unique SKU`,
+      detail: "Shopify uses Handle to match products when overwriting. A changed Handle may be imported as a new product instead of updating the original. Confirm the intended product identity in Shopify before importing."
+    });
+    if (headerSpellingChanges.length || rawHeaderIssues.length) warnings.push({
+      level: "high",
+      title: "Column header spelling or whitespace changed",
+      detail: "Shopify requires headers to match its CSV format, including capitalization. The checker normalizes some headers only to compare files; verify both files against Shopify's current sample before importing."
+    });
+    const variantDataColumns = [
+      proposedSku,
+      columnName(proposed.headers, "Variant Grams")
+    ].filter(Boolean);
+    if (variantDataColumns.length && !optionColumnsIncluded) warnings.push({
+      level: "high",
+      title: "Variant data is included but Option1 columns are missing",
+      detail: "Shopify documents variant data dependencies: fields such as SKU and weight need corresponding option names and values. Missing options can create a default variant and delete existing variants. Inspect the current Shopify CSV requirements before importing."
+    });
+    if (imageContinuationChanges.length) warnings.push({
+      level: "medium",
+      title: `Additional image rows differ for ${imageContinuationChanges.length} product(s)`,
+      detail: "Shopify product CSVs can use extra rows containing a Handle and an image URL. Review the listed image-only row changes; they are excluded from variant identity matching."
+    });
+    if (orphanImageRows.original.length || orphanImageRows.proposed.length) warnings.push({
+      level: "high",
+      title: "Image-only rows have no matching product row",
+      detail: "These image rows use a Handle that does not appear on a product or variant row in the same file. Check the Handle and row placement; the image changes cannot be reliably compared."
+    });
+    if (absent.length) warnings.push({
+      level: "medium",
+      title: `${absent.length} original variant row(s) are absent from the proposed file`,
+      detail: "This reports rows missing from the file only. It does not mean Shopify will delete those products; confirm the intended scope and import behavior."
+    });
+    if (before.duplicates.length || after.duplicates.length) warnings.push({
+      level: "high",
+      title: "Duplicate Handle/option identities make some comparisons ambiguous",
+      detail: "Resolve duplicate product/variant keys or review the affected rows manually before relying on this comparison."
+    });
+    if (ambiguousSkus.original.size || ambiguousSkus.proposed.size) warnings.push({
+      level: "high",
+      title: "Repeated SKU values prevent reliable row matching",
+      detail: `SKU matching was skipped for repeated values. Original: ${[...ambiguousSkus.original].join(", ") || "none"}; proposed: ${[...ambiguousSkus.proposed].join(", ") || "none"}. Review those rows manually.`
+    });
+    return {
+      originalRows: original.rows.length,
+      proposedRows: proposed.rows.length,
+      originalImageOnlyRows: originalParts.imageOnlyRows,
+      proposedImageOnlyRows: proposedParts.imageOnlyRows,
+      matchedRows: pairs.length,
+      addedRows: added,
+      absentRows: absent,
+      changedRows: matched,
+      uniqueSkuMatches: pairs.filter(({ matchType }) => matchType === "unique-sku").length,
+      ambiguousSkus: {
+        original: [...ambiguousSkus.original],
+        proposed: [...ambiguousSkus.proposed]
+      },
+      blankedCells: blanked,
+      packedSizeIssues,
+      changedOptionValues,
+      changedHandles,
+      optionCombinationDifferences,
+      omittedColumns,
+      addedColumns,
+      headerSpellingChanges,
+      rawHeaderIssues,
+      duplicateKeys: { original: before.duplicates, proposed: after.duplicates },
+      imageContinuationChanges,
+      orphanImageRows,
+      warnings,
+      notes: [
+        "Packed size checks cover partial proposed values and Requires shipping=false using current header names only. Units, numeric validity, shipping aliases, all-blank size clearing and the complete import schema are not validated.",
+        "This compares files locally; it does not connect to Shopify or upload either file.",
+        "Column names are normalized for comparison. Shopify requires exact template headers, including case; verify both files against the current Shopify CSV format.",
+        "A report is a review aid, not a guarantee that an import is safe. Verify against Shopify's current documentation and your import settings."
+      ]
+    };
+  }
+
+  // read-csv.mjs
+  var maxInputBytes = 15 * 1024 * 1024;
+  async function readCsvFile(file) {
+    if (file.size > maxInputBytes) throw new Error("Each CSV must be 15 MB or smaller for this prototype.");
+    const bytes = await file.arrayBuffer();
+    if (bytes.byteLength > maxInputBytes) throw new Error("Each CSV must be 15 MB or smaller for this prototype.");
+    try {
+      return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+    } catch {
+      throw new Error("Each CSV must use valid UTF-8 encoding. Export it as UTF-8 and try again.");
+    }
+  }
+
+  // report.mjs
+  var escape = (value) => String(value).replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
+  function table(title, headings, rows) {
+    return `<section><h2>${escape(title)} (${rows.length})</h2>${rows.length ? `<div class="table-scroll"><table><thead><tr>${headings.map((heading) => `<th scope="col">${escape(heading)}</th>`).join("")}</tr></thead><tbody>${rows.map((row) => `<tr>${row.map((value) => `<td>${escape(value)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>` : "<p>None detected.</p>"}</section>`;
+  }
+  var bothFiles = (entries) => ["original", "proposed"].flatMap((file) => entries[file].map((item) => [file, item.handle, item.row]));
+  var lines = (values) => values.join(", ") || "none";
+  var packedSizeReason = (reason) => ({
+    "incomplete-packed-size": "Incomplete packed size: supply all four values or leave all four blank",
+    "shipping-disabled-clears-size": "Shipping disabled: saved packed size can be cleared"
+  })[reason] ?? reason;
+  function summarizeProducts(report) {
+    const products = /* @__PURE__ */ new Map();
+    const add = (handle, category, count = 1) => {
+      if (!products.has(handle)) products.set(handle, {
+        handle,
+        changedCells: 0,
+        blankedCells: 0,
+        addedVariants: 0,
+        absentVariants: 0,
+        packedSizeIssues: 0,
+        imageChanges: 0,
+        optionChanges: 0,
+        optionValueChanges: 0,
+        handleChanges: 0,
+        duplicateIdentities: 0,
+        orphanImages: 0
+      });
+      products.get(handle)[category] += count;
+    };
+    for (const row of report.changedRows) add(row.handle, "changedCells", row.changes.length);
+    for (const [key, category] of [
+      ["blankedCells", "blankedCells"],
+      ["addedRows", "addedVariants"],
+      ["absentRows", "absentVariants"],
+      ["packedSizeIssues", "packedSizeIssues"],
+      ["imageContinuationChanges", "imageChanges"],
+      ["optionCombinationDifferences", "optionChanges"],
+      ["changedOptionValues", "optionValueChanges"]
+    ]) for (const row of report[key] ?? []) {
+      for (const handle of new Set(row.handles ?? [row.handle])) add(handle, category);
+    }
+    for (const row of report.changedHandles) {
+      add(row.before, "handleChanges");
+      if (row.after !== row.before) add(row.after, "handleChanges");
+    }
+    for (const file of ["original", "proposed"]) {
+      for (const row of report.duplicateKeys[file]) add(row.handle, "duplicateIdentities");
+      for (const row of report.orphanImageRows[file]) add(row.handle, "orphanImages");
+    }
+    return [...products.values()].sort((a, b) => a.handle < b.handle ? -1 : a.handle > b.handle ? 1 : 0);
+  }
+  function summarizeProductFindings(report) {
+    return {
+      format: "catalog-product-findings",
+      version: 1,
+      scope: "Exact Handle spellings with findings only. Counts overlap and are not risk scores. Grouped image and option findings appear once under each participating exact spelling. Renamed Handles appear under both spellings. Global warnings, headers, columns and ambiguous SKUs require the full report. Handles and counts may be commercially sensitive.",
+      products: summarizeProducts(report)
+    };
+  }
+  function renderReport(report) {
+    const warnings = report.warnings.map((warning) => `<li><strong>${escape(warning.level)}: ${escape(warning.title)}</strong><p>${escape(warning.detail)}</p></li>`).join("");
+    const sections = [
+      table(
+        "Products with findings",
+        ["Exact Handle", "Changed cells", "Blanked cells", "Added variants", "Absent variants", "Packed size issues", "Image changes", "Option combination changes", "Option value changes", "Handle changes", "Duplicate identities (both files)", "Orphan images (both files)"],
+        summarizeProducts(report).map((item) => Object.values(item))
+      ),
+      table(
+        "Packed product size issues",
+        ["Handle", "Proposed source line", "Reason", "Requires shipping", "Length", "Width", "Height", "Dimension unit"],
+        (report.packedSizeIssues ?? []).map((item) => [
+          item.handle,
+          item.row,
+          packedSizeReason(item.reason),
+          item.requiresShipping ?? "(column omitted)",
+          ...item.fields.map((field) => field.included ? field.value : "(column omitted)")
+        ])
+      ),
+      table(
+        "Changed cells",
+        ["Handle", "Original source line", "Proposed source line", "Matched by", "Column", "Before", "After"],
+        report.changedRows.flatMap((row) => row.changes.map((change) => [row.handle, row.originalRow, row.row, row.matchType, change.column, change.before, change.after]))
+      ),
+      table(
+        "Blanked cells",
+        ["Handle", "Original source line", "Proposed source line", "Matched by", "Column"],
+        report.blankedCells.map((row) => [row.handle, row.originalRow, row.row, row.matchType, row.column])
+      ),
+      table("Absent original variants", ["Handle", "Original source line"], report.absentRows.map((row) => [row.handle, row.row])),
+      table("Added proposed variants", ["Handle", "Proposed source line"], report.addedRows.map((row) => [row.handle, row.row])),
+      table(
+        "Changed variant option values",
+        ["Handle", "Column", "Before", "After"],
+        report.changedOptionValues.map((row) => [row.handle, row.column, row.before, row.after])
+      ),
+      table(
+        "Option combination differences",
+        ["Handle", "Original count", "Proposed count"],
+        report.optionCombinationDifferences.map((row) => [row.handle, row.original, row.proposed])
+      ),
+      table(
+        "Option combination details",
+        ["File", "Handle", "Change", "Source lines", "Option 1 name", "Option 1 value", "Option 2 name", "Option 2 value", "Option 3 name", "Option 3 value"],
+        report.optionCombinationDifferences.flatMap((change) => ["removed", "added"].flatMap((status2) => (change[status2] ?? []).map((item) => [
+          status2 === "removed" ? "original" : "proposed",
+          status2 === "removed" ? change.handle : change.proposedHandle ?? change.handle,
+          status2,
+          lines(item.rows),
+          ...item.options.flatMap((option) => [option.name, option.value])
+        ])))
+      ),
+      table(
+        "Changed handles",
+        ["Before", "After", "SKU", "Proposed source line"],
+        report.changedHandles.map((row) => [row.before, row.after, row.sku, row.row])
+      ),
+      table(
+        "Additional image-row changes",
+        ["Handle", "Original source lines", "Proposed source lines", "Added proposed lines", "Removed original lines", "Order changed"],
+        report.imageContinuationChanges.map((row) => [row.handle, lines(row.originalRows), lines(row.proposedRows), lines(row.addedRows), lines(row.removedRows), row.orderChanged ? "yes" : "no"])
+      ),
+      table(
+        "Image row details for changed products",
+        ["File", "Handle", "Source line", "Change", "URL (text only)", "Position", "Alt text"],
+        report.imageContinuationChanges.flatMap((change) => ["original", "proposed"].flatMap((file) => (change[file === "original" ? "originalImages" : "proposedImages"] ?? []).map((item) => [file, item.handle, item.row, (file === "original" ? change.removedRows : change.addedRows).includes(item.row) ? file === "original" ? "removed" : "added" : "retained", item.url, item.position, item.altText])))
+      ),
+      table("Orphan image rows", ["File", "Handle", "Source line", "URL (text only)", "Position", "Alt text"], ["original", "proposed"].flatMap((file) => report.orphanImageRows[file].map((item) => [file, item.handle, item.row, item.url ?? "", item.position ?? "", item.altText ?? ""]))),
+      table("Duplicate variant identities", ["File", "Handle", "Source line"], bothFiles(report.duplicateKeys)),
+      table("Ambiguous SKUs", ["File", "SKU"], ["original", "proposed"].flatMap((file) => report.ambiguousSkus[file].map((sku) => [file, sku]))),
+      table("Omitted columns", ["Column"], report.omittedColumns.map((column) => [column])),
+      table("Added columns", ["Column"], report.addedColumns.map((column) => [column])),
+      table("Header spelling changes", ["Before", "After"], report.headerSpellingChanges.map((row) => [row.before, row.after])),
+      table(
+        "Header whitespace",
+        ["File", "Raw header (JSON quoted)", "Compared header (JSON quoted)"],
+        report.rawHeaderIssues.map((row) => [row.file, JSON.stringify(row.raw), JSON.stringify(row.trimmed)])
+      )
+    ].join("");
+    return `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'"><title>Catalog Change Guard report</title><style>body{font:16px system-ui;max-width:1100px;margin:40px auto;padding:0 20px;color:#172333}.table-scroll{overflow-x:auto}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:10px;text-align:left;white-space:pre-wrap;overflow-wrap:anywhere}li{margin:16px 0}p{line-height:1.5}</style><body><h1>Catalog Change Guard</h1><p>Local file comparison. Review aid; does not guarantee import safety. This report contains source values: keep it private.</p><p>Original rows: ${escape(report.originalRows)} \xB7 Proposed rows: ${escape(report.proposedRows)} \xB7 Matched variants: ${escape(report.matchedRows)} \xB7 Unique SKU matches: ${escape(report.uniqueSkuMatches)} \xB7 Blanked cells: ${escape(report.blankedCells.length)} \xB7 Original image-only rows: ${escape(report.originalImageOnlyRows)} \xB7 Proposed image-only rows: ${escape(report.proposedImageOnlyRows)}</p><p>Source lines are each record's starting physical line in its own CSV, including the header, blank lines and line breaks inside quoted fields. Missing rows are not deletion instructions. Duplicate identities compare the first row only and require manual review. Image details include URLs as inert text; images are never loaded. Metadata edits appear as an added and a removed row.</p><p>The product overview groups exact Handle spellings and lists finding counts, not risk scores. Blanked cells are also changed cells; categories can overlap. Handle changes appear under both old and new spellings. Image and option counts describe normalized product-group findings, not individual images or option values; each participating exact Handle spelling receives the group finding once. Global column/header findings, ambiguous SKUs and warnings remain in their own sections. Products without findings are omitted.</p><h2>Warnings</h2><ul>${warnings || "<li>No configured warnings. Review the full comparison before importing.</li>"}</ul>${sections}<h2>Privacy and limits</h2><ul>${report.notes.map((note) => `<li>${escape(note)}</li>`).join("")}</ul><p>This HTML view includes all finding categories. JSON preserves the structured comparison for further analysis.</p></body></html>`;
+  }
+  function renderChangedCellsCsv(report) {
+    const cell = (value) => {
+      let text = String(value ?? "");
+      if (/^[\s\u0000-\u001f]*[=+@-]/u.test(text) || /^[\t\r\n]/u.test(text)) text = "'" + text;
+      return '"' + text.replaceAll('"', '""') + '"';
+    };
+    const rows = [["Handle", "Original source line", "Proposed source line", "Matched by", "Column", "Before", "After", "Change"]];
+    for (const row of report.changedRows) {
+      for (const change of row.changes) rows.push([
+        row.handle,
+        row.originalRow,
+        row.row,
+        row.matchType,
+        change.column,
+        change.before,
+        change.after,
+        change.before.trim() && !change.after.trim() ? "blanked" : "edited"
+      ]);
+    }
+    return rows.map((row) => row.map(cell).join(",")).join("\r\n") + "\r\n";
+  }
+  function summarizeReport(report) {
+    const findings = {};
+    for (const key of [
+      "addedRows",
+      "absentRows",
+      "changedRows",
+      "blankedCells",
+      "packedSizeIssues",
+      "changedOptionValues",
+      "changedHandles",
+      "optionCombinationDifferences",
+      "omittedColumns",
+      "addedColumns",
+      "headerSpellingChanges",
+      "rawHeaderIssues",
+      "imageContinuationChanges"
+    ]) {
+      findings[key] = report[key].length;
+    }
+    findings.changedCells = report.changedRows.reduce((count, row) => count + row.changes.length, 0);
+    for (const key of ["ambiguousSkus", "duplicateKeys", "orphanImageRows"]) {
+      findings[key] = { original: report[key].original.length, proposed: report[key].proposed.length };
+    }
+    const warnings = { total: report.warnings.length, high: 0, medium: 0, other: 0 };
+    for (const warning of report.warnings) {
+      warnings[warning.level === "high" || warning.level === "medium" ? warning.level : "other"] += 1;
+    }
+    return {
+      format: "catalog-count-summary",
+      version: 1,
+      scope: "Counts only; review the full report before importing. Counts may still be commercially sensitive.",
+      rows: {
+        original: report.originalRows,
+        proposed: report.proposedRows,
+        originalImageOnly: report.originalImageOnlyRows,
+        proposedImageOnly: report.proposedImageOnlyRows,
+        matchedVariants: report.matchedRows,
+        uniqueSkuMatches: report.uniqueSkuMatches
+      },
+      findings,
+      warnings
+    };
+  }
+
+  // app.js
+  var form = document.querySelector("#compare-form");
+  var output = document.querySelector("#results");
+  var status = document.querySelector("#status");
+  var downloadButton = document.querySelector("#download");
+  var htmlDownloadButton = document.querySelector("#download-html");
+  var csvDownloadButton = document.querySelector("#download-csv");
+  var summaryDownloadButton = document.querySelector("#download-summary");
+  var productDownloadButton = document.querySelector("#download-products");
+  var compareButton = form.querySelector('button[type="submit"]');
+  var MAX_FILE_BYTES = 15 * 1024 * 1024;
+  var lastReport = null;
+  var selectionVersion = 0;
+  var SAMPLE_ORIGINAL = "Handle,Title,Vendor,Option1 Name,Option1 Value,Variant SKU,Image Src,Image Position,Image Alt Text\nsample-mug,Blue Sample Mug,Example Supply,Size,12 oz,MUG-12,https://example.invalid/mug-front.jpg,1,Front of blue mug\nsample-mug,,,,,,https://example.invalid/mug-side.jpg,2,Side of blue mug\nsample-shirt,Sample Shirt,Example Supply,Size,Small,SHIRT-S,https://example.invalid/shirt.jpg,1,Sample shirt\nsample-shirt,Sample Shirt,Example Supply,Size,Medium,SHIRT-M,https://example.invalid/shirt.jpg,1,Sample shirt\n";
+  var SAMPLE_PROPOSED = "Handle,Title,Vendor,Option1 Name,Option1 Value,Variant SKU,Image Src,Image Position,Image Alt Text\nsample-mug,Blue Sample Mug,Example Supply,Size,12 oz,MUG-12,https://example.invalid/mug-front.jpg,1,Front of blue mug\nsample-mug,,,,,,https://example.invalid/mug-side.jpg,2,Side profile of blue mug\nsample-shirt,Sample Shirt,,Size,Small,SHIRT-S,https://example.invalid/shirt.jpg,1,Sample shirt\n";
+  function element(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== void 0) node.textContent = text;
+    return node;
+  }
+  function addList(section, title, items, format) {
+    const block = element("section", "result-block");
+    block.append(element("h3", "", `${title} (${items.length})`));
+    if (!items.length) block.append(element("p", "muted", "None found."));
+    else {
+      const list = element("ul");
+      for (const item of items) list.append(element("li", "", format(item)));
+      block.append(list);
+    }
+    section.append(block);
+  }
+  function render(report) {
+    output.replaceChildren();
+    output.setAttribute("aria-busy", "false");
+    const summary = element("div", "summary");
+    for (const [value, label2] of [
+      [`${report.originalRows} \u2192 ${report.proposedRows}`, "Original \u2192 proposed rows"],
+      [report.changedRows.length, "Rows with edits"],
+      [report.blankedCells.length, "Values blanked"],
+      [report.absentRows.length, "Original rows missing"],
+      [report.uniqueSkuMatches, "Paired by unique SKU"]
+    ]) {
+      const metric = element("div", "metric");
+      metric.append(element("b", "", value), element("span", "", label2));
+      summary.append(metric);
+    }
+    output.append(summary);
+    const warnings = element("section", "warnings");
+    warnings.append(element("h2", "", "Review before importing"));
+    if (!report.warnings.length) warnings.append(element("p", "", "No high-risk patterns were detected. This does not guarantee the import is safe."));
+    for (const warning of report.warnings) {
+      const card = element("article", `warning ${warning.level}`);
+      card.append(element("h3", "", warning.title), element("p", "", warning.detail));
+      warnings.append(card);
+    }
+    output.append(warnings);
+    const products = summarizeProducts(report);
+    const overview = element("section", "result-block");
+    overview.append(
+      element("h2", "", `Products with findings (${products.length})`),
+      element("p", "muted", "Exact Handle spellings stay separate. Counts overlap and are not risk scores. Blanked cells also count as changed cells; renamed Handles appear under both spellings. Global warnings, columns and ambiguous SKUs still need separate review below.")
+    );
+    const label = element("label", "", "Find in product overview (exact spelling, contains text)");
+    label.htmlFor = "product-search";
+    const search = element("input");
+    search.id = "product-search";
+    search.type = "search";
+    search.autocomplete = "off";
+    const visibleCount = element("p");
+    visibleCount.setAttribute("role", "status");
+    const productList = element("ul");
+    const categories = [
+      ["changedCells", "changed cells"],
+      ["blankedCells", "blanked cells"],
+      ["addedVariants", "added variants"],
+      ["absentVariants", "absent variants"],
+      ["packedSizeIssues", "packed size issues"],
+      ["imageChanges", "image findings"],
+      ["optionChanges", "option combination findings"],
+      ["optionValueChanges", "option value findings"],
+      ["handleChanges", "handle changes"],
+      ["duplicateIdentities", "duplicate identities (both files)"],
+      ["orphanImages", "orphan images (both files)"]
+    ];
+    const showProducts = () => {
+      const matches = products.filter((item) => item.handle.includes(search.value));
+      productList.replaceChildren(...matches.map((item) => element("li", "", `Handle ${JSON.stringify(item.handle)} \xB7 ${categories.filter(([key]) => item[key]).map(([key, name]) => `${item[key]} ${name}`).join(" \xB7 ")}`)));
+      visibleCount.textContent = `${matches.length} of ${products.length} products with findings shown. Search filters this overview only; detailed findings below remain complete.`;
+    };
+    search.addEventListener("input", showProducts);
+    overview.append(label, search, visibleCount, productList);
+    output.append(overview);
+    showProducts();
+    addList(
+      output,
+      "Packed product size issues",
+      report.packedSizeIssues,
+      (item) => `Handle \u201C${item.handle}\u201D \xB7 proposed source line ${item.row} \xB7 ${packedSizeReason(item.reason)} \xB7 Requires shipping: ${item.requiresShipping === null ? "(column omitted)" : JSON.stringify(item.requiresShipping)} \xB7 ${item.fields.map((field) => `${field.column}: ${field.included ? JSON.stringify(field.value) : "(column omitted)"}`).join("; ")}`
+    );
+    addList(
+      output,
+      "Blanked values",
+      report.blankedCells,
+      (item) => `Handle \u201C${item.handle}\u201D \xB7 original source line ${item.originalRow} \u2192 proposed source line ${item.row} \xB7 ${item.column}: a prior nonblank value becomes blank${item.matchType === "unique-sku" ? " \xB7 paired by unique SKU; check identity" : ""}`
+    );
+    addList(
+      output,
+      "Changed rows",
+      report.changedRows,
+      (item) => `Handle \u201C${item.handle}\u201D \xB7 original source line ${item.originalRow} \u2192 proposed source line ${item.row} \xB7 matched by ${item.matchType === "unique-sku" ? "unique SKU (check identity)" : "Handle/options"}: ${item.changes.map((change) => `${change.column}: \u201C${change.before}\u201D \u2192 \u201C${change.after}\u201D`).join("; ")}`
+    );
+    addList(
+      output,
+      "Changed variant option values",
+      report.changedOptionValues,
+      (item) => `Handle \u201C${item.handle}\u201D \xB7 ${item.column}: \u201C${item.before}\u201D \u2192 \u201C${item.after}\u201D`
+    );
+    addList(
+      output,
+      "Products with changed option combinations",
+      report.optionCombinationDifferences,
+      (item) => `Handle \u201C${item.handle}\u201D \xB7 ${item.original} original combination(s) \u2192 ${item.proposed} proposed combination(s)`
+    );
+    addList(
+      output,
+      "Option combination details",
+      report.optionCombinationDifferences.flatMap((change) => ["removed", "added"].flatMap((state) => change[state].map((combination) => ({
+        ...combination,
+        state,
+        file: state === "removed" ? "original" : "proposed",
+        handle: state === "removed" ? change.handle : change.proposedHandle
+      })))),
+      (item) => `${item.file} \xB7 Handle \u201C${item.handle}\u201D \xB7 ${item.state} \xB7 source lines ${item.rows.join(", ")} \xB7 ${item.options.map((option, index) => `Option ${index + 1}: name ${JSON.stringify(option.name)}, value ${JSON.stringify(option.value)}`).join("; ")}`
+    );
+    addList(
+      output,
+      "Possible product identity changes",
+      report.changedHandles,
+      (item) => `Handle \u201C${item.before}\u201D \u2192 \u201C${item.after}\u201D \xB7 SKU \u201C${item.sku || "(blank)"}\u201D \xB7 source line ${item.row}`
+    );
+    addList(
+      output,
+      "Rows present only in proposed file",
+      report.addedRows,
+      (item) => `Handle \u201C${item.handle}\u201D \xB7 source line ${item.row}`
+    );
+    addList(
+      output,
+      "Original rows missing from proposed file",
+      report.absentRows,
+      (item) => `Handle \u201C${item.handle}\u201D \xB7 original source line ${item.row}; this is not a deletion instruction`
+    );
+    addList(
+      output,
+      "Additional image-row changes",
+      report.imageContinuationChanges,
+      (item) => `Handle \u201C${item.handle}\u201D \xB7 original source lines ${item.originalRows.join(", ") || "none"} \u2192 proposed source lines ${item.proposedRows.join(", ") || "none"}; ${item.addedRows.length} added, ${item.removedRows.length} removed${item.orderChanged ? ", order changed" : ""}. See image row details below.`
+    );
+    addList(
+      output,
+      "Image row details for changed products",
+      report.imageContinuationChanges.flatMap((change) => ["original", "proposed"].flatMap((file) => (change[file === "original" ? "originalImages" : "proposedImages"] ?? []).map((image) => ({
+        ...image,
+        file,
+        change: (file === "original" ? change.removedRows : change.addedRows).includes(image.row) ? file === "original" ? "removed" : "added" : "retained"
+      })))),
+      (item) => `${item.file} \xB7 Handle \u201C${item.handle}\u201D \xB7 source line ${item.row} \xB7 ${item.change} \xB7 URL \u201C${item.url}\u201D \xB7 position \u201C${item.position}\u201D \xB7 alt text \u201C${item.altText}\u201D`
+    );
+    addList(output, "Image-only rows without a product row", [
+      ...report.orphanImageRows.original.map((item) => ({ ...item, file: "original" })),
+      ...report.orphanImageRows.proposed.map((item) => ({ ...item, file: "proposed" }))
+    ], (item) => `${item.file} file \xB7 Handle \u201C${item.handle}\u201D \xB7 source line ${item.row} \xB7 URL \u201C${item.url}\u201D \xB7 position \u201C${item.position}\u201D \xB7 alt text \u201C${item.altText}\u201D`);
+    addList(output, "Columns omitted from proposed file", report.omittedColumns, (item) => item);
+    addList(output, "Columns added to proposed file", report.addedColumns, (item) => item);
+    addList(
+      output,
+      "Header spelling changes",
+      report.headerSpellingChanges,
+      (item) => `\u201C${item.before}\u201D \u2192 \u201C${item.after}\u201D`
+    );
+    addList(
+      output,
+      "Headers with surrounding whitespace",
+      report.rawHeaderIssues,
+      (item) => `${item.file} file: ${JSON.stringify(item.raw)} becomes ${JSON.stringify(item.trimmed)} when compared`
+    );
+    addList(output, "Duplicate Handle/option rows", [
+      ...report.duplicateKeys.original.map((item) => ({ ...item, file: "original" })),
+      ...report.duplicateKeys.proposed.map((item) => ({ ...item, file: "proposed" }))
+    ], (item) => `${item.file} file \xB7 Handle \u201C${item.handle}\u201D \xB7 source line ${item.row}`);
+    addList(output, "Ambiguous SKUs", [
+      ...report.ambiguousSkus.original.map((sku) => ({ file: "original", sku })),
+      ...report.ambiguousSkus.proposed.map((sku) => ({ file: "proposed", sku }))
+    ], (item) => `${item.file} file \xB7 SKU \u201C${item.sku}\u201D \xB7 repeated values require manual review`);
+    const notes = element("section", "notes");
+    notes.append(element("h2", "", "Privacy and limits"));
+    const list = element("ul");
+    report.notes.forEach((note) => list.append(element("li", "", note)));
+    notes.append(list);
+    output.append(notes);
+    lastReport = report;
+    downloadButton.disabled = false;
+    htmlDownloadButton.disabled = false;
+    productDownloadButton.disabled = summaryDownloadButton.disabled = csvDownloadButton.disabled = false;
+    status.textContent = "Comparison complete. Review every warning before using the file.";
+  }
+  for (const input of document.querySelectorAll('input[type="file"]')) {
+    const zone = document.querySelector(`[data-for="${input.id}"]`);
+    const name = zone.querySelector(".file-name");
+    const updateName = () => {
+      selectionVersion += 1;
+      name.textContent = input.files[0]?.name ?? "or choose a file below";
+      lastReport = null;
+      downloadButton.disabled = true;
+      htmlDownloadButton.disabled = true;
+      productDownloadButton.disabled = summaryDownloadButton.disabled = csvDownloadButton.disabled = true;
+      output.replaceChildren();
+      output.setAttribute("aria-busy", "false");
+      compareButton.disabled = false;
+      status.textContent = input.files[0] ? `${input.files[0].name} selected. Compare again to refresh the results.` : "File selection changed. Choose both files and compare again.";
+    };
+    input.addEventListener("change", updateName);
+    for (const eventName of ["dragenter", "dragover"]) zone.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      zone.classList.add("dragover");
+    });
+    for (const eventName of ["dragleave", "drop"]) zone.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      zone.classList.remove("dragover");
+    });
+    zone.addEventListener("drop", (event) => {
+      const file = [...event.dataTransfer.files].find((item) => item.name.toLowerCase().endsWith(".csv") || item.type === "text/csv");
+      if (!file) {
+        status.textContent = "Drop a CSV file into each file area.";
+        return;
+      }
+      const transfer = new DataTransfer();
+      transfer.items.add(file);
+      input.files = transfer.files;
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      status.textContent = `${file.name} selected.`;
+    });
+  }
+  function downloadReport(format) {
+    if (!lastReport) return;
+    const content = format === "csv" ? renderChangedCellsCsv(lastReport) : format === "html" ? renderReport(lastReport) : JSON.stringify(format === "summary" ? summarizeReport(lastReport) : format === "products" ? summarizeProductFindings(lastReport) : lastReport, null, 2);
+    const blob = new Blob([content], { type: format === "csv" ? "text/csv;charset=utf-8" : format === "html" ? "text/html;charset=utf-8" : "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = element("a");
+    link.href = url;
+    link.download = format === "products" ? "catalog-product-findings.json" : format === "summary" ? "catalog-count-summary.json" : format === "csv" ? "catalog-changed-cells-review.csv" : `catalog-change-summary.${format}`;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1e3);
+  }
+  downloadButton.addEventListener("click", () => downloadReport("json"));
+  htmlDownloadButton.addEventListener("click", () => downloadReport("html"));
+  summaryDownloadButton.addEventListener("click", () => downloadReport("summary"));
+  productDownloadButton.addEventListener("click", () => downloadReport("products"));
+  csvDownloadButton.addEventListener("click", () => downloadReport("csv"));
+  function clearComparison() {
+    selectionVersion += 1;
+    form.reset();
+    for (const input of form.querySelectorAll('input[type="file"]')) input.value = "";
+    for (const zone of form.querySelectorAll(".drop-zone")) {
+      zone.classList.remove("dragover");
+      zone.querySelector(".file-name").textContent = "or choose a file below";
+    }
+    lastReport = null;
+    downloadButton.disabled = htmlDownloadButton.disabled = true;
+    productDownloadButton.disabled = summaryDownloadButton.disabled = csvDownloadButton.disabled = true;
+    output.replaceChildren();
+    output.setAttribute("aria-busy", "false");
+    compareButton.disabled = false;
+  }
+  document.querySelector("#clear").addEventListener("click", () => {
+    clearComparison();
+    status.textContent = "Cleared files and results from this tab. Previously downloaded reports remain on your device.";
+  });
+  document.querySelector("#try-sample").addEventListener("click", () => {
+    clearComparison();
+    try {
+      render(analyzeCsvPair(SAMPLE_ORIGINAL, SAMPLE_PROPOSED));
+      status.textContent = "Fictional sample comparison complete: vendor blanked, Medium variant absent and image caption edited. Your previous file selections were cleared. Choose both CSVs to compare your own files.";
+    } catch (error) {
+      status.textContent = error instanceof Error ? error.message : "Could not compare the fictional sample.";
+    }
+  });
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    output.replaceChildren();
+    lastReport = null;
+    downloadButton.disabled = true;
+    htmlDownloadButton.disabled = true;
+    productDownloadButton.disabled = summaryDownloadButton.disabled = csvDownloadButton.disabled = true;
+    const files = [document.querySelector("#original").files[0], document.querySelector("#proposed").files[0]];
+    if (files.some((file) => !file)) {
+      status.textContent = "Choose both the original export and proposed import CSV.";
+      return;
+    }
+    if (files.some((file) => !file.name.toLowerCase().endsWith(".csv") && file.type !== "text/csv")) {
+      status.textContent = "Both selected files must be CSV files.";
+      return;
+    }
+    const comparisonVersion = selectionVersion;
+    if (files.some((file) => file.size > MAX_FILE_BYTES)) {
+      status.textContent = "Each CSV must be 15 MB or smaller for this prototype.";
+      return;
+    }
+    compareButton.disabled = true;
+    output.setAttribute("aria-busy", "true");
+    status.textContent = "Reading both CSV files and comparing them locally\u2026";
+    try {
+      const [originalText, proposedText] = await Promise.all(files.map(readCsvFile));
+      if (comparisonVersion !== selectionVersion) return;
+      render(analyzeCsvPair(originalText, proposedText));
+    } catch (error) {
+      if (comparisonVersion !== selectionVersion) return;
+      status.textContent = error instanceof Error ? error.message : "Could not compare these files.";
+    } finally {
+      if (comparisonVersion === selectionVersion) {
+        compareButton.disabled = false;
+        output.setAttribute("aria-busy", "false");
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>

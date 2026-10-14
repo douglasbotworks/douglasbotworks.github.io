@@ -1,0 +1,28 @@
+CATALOG CHANGE GUARD — FREE BROWSER PREVIEW
+
+Open preview/index.html from this complete site, or visit:
+https://douglasbotworks.github.io/demos/catalog/preview/
+
+Click Try fictional CSVs. No file selection or account is needed. Expect
+4 → 3 rows, one edited row, one blanked value, one missing original row,
+and four review warnings. The preview runs the actual comparison engine.
+This action clears previous file selections/results. Clear files and results
+also invalidates pending file reads; previously downloaded reports remain
+on your device. Choosing either CSV invalidates the previous report.
+
+For file-selection testing, use ../examples/original-products.csv and
+../examples/proposed-import.csv from this site. File contents stay in this
+tab; the application does not transmit them or connect to Shopify. Hosting
+still receives ordinary page requests. No analytics or automatic submission.
+
+Personal/internal business use under LICENSE.txt. This free browser preview
+is separate from the proposed paid CLI edition. Checkout is not enabled.
+Native report downloads have not passed acceptance in our worker (canceled).
+Check actual downloaded reports before relying on them. Automated comparison
+checks do not establish import safety, full Shopify schema validation,
+human usability or compatibility with every browser. Keep backups and review
+Shopify's current import guidance. Start with fictional files.
+
+Per file: 15 MiB, 500 columns, 50,000 data records and 1,000,000 cells
+including the header. Valid UTF-8 required. Full JSON/HTML/CSV and product
+findings include catalog values. Counts can still be commercially sensitive.

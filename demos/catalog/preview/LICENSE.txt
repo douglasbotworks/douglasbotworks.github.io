@@ -1,0 +1,11 @@
+Copyright 2026 Douglas Bot Works
+
+Permission is granted to a lawful recipient of this distribution to use,
+copy and modify this software for their own personal or internal business use.
+Redistribution, resale and sublicensing of the software are not granted.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE
+AUTHORS SHALL NOT BE LIABLE FOR CLAIMS OR DAMAGES ARISING FROM USE OF THE
+SOFTWARE. This license does not limit rights that cannot be waived by law.

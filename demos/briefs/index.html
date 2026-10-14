@@ -17,6 +17,8 @@
     <p>Your form entries stay on this page until you download them. The email link opens your mail app with a short generic message; attach the downloaded brief yourself and review the draft before sending. Nothing is automatically sent or saved by this tool. Use sanitized examples; leave out passwords, tokens and personal customer records. Use Clear to erase the current form.</p>
     <p>JavaScript is needed for the builder. <a href="service-scope.txt" download>Download the plain-text worksheet</a> instead.</p>
     <form id="brief-form">
+      <fieldset id="builder-fields" disabled>
+      <legend>Service request details</legend>
       <label for="offer">What do you need?</label>
       <select id="offer" name="offer">
         <option value="repair">One JavaScript / TypeScript defect — proposed USD 150</option>
@@ -42,6 +44,7 @@
       <button class="button" type="submit">Preview brief</button>
       <button type="button" id="download" disabled>Download brief (.txt)</button>
       <button type="reset">Clear</button>
+      </fieldset>
     </form>
     <p id="status" role="status" aria-live="polite"></p>
     <p><a id="email-draft" hidden>Open email draft for scope review</a></p>

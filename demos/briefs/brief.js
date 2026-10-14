@@ -86,4 +86,5 @@
     }
   });
   invalidate();
+  document.getElementById('builder-fields').disabled = false;
 })();

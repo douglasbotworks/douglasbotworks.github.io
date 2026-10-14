@@ -58,3 +58,10 @@ or native APK. Current native rebuild and headset acceptance remain pending.
 Regenerate with Skybound `tools/test.sh` and `tools/preview.py`; copy only
 mountain projection, released-ready.svg and released-scene.json. Verify exact
 byte equality before deployment and run `tools/verify_live.py` afterward.
+
+The sunlight diagnostic adds actual runtime solar.csv/solar.svg exports: 5,043
+samples of default, low-west and overhead sun. Skybound's new source-rate check
+marches analytic terrain at 25 m spacing over 12 km, with 1 m clearance. It
+only models direct-sun visibility; no measured heating, diffuse light, real
+thermal persistence, rendered game shadows or headset acceptance is claimed.
+Regenerate with skybound-solar and tools/solar_preview.py; copy exact build bytes.

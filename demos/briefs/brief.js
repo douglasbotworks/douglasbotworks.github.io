@@ -9,6 +9,14 @@
     repair: 'Repair scope: one reproducible JavaScript or TypeScript defect, a bounded patch, passing checks and a handoff. Integration and acceptance must be agreed.',
     release: 'Release scope: one specified static build, inventory, literal local-reference checks and packaging if the agreed gate passes. Browser execution, deployment and security certification are excluded.'
   };
+  // Only a single allowlisted offer may be imported; request text stays local.
+  const offerParameters = new URLSearchParams(window.location.search).getAll('offer');
+  const initialOffer = offerParameters.length === 1 && Object.hasOwn(scopes, offerParameters[0])
+    ? offerParameters[0] : 'repair';
+  for (const option of form.elements.offer.options) {
+    option.defaultSelected = option.value === initialOffer;
+  }
+  form.elements.offer.value = initialOffer;
   const fields = [
     ['expected', 'Expected result'], ['actual', 'Current result'],
     ['steps', 'Minimal reproduction'], ['runtime', 'Runtime / files'],

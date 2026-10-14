@@ -1,0 +1,85 @@
+{
+  "originalRows": 2,
+  "proposedRows": 2,
+  "originalImageOnlyRows": 1,
+  "proposedImageOnlyRows": 1,
+  "matchedRows": 1,
+  "addedRows": [],
+  "absentRows": [],
+  "changedRows": [],
+  "uniqueSkuMatches": 0,
+  "ambiguousSkus": {
+    "original": [],
+    "proposed": []
+  },
+  "blankedCells": [],
+  "packedSizeIssues": [],
+  "changedOptionValues": [],
+  "changedHandles": [],
+  "optionCombinationDifferences": [],
+  "omittedColumns": [],
+  "addedColumns": [],
+  "headerSpellingChanges": [],
+  "rawHeaderIssues": [],
+  "duplicateKeys": {
+    "original": [],
+    "proposed": []
+  },
+  "imageContinuationChanges": [
+    {
+      "handle": "FICTIONAL-MUG",
+      "handles": [
+        "fictional-mug",
+        "FICTIONAL-MUG"
+      ],
+      "originalRows": [
+        3
+      ],
+      "proposedRows": [
+        3
+      ],
+      "originalImages": [
+        {
+          "handle": "fictional-mug",
+          "url": "https://example.invalid/mug.jpg",
+          "position": "1",
+          "altText": "Front",
+          "row": 3
+        }
+      ],
+      "proposedImages": [
+        {
+          "handle": "FICTIONAL-MUG",
+          "url": "https://example.invalid/mug.jpg",
+          "position": "1",
+          "altText": "Front",
+          "row": 3
+        }
+      ],
+      "addedRows": [
+        3
+      ],
+      "removedRows": [
+        3
+      ],
+      "orderChanged": false
+    }
+  ],
+  "orphanImageRows": {
+    "original": [],
+    "proposed": []
+  },
+  "warnings": [
+    {
+      "level": "medium",
+      "title": "Additional image rows differ for 1 product(s)",
+      "detail": "Shopify product CSVs can use extra rows containing a Handle and an image URL. Review the listed image-only row changes; they are excluded from variant identity matching."
+    }
+  ],
+  "notes": [
+    "Packed size checks cover partial proposed values and Requires shipping=false using current header names only. Units, numeric validity, shipping aliases, all-blank size clearing and the complete import schema are not validated.",
+    "This compares files locally; it does not connect to Shopify or upload either file.",
+    "Column names are normalized for comparison. Shopify requires exact template headers, including case; verify both files against the current Shopify CSV format.",
+    "A report is a review aid, not a guarantee that an import is safe. Verify against Shopify's current documentation and your import settings."
+  ]
+}

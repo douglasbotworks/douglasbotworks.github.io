@@ -20,12 +20,16 @@
     .drop-zone strong { color: #202a36; }
     .drop-zone.dragover { border-color: #184f86; background: #edf5fd; box-shadow: 0 0 0 3px #184f8618; }
     input[type=file] { display: block; width: 100%; max-width: 100%; min-width: 0; font: inherit; font-size: .92rem; margin-top: 5px; }
+    [hidden] { display: none !important; }
+    select, textarea { width: 100%; min-width: 0; max-width: 100%; font: inherit; border: 1px solid #97a8ba; border-radius: 8px; padding: 10px; }
+    textarea { min-height: 180px; resize: vertical; font: .9rem/1.5 ui-monospace, monospace; }
+    #input-mode { margin-bottom: 20px; }
     .actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
     button { border: 0; border-radius: 9px; background: #184f86; color: white; font: inherit; font-weight: 700; padding: 12px 18px; margin-top: 18px; cursor: pointer; }
     button.secondary { background: #e8eef5; color:#25374b; }
     button:disabled { opacity:.5; cursor:not-allowed; }
     #results[aria-busy="true"] { opacity: .65; }
-    button:focus-visible, input:focus-visible { outline: 3px solid #f2ac37; outline-offset: 2px; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #f2ac37; outline-offset: 2px; }
     .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:10px; margin:18px 0; }
     .metric { border:1px solid #e2e7ed; border-radius:10px; padding:12px 14px; background:#fbfcfe; }
     .metric b { display:block; font-size:1.45rem; line-height:1.2; }
@@ -49,12 +53,13 @@
   <main>
     <section aria-labelledby="sample-heading">
       <h2 id="sample-heading">Try it with fictional products.</h2>
-      <p>No file selection needed. Compare the included mug and shirt example: a vendor becomes blank, a Medium variant is absent and an image caption changes. This action clears any current file selections and results.</p>
+      <p>No file selection needed. Compare the included mug and shirt example: a vendor becomes blank, a Medium variant is absent and an image caption changes. This action clears any current file selections, pasted text and results.</p>
       <button id="try-sample" type="button">Try fictional CSVs</button>
       <p class="muted">Browser preview with automated comparison checks. Report downloads have not passed native browser acceptance in our worker. Try fictional files first; review all findings and your downloaded reports before relying on them. No checkout or Shopify import is enabled.</p>
     </section>
     <form id="compare-form">
-      <div class="fields">
+      <label for="input-mode">Choose comparison input<select id="input-mode"><option value="files">Two CSV files</option><option value="text">Paste two CSV texts</option></select></label>
+      <div class="fields" id="file-fields">
         <label for="original">1. Original product export (CSV)
           <span class="drop-zone" data-for="original"><strong>Drop the original CSV here</strong><br><span class="file-name">or choose a file below</span><input id="original" type="file" accept=".csv,text/csv" required></span>
         </label>
@@ -62,12 +67,19 @@
           <span class="drop-zone" data-for="proposed"><strong>Drop the proposed CSV here</strong><br><span class="file-name">or choose a file below</span><input id="proposed" type="file" accept=".csv,text/csv" required></span>
         </label>
       </div>
-      <div class="actions"><button type="submit">Compare files locally</button><button id="clear" class="secondary" type="button">Clear files and results</button><button id="download" class="secondary" type="button" disabled>Download full JSON</button><button id="download-html" class="secondary" type="button" disabled>Download readable HTML</button><button id="download-csv" class="secondary" type="button" disabled>Download changed-cell CSV</button><button id="download-summary" class="secondary" type="button" disabled>Download counts only</button><button id="download-products" class="secondary" type="button" disabled>Download product findings</button><span class="muted">Product findings JSON contains exact Handles and overlapping counts; full reports are still required. Counts-only JSON omits catalog values; counts may still be sensitive. CSV is a changed-cell review sheet, not an import file; formula-like values are prefixed with an apostrophe. Reports include changed cell values. Store them carefully. HTML is a summary; JSON contains the full comparison.</span></div>
+      <div id="text-fields" hidden>
+        <p>Paste complete comma-separated CSV text including its header into both boxes. Each box accepts at most 1 MiB of UTF-8 text; the same row, column and cell limits apply. Compare only this text, never a mixture with selected files. Edits invalidate the previous report. Text is kept in this tab until cleared or reloaded; the app does not save or transmit it. Omit secrets and customer records.</p>
+        <div class="fields">
+          <label for="original-text">1. Original CSV text<textarea id="original-text" spellcheck="false" autocomplete="off" autocapitalize="off" disabled></textarea></label>
+          <label for="proposed-text">2. Proposed CSV text<textarea id="proposed-text" spellcheck="false" autocomplete="off" autocapitalize="off" disabled></textarea></label>
+        </div>
+      </div>
+      <div class="actions"><button type="submit">Compare locally</button><button id="clear" class="secondary" type="button">Clear inputs and results</button><button id="download" class="secondary" type="button" disabled>Download full JSON</button><button id="download-html" class="secondary" type="button" disabled>Download readable HTML</button><button id="download-csv" class="secondary" type="button" disabled>Download changed-cell CSV</button><button id="download-summary" class="secondary" type="button" disabled>Download counts only</button><button id="download-products" class="secondary" type="button" disabled>Download product findings</button><span class="muted">Product findings JSON contains exact Handles and overlapping counts; full reports are still required. Counts-only JSON omits catalog values; counts may still be sensitive. CSV is a changed-cell review sheet, not an import file; formula-like values are prefixed with an apostrophe. Reports include changed cell values. Store them carefully. HTML is a summary; JSON contains the full comparison.</span></div>
     </form>
     <p id="status" role="status" aria-live="polite"></p>
     <div id="results" aria-label="Comparison results" aria-busy="false"></div>
   </main>
-  <footer><a href="https://douglasbotworks.github.io/demos/catalog/">About the CLI edition and availability</a><br>This is an early review aid, not an official Shopify tool and not a guarantee that an import is safe. Per file: 15 MiB, 500 columns, 50,000 data records and 1,000,000 cells including the header. Clear removes files and results from this tab, but does not delete previously downloaded reports. Keep backups and verify the latest Shopify instructions and import settings before making catalog changes.</footer>
+  <footer><a href="https://douglasbotworks.github.io/demos/catalog/">About the CLI edition and availability</a><br>This is an early review aid, not an official Shopify tool and not a guarantee that an import is safe. Per file: 15 MiB, 500 columns, 50,000 data records and 1,000,000 cells including the header. Clear removes file selections, pasted text and results from this tab, but does not delete previously downloaded reports. Keep backups and verify the latest Shopify instructions and import settings before making catalog changes.</footer>
   <script>(() => {
   // csv.js
   var CSV_LIMITS = Object.freeze({ columns: 500, dataRows: 5e4, cells: 1e6 });
@@ -816,6 +828,9 @@
   var summaryDownloadButton = document.querySelector("#download-summary");
   var productDownloadButton = document.querySelector("#download-products");
   var compareButton = form.querySelector('button[type="submit"]');
+  var inputMode = document.querySelector("#input-mode");
+  var textInputs = [document.querySelector("#original-text"), document.querySelector("#proposed-text")];
+  var MAX_TEXT_BYTES = 1024 * 1024;
   var MAX_FILE_BYTES = 15 * 1024 * 1024;
   var lastReport = null;
   var selectionVersion = 0;
@@ -1013,6 +1028,38 @@
     productDownloadButton.disabled = summaryDownloadButton.disabled = csvDownloadButton.disabled = false;
     status.textContent = "Comparison complete. Review every warning before using the file.";
   }
+  function invalidateComparison() {
+    selectionVersion += 1;
+    lastReport = null;
+    downloadButton.disabled = htmlDownloadButton.disabled = true;
+    productDownloadButton.disabled = summaryDownloadButton.disabled = csvDownloadButton.disabled = true;
+    output.replaceChildren();
+    output.setAttribute("aria-busy", "false");
+    compareButton.disabled = false;
+  }
+  function syncInputMode() {
+    const pasted = inputMode.value === "text";
+    document.querySelector("#file-fields").hidden = pasted;
+    document.querySelector("#text-fields").hidden = !pasted;
+    for (const input of form.querySelectorAll('input[type="file"]')) {
+      input.required = !pasted;
+      input.disabled = pasted;
+    }
+    for (const input of textInputs) {
+      input.required = pasted;
+      input.disabled = !pasted;
+    }
+  }
+  inputMode.addEventListener("change", () => {
+    invalidateComparison();
+    syncInputMode();
+    status.textContent = inputMode.value === "text" ? "Paste both CSV texts including headers, then compare locally. File selections are ignored in text mode." : "Choose both CSV files, then compare locally. Pasted text is ignored in file mode.";
+  });
+  for (const input of textInputs) input.addEventListener("input", () => {
+    invalidateComparison();
+    status.textContent = "CSV text changed. Compare again to refresh the results.";
+  });
+  syncInputMode();
   for (const input of document.querySelectorAll('input[type="file"]')) {
     const zone = document.querySelector(`[data-for="${input.id}"]`);
     const name = zone.querySelector(".file-name");
@@ -1069,6 +1116,8 @@
   function clearComparison() {
     selectionVersion += 1;
     form.reset();
+    for (const input of textInputs) input.value = "";
+    syncInputMode();
     for (const input of form.querySelectorAll('input[type="file"]')) input.value = "";
     for (const zone of form.querySelectorAll(".drop-zone")) {
       zone.classList.remove("dragover");
@@ -1083,13 +1132,13 @@
   }
   document.querySelector("#clear").addEventListener("click", () => {
     clearComparison();
-    status.textContent = "Cleared files and results from this tab. Previously downloaded reports remain on your device.";
+    status.textContent = "Cleared file selections, pasted text and results from this tab. Previously downloaded reports remain on your device.";
   });
   document.querySelector("#try-sample").addEventListener("click", () => {
     clearComparison();
     try {
       render(analyzeCsvPair(SAMPLE_ORIGINAL, SAMPLE_PROPOSED));
-      status.textContent = "Fictional sample comparison complete: vendor blanked, Medium variant absent and image caption edited. Your previous file selections were cleared. Choose both CSVs to compare your own files.";
+      status.textContent = "Fictional sample comparison complete: vendor blanked, Medium variant absent and image caption edited. Your previous file selections and pasted text were cleared. Choose both CSVs to compare your own files.";
     } catch (error) {
       status.textContent = error instanceof Error ? error.message : "Could not compare the fictional sample.";
     }
@@ -1101,6 +1150,24 @@
     downloadButton.disabled = true;
     htmlDownloadButton.disabled = true;
     productDownloadButton.disabled = summaryDownloadButton.disabled = csvDownloadButton.disabled = true;
+    if (inputMode.value === "text") {
+      const texts = textInputs.map((input) => input.value);
+      if (texts.some((text) => !text.trim())) {
+        status.textContent = "Paste both the original and proposed CSV texts including headers.";
+        return;
+      }
+      if (texts.some((text) => new Blob([text]).size > MAX_TEXT_BYTES)) {
+        status.textContent = "Each pasted CSV must be 1 MiB of UTF-8 text or smaller. Use CSV files for larger inputs.";
+        return;
+      }
+      try {
+        render(analyzeCsvPair(...texts));
+        status.textContent = "Pasted CSV comparison complete. Review every warning; source lines refer to the pasted text, not a full export.";
+      } catch (error) {
+        status.textContent = error instanceof Error ? error.message : "Could not compare these CSV texts.";
+      }
+      return;
+    }
     const files = [document.querySelector("#original").files[0], document.querySelector("#proposed").files[0]];
     if (files.some((file) => !file)) {
       status.textContent = "Choose both the original export and proposed import CSV.";

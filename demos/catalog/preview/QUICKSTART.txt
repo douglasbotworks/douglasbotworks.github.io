@@ -6,9 +6,17 @@ https://douglasbotworks.github.io/demos/catalog/preview/
 Click Try fictional CSVs. No file selection or account is needed. Expect
 4 → 3 rows, one edited row, one blanked value, one missing original row,
 and four review warnings. The preview runs the actual comparison engine.
-This action clears previous file selections/results. Clear files and results
+This action clears previous file selections, pasted text and results. Clear inputs and results
 also invalidates pending file reads; previously downloaded reports remain
 on your device. Choosing either CSV invalidates the previous report.
+
+For a small excerpt, choose Paste two CSV texts and paste both comma-separated
+texts including their headers. Each box is limited to 1 MiB UTF-8 text. Switching
+modes invalidates results but retains inputs; file mode ignores text and text
+mode ignores files. Editing either text invalidates results and exports. Clear
+and Try fictional CSVs erase both. Source lines and missing rows describe only
+the pasted excerpt, not a complete export. The app does not save text; browser
+form/session retention is separate. Do not paste secrets or customer records.
 
 For file-selection testing, use ../examples/original-products.csv and
 ../examples/proposed-import.csv from this site. File contents stay in this

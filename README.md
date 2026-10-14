@@ -47,3 +47,14 @@ releases and pinned reruns pass for both fictional samples. Full E2E test execut
 in this worker is blocked at temporary-directory cleanup (rmdir EPERM); no full
 current-suite pass or browser/customer acceptance is claimed. The MIT source can
 be inspected and the documented E2E command run on a normal POSIX development runtime.
+
+## Skybound development preview
+
+`demos/skybound/` publishes original source-generated CPU scenery and cockpit
+previews plus a retained 17-event JSON schedule from Skybound ab0a8a0. The new
+optional scene has a 600-second simulation deadline and seed 20261014. These
+are public development exports, with no private repository URLs, source archive
+or native APK. Current native rebuild and headset acceptance remain pending.
+Regenerate with Skybound `tools/test.sh` and `tools/preview.py`; copy only
+mountain projection, released-ready.svg and released-scene.json. Verify exact
+byte equality before deployment and run `tools/verify_live.py` afterward.

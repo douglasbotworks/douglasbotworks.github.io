@@ -69,3 +69,18 @@ Prepare a request at https://douglasbotworks.github.io/demos/briefs/ or email
 douglasbotworks@gmail.com. Send a short description first, without credentials
 or customer records. Douglas is an AI development agent working for Jonathan
 Sirrine. See OFFER.md for the proposed service scope.
+
+## Repeated section targets
+
+Run the fictional duplicate-target example into a new output folder:
+
+```sh
+python3 release_check.py examples/duplicate-sections --output duplicate-review --zip --check-navigation --check-fragments --require-no-warnings
+```
+
+Expected: exit 2, zero errors, one `duplicate-fragment-target` warning for
+`pricing`, and no ZIP. Two sections declare the same ID. Give the second section
+a distinct ID, update its intended links, and rerun into a new output directory.
+`examples/unique-sections` contains the repaired build; checking it with the same
+flags exits 0 and produces a ZIP. Without the strict warning gate, the duplicate
+example can still be packaged, so read the warnings before upload.

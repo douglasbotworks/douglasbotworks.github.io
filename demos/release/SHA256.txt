@@ -1,1 +1,1 @@
-73661b25eae0234c4cc597fcf3d6b637702ff946c307012dc4b819d8d3c112b4  static-release-check.zip
+bf4db4df2a672fdd1d892cb982701f0d5ae685a34623ef5b7e8cfadceee15809  static-release-check.zip

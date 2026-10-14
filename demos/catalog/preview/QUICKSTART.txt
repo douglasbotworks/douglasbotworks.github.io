@@ -23,6 +23,8 @@ For file-selection testing, use ../examples/original-products.csv and
 tab; the application does not transmit them or connect to Shopify. Hosting
 still receives ordinary page requests. No analytics or automatic submission.
 
+Detailed sections show 100 findings per page with Previous/Next controls. The product overview shows the first 100 search matches; refine the search for other Handles. Downloads retain all findings regardless of page/search. This bounds visible lists, not comparison memory or processing time.
+
 Personal/internal business use under LICENSE.txt. This free browser preview
 is separate from the proposed paid CLI edition. Checkout is not enabled.
 Native report downloads have not passed acceptance in our worker (canceled).

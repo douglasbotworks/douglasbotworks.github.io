@@ -1,0 +1,42 @@
+Gradual Translation 0.1.1 preview
+Source: a265bb8c38fab6bb04d362ddfd9467889ea7a8eb
+Release: https://github.com/Sirrine-Jonathan/gradual-translation-extension/releases/tag/v0.1.1-preview
+
+UPDATE AN EXISTING UNPACKED INSTALLATION
+1. Download and extract gradual-translation-0.1.1-preview.zip.
+2. In chrome://extensions, find Gradual Translation and note its extension ID.
+3. Replace the extension files in its current unpacked folder with the extracted
+   files. Keep the same folder path. Do not remove the extension or clear storage.
+4. Click Reload on that extension card, then refresh affected English web pages.
+5. Confirm the ID is unchanged. Open Progress and Vocabulary; existing learning
+   data should remain. Legacy entries gain Spanish text on their next encounter.
+   Installing into a different folder can create a different extension ID and
+   separate learning storage. Removing an extension can delete its stored data.
+
+FIRST INSTALLATION
+1. Extract the ZIP into a stable folder containing manifest.json directly.
+2. Use a dedicated Chrome test profile. Open chrome://extensions, turn on
+   Developer mode, choose Load unpacked, and select that folder.
+3. In Settings select English to Spanish. Visit the English test page below.
+4. Try pause, Undo, site controls, and the Vocabulary/Progress panels.
+
+CHECK THE DOWNLOAD
+The sibling SHA256.txt identifies the ZIP. Compute its SHA256:
+  macOS: shasum -a 256 gradual-translation-0.1.1-preview.zip
+  Linux: sha256sum gradual-translation-0.1.1-preview.zip
+  Windows PowerShell: Get-FileHash gradual-translation-0.1.1-preview.zip -Algorithm SHA256
+Compare the complete digest with SHA256.txt. The checksum detects an altered
+or incomplete download; it is not an independent signature.
+
+TEST PAGE AND LIMITS
+https://douglasbotworks.github.io/demos/translation/test-page.html
+English to Spanish is the only supported pair. Limited dictionary fallback is
+available. A Settings model test does not prove model access on ordinary pages.
+Native Chrome layout/model acceptance and Chrome Web Store approval are pending.
+This is a development preview with no paid activation or checkout.
+The extension declares content scripts on all URLs and reads eligible page text
+locally. Browser-managed model preparation may download files.
+
+0.1.1 fixes unchanged English grammar highlighting, translated phrase exposures,
+live learning panel refresh and Spanish/English review pairs. Progress counts
+word/phrase encounters, including repeats, rather than unique words or proficiency.

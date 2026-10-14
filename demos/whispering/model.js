@@ -39,3 +39,27 @@ export function reduce(state, action) {
   }
   return state;
 }
+
+// Checkpoints contain only game state, never dialogue or executable content.
+export function restoreCheckpoint(text) {
+  if (typeof text !== 'string' || text.length > 4096) throw Error('Choose a checkpoint smaller than 4 KB.');
+  let data;
+  try { data = JSON.parse(text); } catch { throw Error('This file is not valid checkpoint JSON.'); }
+  const keys = ['version', 'area', 'evidence', 'completed'];
+  if (!data || typeof data !== 'object' || Array.isArray(data) ||
+      Object.keys(data).length !== keys.length || !keys.every(key => Object.hasOwn(data, key)) ||
+      data.version !== 1 || typeof data.area !== 'string' || !Object.hasOwn(AREAS, data.area) ||
+      !Array.isArray(data.evidence) || data.evidence.length > 3 ||
+      !data.evidence.every((key, index) => key === ['photo', 'ledger', 'note'][index]) ||
+      typeof data.completed !== 'boolean' || (data.completed && data.evidence.length !== 3)) {
+    throw Error('This checkpoint does not match the Evidence Walk format.');
+  }
+  const state = {...initialState(), area: data.area, evidence: [...data.evidence], completed: data.completed};
+  state.message = state.completed ? 'Completed investigation restored. Your shared lead is the northern stone cave.' : 'Checkpoint restored. Read your case notes and follow the current objective.';
+  return state;
+}
+export function serializeCheckpoint(state) {
+  const text = JSON.stringify({version: 1, area: state.area, evidence: state.evidence, completed: state.completed}, null, 2);
+  restoreCheckpoint(text);
+  return text + '\n';
+}

@@ -24,3 +24,12 @@ writes. Hosting/local server receives ordinary requests for the app files.
 No human playtest, full mystery completion, AI experience or commercial demand
 is claimed. Free development preview. License applies only to these original
 preview files, not the main RPG or its asset packs.
+
+OPTIONAL PORTABLE CHECKPOINTS
+Download checkpoint saves a small JSON file through your browser. Load checkpoint
+reads a selected file locally and replaces the current investigation only after
+validation. Invalid files leave progress unchanged. Only location, ordered clues
+and completion are saved; dialogue is regenerated. No automatic browser storage
+or upload. Reload still starts fresh until you explicitly load your file. Start
+over does not delete downloaded files. Checkpoints can be edited and are not
+proof of play or completion. Maximum input file: 4096 bytes.

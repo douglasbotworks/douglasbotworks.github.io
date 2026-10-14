@@ -2,19 +2,34 @@
 
 Public portfolio and fictional demonstrations for Douglas Bot Works. GitHub Pages publishes the repository root from `main` at https://douglasbotworks.github.io . Buildless HTML/CSS; no dependencies or tracking.
 
+## Try the published work
+
+| Product | Start here | Available now |
+| --- | --- | --- |
+| Catalog Change Guard | [Local browser comparison](https://douglasbotworks.github.io/demos/catalog/preview/) | Files, pasted excerpts, fictional sample and complete report exports; [offline preview ZIP](https://github.com/douglasbotworks/douglasbotworks.github.io/releases/tag/catalog-browser-paging-2026-10-14) |
+| Static Release Check | [Download and examples](https://douglasbotworks.github.io/demos/release/) | Free MIT Python CLI for bounded static asset/navigation checks |
+| Software Fix toolkit | [Before/after repair evidence](https://douglasbotworks.github.io/demos/software/) | Free fictional repair toolkit and [single-defect scoping guide](https://douglasbotworks.github.io/demos/software/scope.html) |
+| Gradual Translation | [Extension download and installation](https://douglasbotworks.github.io/demos/translation/) | Unpacked Chrome development preview; native acceptance pending |
+| Whispering Stones | [Play the evidence walk](https://douglasbotworks.github.io/demos/whispering/) | Free original-art scripted vignette with optional local checkpoint files; separate from unfinished AI RPG |
+| Skybound | [Development previews](https://douglasbotworks.github.io/demos/skybound/) | CPU-generated flight/terrain diagnostics; headset acceptance pending |
+
+For the proposed USD150 JavaScript/TypeScript repair pilot, [prepare a request locally](https://douglasbotworks.github.io/demos/briefs/?offer=repair) or email douglasbotworks@gmail.com with reproduction steps and the expected result. Agree scope, authorized source access and a payment arrangement before work starts. No checkout or automatic booking is enabled. Do not send credentials or customer records.
+
+Catalog preview supports personal/internal business use under its included license; the toolkit, release checker and vignette each include their own license. Automated checks and byte verification do not establish human usability or customer outcomes. Native report downloads remain unverified in this worker.
+
 ## Check before publishing
 
 ```sh
 python3 ../static-release-check/release_check.py <clean-site-snapshot> --output ../../artifacts/portfolio-review-NEW --zip --check-navigation --check-fragments --require-no-warnings
 ```
 
-Inspect desktop and mobile in a browser, follow demo links and verify downloads. Demo bytes originate from the separately tested `douglas-public-demos` bundle (e6f3d7d). Extension is a development preview; RPG is a project note pending rights/gameplay validation. Contact links open the visitor's email client; the local request builder does not submit data. Prices are proposed scopes, not payment or booking flows.
+Inspect desktop and mobile in a browser, follow demo links and verify downloads. Demo bytes come from the separately tested product builders; regenerate the applicable product instead of copying an older hub snapshot. Extension is a development preview; the free scripted evidence walk is separate from the larger RPG with pending rights/gameplay validation. Contact links open the visitor's email client; the local request builder does not submit data. Prices are proposed scopes, not payment or booking flows.
 
 Jon explicitly authorized this public repository and GitHub Pages publication on 2026-10-13. Do not add personal, customer, credential or private repository data.
 
 ## Verify the public deployment
 
-`python3 tools/verify_live.py` downloads the currently selected public site files (90 as of the Catalog inquiry worksheet) over HTTPS and compares SHA256 values to the local files. It performs read-only requests with bounded concurrency/timeouts and emits a JSON report. Run after Pages reports the matching commit built.
+`python3 tools/verify_live.py` downloads the currently selected public site files (139 as of the October 14 Catalog pagination deployment) over HTTPS and compares SHA256 values to the local files. It performs read-only requests with bounded concurrency/timeouts and emits a JSON report. Run after Pages reports the matching commit built.
 
 Public release: https://github.com/douglasbotworks/douglasbotworks.github.io/releases/tag/portfolio-2026-10-13 . Download its ZIP and report together, then use the sibling recipient verifier above.
 
@@ -54,7 +69,7 @@ be inspected and the documented E2E command run on a normal POSIX development ru
 previews plus a retained 17-event JSON schedule from Skybound ab0a8a0. The new
 optional scene has a 600-second simulation deadline and seed 20261014. These
 are public development exports, with no private repository URLs, source archive
-or native APK. Current native rebuild and headset acceptance remain pending.
+or native APK. A current native debug build was delivered privately; wearer/controller acceptance remains pending. The public site distributes CPU diagnostics only.
 Regenerate with Skybound `tools/test.sh` and `tools/preview.py`; copy only
 mountain projection, released-ready.svg and released-scene.json. Verify exact
 byte equality before deployment and run `tools/verify_live.py` afterward.

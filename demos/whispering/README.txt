@@ -26,7 +26,9 @@ is claimed. Free development preview. License applies only to these original
 preview files, not the main RPG or its asset packs.
 
 OPTIONAL PORTABLE CHECKPOINTS
-Download checkpoint saves a small JSON file through your browser. Load checkpoint
+Download checkpoint requests a small JSON file through your browser. Confirm the
+file was saved before leaving; the page cannot detect cancellation or blocking.
+If preparation fails, retry guidance appears and your investigation stays intact. Load checkpoint
 reads a selected file locally and replaces the current investigation only after
 validation. Invalid files leave progress unchanged. Only location, ordered clues
 and completion are saved; dialogue is regenerated. No automatic browser storage

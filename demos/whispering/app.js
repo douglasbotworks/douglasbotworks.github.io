@@ -48,12 +48,20 @@ get('restart').addEventListener('click', () => {dispatch({type:'reset'});get('ta
 render();
 
 get('save-progress').addEventListener('click', () => {
-  const url = URL.createObjectURL(new Blob([serializeCheckpoint(state)], {type: 'application/json'}));
-  const link = document.createElement('a');
-  link.href = url; link.download = 'whispering-evidence-checkpoint.json';
-  document.body.append(link); link.click(); link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-  get('checkpoint-status').textContent = 'Checkpoint download requested. Keep the JSON file to resume later.';
+  let url;
+  let link;
+  try {
+    url = URL.createObjectURL(new Blob([serializeCheckpoint(state)], {type: 'application/json'}));
+    link = document.createElement('a');
+    link.href = url; link.download = 'whispering-evidence-checkpoint.json';
+    document.body.append(link); link.click();
+    get('checkpoint-status').textContent = 'Checkpoint download requested. Check that your browser saved the JSON file before leaving; this page cannot confirm it was saved.';
+  } catch {
+    get('checkpoint-status').textContent = 'Checkpoint download could not be requested. Your investigation is unchanged. Try Download checkpoint again before leaving.';
+  } finally {
+    link?.remove();
+    if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
 });
 get('load-progress').addEventListener('change', async event => {
   const input = event.target;
@@ -66,7 +74,9 @@ get('load-progress').addEventListener('change', async event => {
   get('checkpoint-status').textContent = 'Reading checkpoint…';
   try {
     if (file.size > 4096) throw Error('Choose a checkpoint smaller than 4 KB.');
-    const restored = restoreCheckpoint(await file.text());
+    let text;
+    try { text = await file.text(); } catch { throw Error('The file could not be read. Select the checkpoint again to retry.'); }
+    const restored = restoreCheckpoint(text);
     if (revision !== checkpointRevision) return;
     checkpointPending = false;
     const wasCompleted = state.completed;

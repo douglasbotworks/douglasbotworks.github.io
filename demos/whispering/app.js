@@ -83,7 +83,7 @@ get('load-progress').addEventListener('change', async event => {
     state = restored;
     render();
     get('checkpoint-status').textContent = 'Checkpoint loaded. Your case notes and objective are restored.';
-    if (state.completed && !wasCompleted) get('ending-title').focus();
+    if (state.completed && !wasCompleted && document.activeElement === input) get('ending-title').focus();
   } catch (error) {
     if (revision === checkpointRevision) {
       checkpointPending = false;

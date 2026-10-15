@@ -23,7 +23,7 @@ For file-selection testing, use ../examples/original-products.csv and
 tab; the application does not transmit them or connect to Shopify. Hosting
 still receives ordinary page requests. No analytics or automatic submission.
 
-Detailed sections show 100 findings per page with Previous/Next controls. The product overview pages through every matching product, 100 at a time. Choose a finding category and optionally search exact Handle text to narrow this overview. Both filters must match; counts overlap and are not risk scores. Changing either filter returns to the first page. Detailed sections and downloads retain all findings regardless of filters or page. This bounds visible lists, not comparison memory or processing time.
+Detailed sections show 100 findings per page with Previous/Next controls. The product overview pages through every matching product, 100 at a time. Choose a finding category and optionally search exact Handle text to narrow this overview. Both filters must match; counts overlap and are not risk scores. Image findings combine matched variant rows with edited image URL/position/alt text (once per row) and additional image-row groups (once per participating spelling). Added/absent variants and orphan images have separate categories. Changing either filter returns to the first page. Detailed sections and downloads retain all findings regardless of filters or page. This bounds visible lists, not comparison memory or processing time.
 
 Personal/internal business use under LICENSE.txt. This free browser preview
 is separate from the proposed paid CLI edition. Checkout is not enabled.

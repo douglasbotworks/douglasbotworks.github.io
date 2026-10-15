@@ -50,7 +50,7 @@
   "pairs": [
     {
       "id": "legacy",
-      "reviewSha256": "a56cde55df91f06c94967565e7988a61853e2e85edae913284aeeae4ad48578c",
+      "reviewSha256": "83e0955691f775df42bc50ddbdfbcc6e8da1d86c044c31f728d17cd674592920",
       "counts": {
         "format": "catalog-count-summary",
         "version": 1,
@@ -101,7 +101,7 @@
     },
     {
       "id": "current",
-      "reviewSha256": "74ce8b28588db3964a1c1481ad61717c8b9dc25dc3c99eae77312f51aee99659",
+      "reviewSha256": "63c805b017cf04f6ad7969dc1154ca5a248347a368201ef43342ef5e926f3690",
       "counts": {
         "format": "catalog-count-summary",
         "version": 1,
@@ -152,7 +152,7 @@
     },
     {
       "id": "packed",
-      "reviewSha256": "4e81661b97663d9e3a71d49ee03634981032d9c3205de56f94128ee70ac880dd",
+      "reviewSha256": "a0f6ba92bce2802be5a0b9d7b03e4d4a6ea80e59c7e4e880e27555273a8ffad5",
       "counts": {
         "format": "catalog-count-summary",
         "version": 1,

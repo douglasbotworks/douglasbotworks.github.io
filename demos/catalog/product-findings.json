@@ -1,7 +1,7 @@
 {
   "format": "catalog-product-findings",
   "version": 1,
-  "scope": "Exact Handle spellings with findings only. Counts overlap and are not risk scores. Grouped image and option findings appear once under each participating exact spelling. Renamed Handles appear under both spellings. Global warnings, headers, columns and ambiguous SKUs require the full report. Handles and counts may be commercially sensitive.",
+  "scope": "Exact Handle spellings with findings only. Counts overlap and are not risk scores. Image findings count each matched variant row with an edited Image Src/Product image URL, Image Position or Image Alt Text once, plus each additional image-row group once under every participating exact spelling. Option groups appear once under each participating exact spelling. Renamed Handles appear under both spellings. Global warnings, headers, columns and ambiguous SKUs require the full report. Handles and counts may be commercially sensitive.",
   "products": [
     {
       "handle": "sample-mug",

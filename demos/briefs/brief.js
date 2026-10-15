@@ -24,7 +24,29 @@
     ['sample', 'Sanitized sample'], ['acceptance', 'Completion check'],
     ['boundaries', 'Included scope / exclusions'], ['delivery', 'Delivery / timeline for discussion']
   ];
-  const required = new Set(['expected', 'actual', 'steps', 'acceptance']);
+  const repairLabels = fields.map(([, label]) => label);
+  const releaseLabels = ['Review objective', 'Known concerns (optional)', 'Build preparation / safe access',
+    'Build format / runtime', 'Sanitized reference examples', 'Review gate / completion check',
+    'Included build / exclusions', 'Delivery / timeline for discussion'];
+  const repairPrompts = fields.map(([key]) => document.querySelector(`label[for="${key}"]`).textContent);
+  const releasePrompts = ['What should the static review check? (required)', 'Known concerns (optional)',
+    'How is the sanitized build prepared, and how can access be agreed? (required)',
+    'Build format, runtime versions and relevant files', 'Fictional reference examples (optional)',
+    'Which review gate and outputs will show completion? (required)',
+    'Included build and explicit exclusions', 'Preferred delivery format and timeline for discussion'];
+  const repairPlaceholders = fields.map(([key]) => form.elements[key].placeholder);
+  const releasePlaceholders = ['', 'Leave blank if no defect is known.',
+    'For example: npm run build produces dist/. Agree authorized access after initial review; do not paste private links or credentials.',
+    'For example: static HTML/CSS/JS build or MV3 extension; runtime and build command versions', '',
+    'For example: inventory and local-reference report; package only if the agreed gate passes', '', ''];
+  function updateOffer() {
+    const release = form.elements.offer.value === 'release';
+    fields.forEach(([key], index) => {
+      document.querySelector(`label[for="${key}"]`).textContent = (release ? releasePrompts : repairPrompts)[index];
+      form.elements[key].placeholder = (release ? releasePlaceholders : repairPlaceholders)[index];
+    });
+    form.elements.actual.required = !release;
+  }
   let prepared = null;
   let revision = 0;
   function invalidate() {
@@ -36,6 +58,7 @@
     emailDraft.removeAttribute('href');
     preview.textContent = 'Complete the required fields, then preview.';
     status.textContent = '';
+    updateOffer();
     document.getElementById('offer-scope').textContent = scopes[form.elements.offer.value] || '';
   }
   form.addEventListener('input', invalidate);
@@ -49,7 +72,9 @@
       status.textContent = 'Choose one of the available services.';
       return;
     }
-    const values = fields.map(([key, label]) => [key, label, form.elements[key].value.trim()]);
+    const labels = offer === 'release' ? releaseLabels : repairLabels;
+    const required = new Set(offer === 'release' ? ['expected', 'steps', 'acceptance'] : ['expected', 'actual', 'steps', 'acceptance']);
+    const values = fields.map(([key], index) => [key, labels[index], form.elements[key].value.trim()]);
     for (const [key, label, value] of values) {
       if ((required.has(key) && !value) || value.length > 4000) {
         status.textContent = `${label}: enter ${required.has(key) ? '1–4000' : 'at most 4000'} characters.`;

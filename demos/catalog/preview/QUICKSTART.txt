@@ -27,6 +27,11 @@ Detailed sections show 100 findings per page with Previous/Next controls. The pr
 
 Personal/internal business use under LICENSE.txt. This free browser preview
 is separate from the proposed paid CLI edition. Checkout is not enabled.
+If a CSV drop cannot be selected, use the file chooser and check the selected
+filename. Existing results describe the previous selection. Failed reads offer
+a retry: choose both files again or paste a small excerpt. Source files are not
+changed. Native file handling remains unverified.
+
 A download request is not proof of a saved file. Check browser downloads and open
 the report. Preparation/request failures keep the comparison available for retry.
 This page cannot detect later browser cancellation or a blocked save.

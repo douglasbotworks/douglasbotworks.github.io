@@ -604,7 +604,12 @@
   var maxInputBytes = 15 * 1024 * 1024;
   async function readCsvFile(file) {
     if (file.size > maxInputBytes) throw new Error("Each CSV must be 15 MB or smaller for this prototype.");
-    const bytes = await file.arrayBuffer();
+    let bytes;
+    try {
+      bytes = await file.arrayBuffer();
+    } catch {
+      throw new Error("Could not read a selected CSV. Choose both files again and retry, or use pasted CSV text for a small excerpt. Your source files have not been changed.");
+    }
     if (bytes.byteLength > maxInputBytes) throw new Error("Each CSV must be 15 MB or smaller for this prototype.");
     try {
       return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
@@ -1160,16 +1165,19 @@
       zone.classList.remove("dragover");
     });
     zone.addEventListener("drop", (event) => {
-      const file = [...event.dataTransfer.files].find((item) => item.name.toLowerCase().endsWith(".csv") || item.type === "text/csv");
-      if (!file) {
-        status.textContent = "Drop a CSV file into each file area.";
-        return;
+      try {
+        const file = [...event.dataTransfer?.files ?? []].find((item) => item.name.toLowerCase().endsWith(".csv") || item.type === "text/csv");
+        if (!file) {
+          status.textContent = "No CSV was selected from this drop. Existing selections and results are unchanged. Use the file chooser below or drop a CSV file.";
+          return;
+        }
+        const transfer = new DataTransfer();
+        transfer.items.add(file);
+        input.files = transfer.files;
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      } catch {
+        status.textContent = "Could not select a CSV from this drop. Check the selected filename below and use the file chooser to select the intended CSV, then compare again. Existing results describe the previous selection.";
       }
-      const transfer = new DataTransfer();
-      transfer.items.add(file);
-      input.files = transfer.files;
-      input.dispatchEvent(new Event("change", { bubbles: true }));
-      status.textContent = `${file.name} selected.`;
     });
   }
   function downloadReport(format) {

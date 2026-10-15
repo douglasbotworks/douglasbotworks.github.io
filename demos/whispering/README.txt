@@ -35,3 +35,10 @@ and completion are saved; dialogue is regenerated. No automatic browser storage
 or upload. Reload still starts fresh until you explicitly load your file. Start
 over does not delete downloaded files. Checkpoints can be edited and are not
 proof of play or completion. Maximum input file: 4096 bytes.
+
+While a checkpoint is reading, Cancel checkpoint load keeps the current investigation.
+Reads time out after ten seconds with retry guidance; late results cannot replace
+progress after cancellation, timeout, new gameplay or a newer load. Cancellation
+stops applying the result; it does not promise to abort the browser's file read.
+If a restored checkpoint hides the focused deduction or ending, focus returns
+to Load checkpoint. Focus elsewhere stays in place.

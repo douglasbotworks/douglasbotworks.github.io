@@ -2,6 +2,7 @@ import {AREAS, WITNESSES, EVIDENCE, initialState, objective, reduce, serializeCh
 let state = initialState();
 let checkpointRevision = 0;
 let checkpointPending = false;
+let cancelCheckpointRead;
 const get = id => document.getElementById(id);
 function render() {
   get('scene-name').textContent = AREAS[state.area];
@@ -33,6 +34,8 @@ function dispatch(action) {
   checkpointRevision++;
   if (checkpointPending) {
     checkpointPending = false;
+    cancelCheckpointRead?.();
+    get('cancel-load').hidden = true;
     get('checkpoint-status').textContent = 'Checkpoint load cancelled because the investigation changed. Select the file again to load it.';
   }
   const wasCompleted = state.completed;
@@ -63,31 +66,59 @@ get('save-progress').addEventListener('click', () => {
     if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 });
+function cancelLoad() {
+  if (!checkpointPending) return;
+  checkpointRevision++;
+  checkpointPending = false;
+  cancelCheckpointRead?.();
+  const hadFocus = document.activeElement === get('cancel-load');
+  get('cancel-load').hidden = true;
+  get('checkpoint-status').textContent = 'Checkpoint load cancelled. Your investigation is unchanged. Select a checkpoint to try again.';
+  if (hadFocus) get('load-progress').focus();
+}
+get('cancel-load').addEventListener('click', cancelLoad);
+get('load-progress').addEventListener('cancel', cancelLoad);
 get('load-progress').addEventListener('change', async event => {
   const input = event.target;
   const file = input.files?.[0];
+  if (!file) { cancelLoad(); return; }
   const revision = ++checkpointRevision;
+  cancelCheckpointRead?.();
   input.value = '';
-  checkpointPending = false;
-  if (!file) return;
   checkpointPending = true;
+  get('cancel-load').hidden = false;
   get('checkpoint-status').textContent = 'Reading checkpoint…';
   try {
     if (file.size > 4096) throw Error('Choose a checkpoint smaller than 4 KB.');
-    let text;
-    try { text = await file.text(); } catch { throw Error('The file could not be read. Select the checkpoint again to retry.'); }
+    const text = await new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(Error('The file read timed out. Select the checkpoint again to retry.')), 10000);
+      cancelCheckpointRead = () => { clearTimeout(timer); reject(Error('Checkpoint load cancelled.')); };
+      try {
+        Promise.resolve(file.text()).then(resolve, () => reject(Error('The file could not be read. Select the checkpoint again to retry.'))).finally(() => clearTimeout(timer));
+      } catch { clearTimeout(timer); reject(Error('The file could not be read. Select the checkpoint again to retry.')); }
+    });
     const restored = restoreCheckpoint(text);
     if (revision !== checkpointRevision) return;
     checkpointPending = false;
     const wasCompleted = state.completed;
+    const focused = document.activeElement;
     state = restored;
     render();
+    if (focused?.closest('[hidden]')) input.focus();
     get('checkpoint-status').textContent = 'Checkpoint loaded. Your case notes and objective are restored.';
     if (state.completed && !wasCompleted && document.activeElement === input) get('ending-title').focus();
   } catch (error) {
     if (revision === checkpointRevision) {
       checkpointPending = false;
       get('checkpoint-status').textContent = 'Checkpoint not loaded: ' + error.message;
+    }
+  } finally {
+    if (revision === checkpointRevision) {
+      checkpointPending = false;
+      cancelCheckpointRead = undefined;
+      const hadFocus = document.activeElement === get('cancel-load');
+      get('cancel-load').hidden = true;
+      if (hadFocus) input.focus();
     }
   }
 });

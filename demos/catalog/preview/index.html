@@ -74,7 +74,7 @@
           <label for="proposed-text">2. Proposed CSV text<textarea id="proposed-text" spellcheck="false" autocomplete="off" autocapitalize="off" disabled></textarea></label>
         </div>
       </div>
-      <div class="actions"><button type="submit">Compare locally</button><button id="clear" class="secondary" type="button">Clear inputs and results</button><button id="download" class="secondary" type="button" disabled>Download full JSON</button><button id="download-html" class="secondary" type="button" disabled>Download readable HTML</button><button id="download-csv" class="secondary" type="button" disabled>Download changed-cell CSV</button><button id="download-summary" class="secondary" type="button" disabled>Download counts only</button><button id="show-counts" class="secondary" type="button" disabled>Preview counts for sharing</button><button id="download-products" class="secondary" type="button" disabled>Download product findings</button><span class="muted">Product findings JSON contains exact Handles and overlapping counts; full reports are still required. Counts-only JSON omits catalog values; counts may still be sensitive. CSV is a changed-cell review sheet, not an import file; formula-like values are prefixed with an apostrophe. Reports include changed cell values. Store them carefully. HTML is a summary; JSON contains the full comparison.</span></div>
+      <div class="actions"><button type="submit">Compare locally</button><button id="clear" class="secondary" type="button">Clear inputs and results</button><button id="download" class="secondary" type="button" disabled>Download full JSON</button><button id="download-html" class="secondary" type="button" disabled>Download readable HTML</button><button id="download-csv" class="secondary" type="button" disabled>Download changed-cell CSV</button><button id="download-summary" class="secondary" type="button" disabled>Download counts only</button><button id="show-counts" class="secondary" type="button" disabled>Preview counts for sharing</button><button id="show-report" class="secondary" type="button" disabled>Preview complete report for copy</button><button id="download-products" class="secondary" type="button" disabled>Download product findings</button><span class="muted">Product findings JSON contains exact Handles and overlapping counts; full reports are still required. Counts-only JSON omits catalog values; counts may still be sensitive. CSV is a changed-cell review sheet, not an import file; formula-like values are prefixed with an apostrophe. Reports include changed cell values. Store them carefully. HTML is a summary; JSON contains the full comparison.</span></div>
     </form>
     <p class="muted">Detailed sections show 100 findings per page with Previous/Next controls. The product overview pages through every matching product, 100 at a time. Choose a finding category and optionally search exact Handle text to narrow this overview. Both filters must match; counts overlap and are not risk scores. Image findings combine matched variant rows with edited image URL/position/alt text (once per row) and additional image-row groups (once per participating spelling). Added/absent variants and orphan images have separate categories. Changing either filter returns to the first page. Detailed sections and downloads retain all findings regardless of filters or page. This bounds visible lists, not comparison memory or processing time.</p>
     <p id="status" role="status" aria-live="polite"></p>
@@ -84,6 +84,15 @@
       <label for="counts-text">Counts-only JSON for manual copy</label>
       <textarea id="counts-text" rows="12" readonly spellcheck="false" aria-describedby="counts-help"></textarea>
       <button id="select-counts" class="secondary" type="button">Select all counts</button>
+    </section>
+    <section id="report-panel" hidden aria-labelledby="report-heading">
+      <h2 id="report-heading">Complete report for manual copy</h2>
+      <p id="report-help">This includes catalog values from the complete comparison, regardless of overview filters. Keep it private; use the counts-only preview for initial inquiries. Copy to your own editor and verify the pasted content. Nothing is sent or copied automatically. CSV lists changed cells only, prefixes formula-like values with an apostrophe, and is a review sheet, not an import file. The text box normalizes CSV line endings to LF, including within quoted values; copying may normalize them again. Use the JSON preview or downloads when exact cell line endings matter.</p>
+      <label for="report-format">Report format</label>
+      <select id="report-format"><option value="json">Full comparison JSON</option><option value="csv">Changed-cell review CSV</option></select>
+      <label for="report-text">Report text for manual copy</label>
+      <textarea id="report-text" rows="16" readonly spellcheck="false" aria-describedby="report-help"></textarea>
+      <button id="select-report" class="secondary" type="button">Select all report text</button>
     </section>
     <div id="results" aria-label="Comparison results" aria-busy="false"></div>
   </main>
@@ -849,6 +858,10 @@
   var showCountsButton = document.querySelector("#show-counts");
   var countsPanel = document.querySelector("#counts-panel");
   var countsText = document.querySelector("#counts-text");
+  var showReportButton = document.querySelector("#show-report");
+  var reportPanel = document.querySelector("#report-panel");
+  var reportText = document.querySelector("#report-text");
+  var reportFormat = document.querySelector("#report-format");
   var compareButton = form.querySelector('button[type="submit"]');
   var inputMode = document.querySelector("#input-mode");
   var textInputs = [document.querySelector("#original-text"), document.querySelector("#proposed-text")];
@@ -1121,12 +1134,16 @@
     lastReport = report;
     resetCountsPreview();
     showCountsButton.disabled = false;
+    showReportButton.disabled = false;
     downloadButton.disabled = false;
     htmlDownloadButton.disabled = false;
     productDownloadButton.disabled = summaryDownloadButton.disabled = csvDownloadButton.disabled = false;
     status.textContent = "Comparison complete. Review every warning before using the file.";
   }
   function resetCountsPreview() {
+    showReportButton.disabled = true;
+    reportPanel.hidden = true;
+    reportText.value = "";
     showCountsButton.disabled = true;
     countsPanel.hidden = true;
     countsText.value = "";
@@ -1141,6 +1158,22 @@
   document.querySelector("#select-counts").addEventListener("click", () => {
     countsText.focus();
     countsText.select();
+  });
+  function showReportPreview() {
+    if (!lastReport) return;
+    reportText.value = reportFormat.value === "csv" ? renderChangedCellsCsv(lastReport) : JSON.stringify(lastReport, null, 2);
+    reportPanel.hidden = false;
+    reportText.focus();
+    status.textContent = "Complete report preview ready. It contains catalog values, regardless of overview filters. Select and copy with your device\u2019s Copy command, then verify the pasted content. Nothing was sent or copied automatically. CSV is a review sheet, not an import file.";
+  }
+  showReportButton.addEventListener("click", showReportPreview);
+  reportFormat.addEventListener("change", () => {
+    reportText.value = "";
+    if (!reportPanel.hidden) showReportPreview();
+  });
+  document.querySelector("#select-report").addEventListener("click", () => {
+    reportText.focus();
+    reportText.select();
   });
   function invalidateComparison() {
     selectionVersion += 1;

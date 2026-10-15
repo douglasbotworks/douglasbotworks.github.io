@@ -38,6 +38,14 @@ is required. Counts can still be sensitive; review before sharing in an inquiry.
 No automatic copying or sending. Input changes and Clear erase this preview,
 not text already copied elsewhere. Full reports remain needed for diagnosis.
 
+For complete results without a download, choose Preview complete report for copy.
+Select full comparison JSON or changed-cell review CSV, then Select all report text
+and use your device’s Copy command. Overview filters never narrow these outputs.
+They contain catalog values: keep private, and use counts only for initial inquiries.
+CSV text boxes normalize line endings to LF, including quoted values. Copying may normalize again; verify pasted content. Use JSON or downloads when exact cell line endings matter. CSV
+is a review sheet, not an import file. No automatic copying or sending. Input
+changes, Clear, sample and new comparisons erase previews, not external copies.
+
 A download request is not proof of a saved file. Check browser downloads and open
 the report. Preparation/request failures keep the comparison available for retry.
 This page cannot detect later browser cancellation or a blocked save.

@@ -23,7 +23,7 @@ For file-selection testing, use ../examples/original-products.csv and
 tab; the application does not transmit them or connect to Shopify. Hosting
 still receives ordinary page requests. No analytics or automatic submission.
 
-Detailed sections show 100 findings per page with Previous/Next controls. The product overview shows the first 100 search matches; refine the search for other Handles. Downloads retain all findings regardless of page/search. This bounds visible lists, not comparison memory or processing time.
+Detailed sections show 100 findings per page with Previous/Next controls. The product overview pages through all search matches, 100 products at a time. Search changes return to the first page. Downloads retain all findings regardless of page/search. This bounds visible lists, not comparison memory or processing time.
 
 Personal/internal business use under LICENSE.txt. This free browser preview
 is separate from the proposed paid CLI edition. Checkout is not enabled.
@@ -39,3 +39,5 @@ Shopify's current import guidance. Start with fictional files.
 Per file: 15 MiB, 500 columns, 50,000 data records and 1,000,000 cells
 including the header. Valid UTF-8 required. Full JSON/HTML/CSV and product
 findings include catalog values. Counts can still be commercially sensitive.
+
+Browsers normalize pasted CRLF/CR line endings to LF, including inside quoted cells. Line-ending-only edits may be hidden. Use CSV files when these differences matter; paste-mode downloads describe the normalized text.

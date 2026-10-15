@@ -68,7 +68,7 @@
         </label>
       </div>
       <div id="text-fields" hidden>
-        <p>Paste complete comma-separated CSV text including its header into both boxes. Each box accepts at most 1 MiB of UTF-8 text; the same row, column and cell limits apply. Compare only this text, never a mixture with selected files. Edits invalidate the previous report. Text is kept in this tab until cleared or reloaded; the app does not save or transmit it. Omit secrets and customer records.</p>
+        <p>Paste complete comma-separated CSV text including its header into both boxes. Each box accepts at most 1 MiB of UTF-8 text; the same row, column and cell limits apply. Browsers normalize pasted CRLF/CR line endings to LF, including inside quoted cells. Line-ending-only edits may be hidden; use CSV files when these differences matter. Downloaded reports describe the normalized pasted text. Compare only this text, never a mixture with selected files. Edits invalidate the previous report. Text is kept in this tab until cleared or reloaded; the app does not save or transmit it. Omit secrets and customer records.</p>
         <div class="fields">
           <label for="original-text">1. Original CSV text<textarea id="original-text" spellcheck="false" autocomplete="off" autocapitalize="off" disabled></textarea></label>
           <label for="proposed-text">2. Proposed CSV text<textarea id="proposed-text" spellcheck="false" autocomplete="off" autocapitalize="off" disabled></textarea></label>
@@ -76,7 +76,7 @@
       </div>
       <div class="actions"><button type="submit">Compare locally</button><button id="clear" class="secondary" type="button">Clear inputs and results</button><button id="download" class="secondary" type="button" disabled>Download full JSON</button><button id="download-html" class="secondary" type="button" disabled>Download readable HTML</button><button id="download-csv" class="secondary" type="button" disabled>Download changed-cell CSV</button><button id="download-summary" class="secondary" type="button" disabled>Download counts only</button><button id="download-products" class="secondary" type="button" disabled>Download product findings</button><span class="muted">Product findings JSON contains exact Handles and overlapping counts; full reports are still required. Counts-only JSON omits catalog values; counts may still be sensitive. CSV is a changed-cell review sheet, not an import file; formula-like values are prefixed with an apostrophe. Reports include changed cell values. Store them carefully. HTML is a summary; JSON contains the full comparison.</span></div>
     </form>
-    <p class="muted">Detailed sections show 100 findings per page with Previous/Next controls. The product overview shows the first 100 search matches; refine the search for other Handles. Downloads retain all findings regardless of page/search. This bounds visible lists, not comparison memory or processing time.</p>
+    <p class="muted">Detailed sections show 100 findings per page with Previous/Next controls. The product overview pages through every search match, 100 products at a time. Changing the search returns to the first page. Downloads retain all findings regardless of page/search. This bounds visible lists, not comparison memory or processing time.</p>
     <p id="status" role="status" aria-live="polite"></p>
     <div id="results" aria-label="Comparison results" aria-busy="false"></div>
   </main>
@@ -940,13 +940,41 @@
       ["duplicateIdentities", "duplicate identities (both files)"],
       ["orphanImages", "orphan images (both files)"]
     ];
+    let productPage = 0;
+    const productPageSize = 100;
+    const productControls = element("div", "actions");
+    const previousProducts = element("button", "secondary", "Previous products");
+    const nextProducts = element("button", "secondary", "Next products");
+    previousProducts.type = nextProducts.type = "button";
+    previousProducts.setAttribute("aria-label", "Previous products with findings");
+    nextProducts.setAttribute("aria-label", "Next products with findings");
+    productControls.append(previousProducts, nextProducts);
     const showProducts = () => {
       const matches = products.filter((item) => item.handle.includes(search.value));
-      productList.replaceChildren(...matches.slice(0, 100).map((item) => element("li", "", `Handle ${JSON.stringify(item.handle)} \xB7 ${categories.filter(([key]) => item[key]).map(([key, name]) => `${item[key]} ${name}`).join(" \xB7 ")}`)));
-      visibleCount.textContent = `Showing ${Math.min(matches.length, 100)} of ${matches.length} matching products (${products.length} total). Refine the search to find other Handles. Search filters this overview only; detailed findings and downloads remain complete.`;
+      const start = productPage * productPageSize;
+      productList.replaceChildren(...matches.slice(start, start + productPageSize).map((item) => element("li", "", `Handle ${JSON.stringify(item.handle)} \xB7 ${categories.filter(([key]) => item[key]).map(([key, name]) => `${item[key]} ${name}`).join(" \xB7 ")}`)));
+      visibleCount.textContent = `Showing ${matches.length ? start + 1 : 0}\u2013${Math.min(start + productPageSize, matches.length)} of ${matches.length} matching products (${products.length} total). Search filters this overview only; detailed findings and downloads remain complete.`;
+      previousProducts.disabled = productPage === 0;
+      nextProducts.disabled = start + productPageSize >= matches.length;
+      productControls.hidden = matches.length <= productPageSize;
     };
-    search.addEventListener("input", showProducts);
-    overview.append(label, search, visibleCount, productList);
+    previousProducts.addEventListener("click", () => {
+      if (productPage > 0) {
+        productPage -= 1;
+        showProducts();
+      }
+    });
+    nextProducts.addEventListener("click", () => {
+      if (!nextProducts.disabled) {
+        productPage += 1;
+        showProducts();
+      }
+    });
+    search.addEventListener("input", () => {
+      productPage = 0;
+      showProducts();
+    });
+    overview.append(label, search, visibleCount, productList, productControls);
     output.append(overview);
     showProducts();
     addList(
@@ -1212,7 +1240,7 @@
       }
       try {
         render(analyzeCsvPair(...texts));
-        status.textContent = "Pasted CSV comparison complete. Review every warning; source lines refer to the pasted text, not a full export.";
+        status.textContent = "Pasted CSV comparison complete. Browsers normalize pasted CRLF/CR line endings to LF, including inside quoted cells; line-ending-only edits may be hidden. Use CSV files to preserve those differences. Review every warning; source lines refer to the pasted text, not a full export.";
       } catch (error) {
         status.textContent = error instanceof Error ? error.message : "Could not compare these CSV texts.";
       }

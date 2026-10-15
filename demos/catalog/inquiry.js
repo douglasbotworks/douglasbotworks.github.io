@@ -4,12 +4,16 @@
   const preview = document.getElementById('preview');
   const status = document.getElementById('status');
   const download = document.getElementById('download');
+  const copy = document.getElementById('copy');
   const emailDraft = document.getElementById('email-draft');
   const fields = [['runtime', 'Operating system and Node.js version'], ['size', 'Approximate file sizes, row counts and number of pairs'], ['needs', 'Reports and review needs'], ['workflow', 'Review workflow and intended internal users'], ['delivery', 'Timeline and license questions for discussion']];
   const required = new Set(['runtime', 'size', 'needs']);
   let prepared = null;
+  let revision = 0;
   function invalidate() {
     prepared = null;
+    revision++;
+    copy.disabled = true;
     download.disabled = true;
     emailDraft.hidden = true;
     emailDraft.removeAttribute('href');
@@ -39,10 +43,40 @@
     ].join('\n\n') + '\n';
     preview.textContent = prepared;
     download.disabled = false;
+    copy.disabled = false;
     const subject = 'Catalog CLI availability';
-    emailDraft.href = `mailto:douglasbotworks@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('Hello Douglas, I would like to discuss Catalog CLI availability. I will attach my downloaded inquiry before sending. Please confirm license, scope, price and delivery arrangements before any purchase.')}`;
+    emailDraft.href = `mailto:douglasbotworks@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('Hello Douglas, I would like to discuss Catalog CLI availability. I will paste my prepared inquiry or attach my downloaded inquiry before sending. Please confirm license, scope, price and delivery arrangements before any purchase.')}`;
     emailDraft.hidden = false;
     status.textContent = 'Brief prepared locally. Review it before downloading or sharing.';
+  });
+  copy.addEventListener('click', async () => {
+    if (prepared === null) return;
+    const currentRevision = revision;
+    const text = prepared;
+    copy.disabled = true;
+    status.textContent = 'Copying prepared brief…';
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(text);
+      if (revision === currentRevision) {
+        status.textContent = 'Brief copied. Paste it into your email and review before sending. Nothing was sent. Clear does not erase your clipboard.';
+      }
+    } catch {
+      if (revision === currentRevision) {
+        // Selection is a manual fallback; never claim a failed write copied text.
+        const selection = window.getSelection();
+        if (selection) {
+          preview.focus();
+          const range = document.createRange();
+          range.selectNodeContents(preview);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
+        status.textContent = 'Automatic copy unavailable. Select the preview text and use your device’s Copy command, or download the brief. Nothing was sent.';
+      }
+    } finally {
+      if (revision === currentRevision) copy.disabled = false;
+    }
   });
   download.addEventListener('click', () => {
     if (prepared === null) return;

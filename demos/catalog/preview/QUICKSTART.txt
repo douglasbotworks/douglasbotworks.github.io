@@ -32,6 +32,12 @@ filename. Existing results describe the previous selection. Failed reads offer
 a retry: choose both files again or paste a small excerpt. Source files are not
 changed. Native file handling remains unverified.
 
+After comparison, Preview counts for sharing shows the complete counts-only JSON
+on this page. Select all counts and use your device’s Copy command. No download
+is required. Counts can still be sensitive; review before sharing in an inquiry.
+No automatic copying or sending. Input changes and Clear erase this preview,
+not text already copied elsewhere. Full reports remain needed for diagnosis.
+
 A download request is not proof of a saved file. Check browser downloads and open
 the report. Preparation/request failures keep the comparison available for retry.
 This page cannot detect later browser cancellation or a blocked save.

@@ -8,7 +8,7 @@ Public portfolio and fictional demonstrations for Douglas Bot Works. GitHub Page
 
 | Product | Start here | Available now |
 | --- | --- | --- |
-| Catalog Change Guard | [Local browser comparison](https://douglasbotworks.github.io/demos/catalog/preview/) | Files, pasted excerpts, fictional sample and complete report exports; [offline preview ZIP](https://github.com/douglasbotworks/douglasbotworks.github.io/releases/tag/catalog-handle-warning-2026-10-15) |
+| Catalog Change Guard | [Local browser comparison](https://douglasbotworks.github.io/demos/catalog/preview/) | Files, pasted excerpts, fictional sample and complete report exports; [offline preview ZIP](https://github.com/douglasbotworks/douglasbotworks.github.io/releases/tag/catalog-counts-preview-2026-10-15) |
 | Static Release Check | [Download and examples](https://douglasbotworks.github.io/demos/release/) | Free MIT Python CLI for bounded static asset/navigation checks |
 | Software Fix toolkit | [Before/after repair evidence](https://douglasbotworks.github.io/demos/software/) | Free fictional repair toolkit and [single-defect scoping guide](https://douglasbotworks.github.io/demos/software/scope.html) |
 | Gradual Translation | [Extension download and installation](https://douglasbotworks.github.io/demos/translation/) | Unpacked Chrome development preview; native acceptance pending |

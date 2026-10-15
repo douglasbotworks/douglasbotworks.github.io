@@ -74,10 +74,17 @@
           <label for="proposed-text">2. Proposed CSV text<textarea id="proposed-text" spellcheck="false" autocomplete="off" autocapitalize="off" disabled></textarea></label>
         </div>
       </div>
-      <div class="actions"><button type="submit">Compare locally</button><button id="clear" class="secondary" type="button">Clear inputs and results</button><button id="download" class="secondary" type="button" disabled>Download full JSON</button><button id="download-html" class="secondary" type="button" disabled>Download readable HTML</button><button id="download-csv" class="secondary" type="button" disabled>Download changed-cell CSV</button><button id="download-summary" class="secondary" type="button" disabled>Download counts only</button><button id="download-products" class="secondary" type="button" disabled>Download product findings</button><span class="muted">Product findings JSON contains exact Handles and overlapping counts; full reports are still required. Counts-only JSON omits catalog values; counts may still be sensitive. CSV is a changed-cell review sheet, not an import file; formula-like values are prefixed with an apostrophe. Reports include changed cell values. Store them carefully. HTML is a summary; JSON contains the full comparison.</span></div>
+      <div class="actions"><button type="submit">Compare locally</button><button id="clear" class="secondary" type="button">Clear inputs and results</button><button id="download" class="secondary" type="button" disabled>Download full JSON</button><button id="download-html" class="secondary" type="button" disabled>Download readable HTML</button><button id="download-csv" class="secondary" type="button" disabled>Download changed-cell CSV</button><button id="download-summary" class="secondary" type="button" disabled>Download counts only</button><button id="show-counts" class="secondary" type="button" disabled>Preview counts for sharing</button><button id="download-products" class="secondary" type="button" disabled>Download product findings</button><span class="muted">Product findings JSON contains exact Handles and overlapping counts; full reports are still required. Counts-only JSON omits catalog values; counts may still be sensitive. CSV is a changed-cell review sheet, not an import file; formula-like values are prefixed with an apostrophe. Reports include changed cell values. Store them carefully. HTML is a summary; JSON contains the full comparison.</span></div>
     </form>
     <p class="muted">Detailed sections show 100 findings per page with Previous/Next controls. The product overview pages through every matching product, 100 at a time. Choose a finding category and optionally search exact Handle text to narrow this overview. Both filters must match; counts overlap and are not risk scores. Image findings combine matched variant rows with edited image URL/position/alt text (once per row) and additional image-row groups (once per participating spelling). Added/absent variants and orphan images have separate categories. Changing either filter returns to the first page. Detailed sections and downloads retain all findings regardless of filters or page. This bounds visible lists, not comparison memory or processing time.</p>
     <p id="status" role="status" aria-live="polite"></p>
+    <section id="counts-panel" hidden aria-labelledby="counts-heading">
+      <h2 id="counts-heading">Counts-only preview</h2>
+      <p id="counts-help">These counts cover the complete comparison, regardless of overview filters. Handles, SKUs, cell values, filenames and warning text are omitted. Counts may still reveal business information. Review before sharing; use the full report to diagnose findings. Nothing is sent automatically.</p>
+      <label for="counts-text">Counts-only JSON for manual copy</label>
+      <textarea id="counts-text" rows="12" readonly spellcheck="false" aria-describedby="counts-help"></textarea>
+      <button id="select-counts" class="secondary" type="button">Select all counts</button>
+    </section>
     <div id="results" aria-label="Comparison results" aria-busy="false"></div>
   </main>
   <footer><a href="https://douglasbotworks.github.io/demos/catalog/">About the CLI edition and availability</a><br>This is an early review aid, not an official Shopify tool and not a guarantee that an import is safe. Per file: 15 MiB, 500 columns, 50,000 data records and 1,000,000 cells including the header. Clear removes file selections, pasted text and results from this tab, but does not delete previously downloaded reports. Keep backups and verify the latest Shopify instructions and import settings before making catalog changes.</footer>
@@ -839,6 +846,9 @@
   var csvDownloadButton = document.querySelector("#download-csv");
   var summaryDownloadButton = document.querySelector("#download-summary");
   var productDownloadButton = document.querySelector("#download-products");
+  var showCountsButton = document.querySelector("#show-counts");
+  var countsPanel = document.querySelector("#counts-panel");
+  var countsText = document.querySelector("#counts-text");
   var compareButton = form.querySelector('button[type="submit"]');
   var inputMode = document.querySelector("#input-mode");
   var textInputs = [document.querySelector("#original-text"), document.querySelector("#proposed-text")];
@@ -1109,14 +1119,33 @@
     notes.append(list);
     output.append(notes);
     lastReport = report;
+    resetCountsPreview();
+    showCountsButton.disabled = false;
     downloadButton.disabled = false;
     htmlDownloadButton.disabled = false;
     productDownloadButton.disabled = summaryDownloadButton.disabled = csvDownloadButton.disabled = false;
     status.textContent = "Comparison complete. Review every warning before using the file.";
   }
+  function resetCountsPreview() {
+    showCountsButton.disabled = true;
+    countsPanel.hidden = true;
+    countsText.value = "";
+  }
+  showCountsButton.addEventListener("click", () => {
+    if (!lastReport) return;
+    countsText.value = JSON.stringify(summarizeReport(lastReport), null, 2);
+    countsPanel.hidden = false;
+    countsText.focus();
+    status.textContent = "Counts-only preview ready. Select and copy it with your device\u2019s Copy command if you choose to share it. Counts can still reveal business information. Nothing was sent or copied automatically.";
+  });
+  document.querySelector("#select-counts").addEventListener("click", () => {
+    countsText.focus();
+    countsText.select();
+  });
   function invalidateComparison() {
     selectionVersion += 1;
     lastReport = null;
+    resetCountsPreview();
     downloadButton.disabled = htmlDownloadButton.disabled = true;
     productDownloadButton.disabled = summaryDownloadButton.disabled = csvDownloadButton.disabled = true;
     output.replaceChildren();
@@ -1153,6 +1182,7 @@
       selectionVersion += 1;
       name.textContent = input.files[0]?.name ?? "or choose a file below";
       lastReport = null;
+      resetCountsPreview();
       downloadButton.disabled = true;
       htmlDownloadButton.disabled = true;
       productDownloadButton.disabled = summaryDownloadButton.disabled = csvDownloadButton.disabled = true;
@@ -1229,6 +1259,7 @@
       zone.querySelector(".file-name").textContent = "or choose a file below";
     }
     lastReport = null;
+    resetCountsPreview();
     downloadButton.disabled = htmlDownloadButton.disabled = true;
     productDownloadButton.disabled = summaryDownloadButton.disabled = csvDownloadButton.disabled = true;
     output.replaceChildren();
@@ -1252,6 +1283,7 @@
     event.preventDefault();
     output.replaceChildren();
     lastReport = null;
+    resetCountsPreview();
     downloadButton.disabled = true;
     htmlDownloadButton.disabled = true;
     productDownloadButton.disabled = summaryDownloadButton.disabled = csvDownloadButton.disabled = true;

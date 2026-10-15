@@ -1,1 +1,1 @@
-f6725ec19636a7b698ff688a75c5ff511087b08062dd31548dd0272fd907c880  gradual-translation-0.1.1-preview.zip
+2642e9d4c4bb5a713c36455782738860a6a0ccde5b657f847ddab135376a8e5b  gradual-translation-0.1.2-preview.zip

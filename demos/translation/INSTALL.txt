@@ -1,9 +1,9 @@
-Gradual Translation 0.1.1 preview
-Source: a265bb8c38fab6bb04d362ddfd9467889ea7a8eb
-Release: https://github.com/Sirrine-Jonathan/gradual-translation-extension/releases/tag/v0.1.1-preview
+Gradual Translation 0.1.2 preview
+Source: the v0.1.2-preview Git tag linked below
+Release: https://github.com/Sirrine-Jonathan/gradual-translation-extension/releases/tag/v0.1.2-preview
 
 UPDATE AN EXISTING UNPACKED INSTALLATION
-1. Download and extract gradual-translation-0.1.1-preview.zip.
+1. Download and extract gradual-translation-0.1.2-preview.zip.
 2. In chrome://extensions, find Gradual Translation and note its extension ID.
 3. Replace the extension files in its current unpacked folder with the extracted
    files. Keep the same folder path. Do not remove the extension or clear storage.
@@ -21,10 +21,10 @@ FIRST INSTALLATION
 4. Try pause, Undo, site controls, and the Vocabulary/Progress panels.
 
 CHECK THE DOWNLOAD
-The sibling SHA256.txt identifies the ZIP. Compute its SHA256:
-  macOS: shasum -a 256 gradual-translation-0.1.1-preview.zip
-  Linux: sha256sum gradual-translation-0.1.1-preview.zip
-  Windows PowerShell: Get-FileHash gradual-translation-0.1.1-preview.zip -Algorithm SHA256
+Download SHA256.txt from the release above; it identifies the ZIP. Compute its SHA256:
+  macOS: shasum -a 256 gradual-translation-0.1.2-preview.zip
+  Linux: sha256sum gradual-translation-0.1.2-preview.zip
+  Windows PowerShell: Get-FileHash gradual-translation-0.1.2-preview.zip -Algorithm SHA256
 Compare the complete digest with SHA256.txt. The checksum detects an altered
 or incomplete download; it is not an independent signature.
 
@@ -37,6 +37,10 @@ This is a development preview with no paid activation or checkout.
 The extension declares content scripts on all URLs and reads eligible page text
 locally. Browser-managed model preparation may download files.
 
-0.1.1 fixes unchanged English grammar highlighting, translated phrase exposures,
+Includes the 0.1.1 fixes for unchanged English grammar highlighting, translated phrase exposures,
 live learning panel refresh and Spanish/English review pairs. Progress counts
 word/phrase encounters, including repeats, rather than unique words or proficiency.
+
+0.1.2 preserves the visible Vocabulary and Grammar search during live storage
+updates, tab return and delayed Mark known/Unlearn completion. Older list reads
+cannot replace newer searches. Searches are held only in the open Options page.

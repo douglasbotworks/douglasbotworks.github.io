@@ -48,6 +48,9 @@ def verify(path, expected_digest):
         for entry in entries:
             if entry.orig_filename != entry.filename or entry.file_size > MAX_MEMBER:
                 raise ValueError('Invalid member name or size')
+            if (stat.S_IFMT(entry.external_attr >> 16) not in (0, stat.S_IFREG)
+                    or entry.external_attr & 0x10):
+                raise ValueError('Archive members must describe regular files')
             if entry.compress_type != zipfile.ZIP_STORED or entry.flag_bits & 1:
                 raise ValueError('Only unencrypted stored members are supported')
             contents[entry.filename] = archive.read(entry)

@@ -522,8 +522,8 @@
     });
     if (changedHandles.length) warnings.push({
       level: "high",
-      title: `${changedHandles.length} row(s) have a changed Handle despite a matching unique SKU`,
-      detail: "Shopify uses Handle to match products when overwriting. A changed Handle may be imported as a new product instead of updating the original. Confirm the intended product identity in Shopify before importing."
+      title: `${changedHandles.length} matched row(s) have a changed Handle`,
+      detail: "Rows can be paired by normalized Handle/options or by unique SKU; inspect the changed-row matching details. Shopify uses Handle to match products when overwriting. A changed Handle may be imported as a new product instead of updating the original. Confirm the intended product identity in Shopify before importing."
     });
     if (headerSpellingChanges.length || rawHeaderIssues.length) warnings.push({
       level: "high",

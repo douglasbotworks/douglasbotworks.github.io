@@ -10,7 +10,9 @@
   const required = new Set(['runtime', 'size', 'needs']);
   let prepared = null;
   let revision = 0;
+  let copyTimer;
   function invalidate() {
+    clearTimeout(copyTimer);
     prepared = null;
     revision++;
     copy.disabled = true;
@@ -55,14 +57,22 @@
     const text = prepared;
     copy.disabled = true;
     status.textContent = 'Copying prepared brief…';
+    let expired = false;
+    copyTimer = setTimeout(() => {
+      expired = true;
+      if (revision === currentRevision) {
+        copy.disabled = false;
+        status.textContent = 'Automatic copy has not finished. Copy the preview text manually or download the brief. The browser may still finish the earlier clipboard write; check pasted text before sharing. Nothing was sent.';
+      }
+    }, 10000);
     try {
       if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
       await navigator.clipboard.writeText(text);
-      if (revision === currentRevision) {
+      if (!expired && revision === currentRevision) {
         status.textContent = 'Brief copied. Paste it into your email and review before sending. Nothing was sent. Clear does not erase your clipboard.';
       }
     } catch {
-      if (revision === currentRevision) {
+      if (!expired && revision === currentRevision) {
         // Selection is a manual fallback; never claim a failed write copied text.
         const selection = window.getSelection();
         if (selection) {
@@ -75,7 +85,10 @@
         status.textContent = 'Automatic copy unavailable. Select the preview text and use your device’s Copy command, or download the brief. Nothing was sent.';
       }
     } finally {
-      if (revision === currentRevision) copy.disabled = false;
+      if (!expired && revision === currentRevision) {
+        clearTimeout(copyTimer);
+        copy.disabled = false;
+      }
     }
   });
   download.addEventListener('click', () => {

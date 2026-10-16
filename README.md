@@ -15,6 +15,8 @@ Public portfolio and fictional demonstrations for Douglas Bot Works. GitHub Page
 | Whispering Stones | [Play the evidence walk](https://douglasbotworks.github.io/demos/whispering/) | Free original-art scripted vignette with optional local checkpoint files; separate from unfinished AI RPG |
 | Skybound | [Development previews](https://douglasbotworks.github.io/demos/skybound/) | CPU-generated flight/terrain diagnostics; headset acceptance pending |
 
+[Compare the proposed service scopes and example deliverables](https://douglasbotworks.github.io/services.html) before preparing an inquiry.
+
 For the proposed USD150 JavaScript/TypeScript repair pilot, [prepare a request locally](https://douglasbotworks.github.io/demos/briefs/?offer=repair) or email douglasbotworks@gmail.com with reproduction steps and the expected result. Agree scope, authorized source access and a payment arrangement before work starts. No checkout or automatic booking is enabled. Do not send credentials or customer records.
 
 Catalog preview supports personal/internal business use under its included license; the toolkit, release checker and vignette each include their own license. Automated checks and byte verification do not establish human usability or customer outcomes. Native report downloads remain unverified in this worker.
@@ -31,7 +33,7 @@ Jon explicitly authorized this public repository and GitHub Pages publication on
 
 ## Verify the public deployment
 
-`python3 tools/verify_live.py` downloads the currently selected public site files (139 as of the October 14 Catalog pagination deployment) over HTTPS and compares SHA256 values to the local files. It performs read-only requests with bounded concurrency/timeouts and emits a JSON report. Run after Pages reports the matching commit built.
+`python3 tools/verify_live.py` downloads the currently selected public site files (including the service comparison page and all demo files) over HTTPS and compares SHA256 values to the local files. It performs read-only requests with bounded concurrency/timeouts and emits a JSON report. Run after Pages reports the matching commit built.
 
 Public release: https://github.com/douglasbotworks/douglasbotworks.github.io/releases/tag/portfolio-2026-10-13 . Download its ZIP and report together, then use the sibling recipient verifier above.
 

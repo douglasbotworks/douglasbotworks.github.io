@@ -5,12 +5,12 @@
   "failOnHigh": false,
   "highWarnings": 6,
   "files": {
-    "counts.json": "3481f7aad130bc2b9e45070ac130cb7e3ef06b7015b2a77234d7725e9a6531c4",
+    "counts.json": "168e149f06850be83b2de08e5ba5b11ab839928532a68b9839b6256b67e70ec0",
     "index.html": "90ef240aa013d4251c4eada721459a9f4e0bc67ee3aa18037257f05af9a3ea65",
     "README.txt": "157de8af0a10ea883a7454ceb13edad52afda9baec754326d949bb75b6cc1b84"
   },
   "reviews": {
-    "legacy": "83e0955691f775df42bc50ddbdfbcc6e8da1d86c044c31f728d17cd674592920",
+    "legacy": "65bf688088bbf2d458cfd20f28ad0bc0569b2a5a48373070bc063cf991698913",
     "current": "df21cba507a4d3f7329c511a8763527d9ddc760e3e9b34dadff8ce2d8d28a2e6",
     "packed": "a0f6ba92bce2802be5a0b9d7b03e4d4a6ea80e59c7e4e880e27555273a8ffad5"
   }

@@ -50,7 +50,7 @@
   "pairs": [
     {
       "id": "legacy",
-      "reviewSha256": "83e0955691f775df42bc50ddbdfbcc6e8da1d86c044c31f728d17cd674592920",
+      "reviewSha256": "65bf688088bbf2d458cfd20f28ad0bc0569b2a5a48373070bc063cf991698913",
       "counts": {
         "format": "catalog-count-summary",
         "version": 1,

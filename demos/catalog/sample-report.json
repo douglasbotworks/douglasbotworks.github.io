@@ -135,8 +135,8 @@
     },
     {
       "level": "high",
-      "title": "Variant option combinations differ for 1 existing product(s)",
-      "detail": "Changed, added, or missing variant option combinations need review. Shopify warns that changing option values can replace variant IDs; check downstream references before import."
+      "title": "Variant option combinations or matched option values differ",
+      "detail": "1 shared-Handle group(s) have changed combinations; 0 matched option-value cell(s) changed. These counts overlap and are not product totals. A renamed Handle paired by unique SKU can have changed cells without a shared-Handle group. Changed, added, or missing variant option combinations need review. Shopify warns that changing option values can replace variant IDs; check downstream references before import."
     },
     {
       "level": "medium",

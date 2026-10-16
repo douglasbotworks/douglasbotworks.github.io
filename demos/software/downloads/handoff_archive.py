@@ -119,7 +119,10 @@ def pack(root, output):
     data = buffer.getvalue()
     if len(data) > MAX_ARCHIVE:
         raise ValueError('Archive exceeds size limit')
-    with open(output, 'xb') as destination:
+    # Exported handoffs can contain client source. Restrict the new archive
+    # from creation, including when it is outside the private release directory.
+    fd = os.open(output, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    with os.fdopen(fd, 'wb') as destination:
         destination.write(data)
     return {**result, 'sha256': sha(data), 'archive': str(output)}
 

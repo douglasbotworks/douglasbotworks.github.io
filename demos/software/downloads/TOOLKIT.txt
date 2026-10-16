@@ -8,7 +8,7 @@ Hashes establish consistency, not sender identity or customer acceptance.
 
 Download verify_demo.py and package_demo.py using the software page links.
 Keep both files together beside toolkit.zip before verification.
-python3 verify_demo.py toolkit.zip 22e0f96e7d87bda2e7e9e51bbef862a867ac8e50b3809addce94ef4a49c87941
+python3 verify_demo.py toolkit.zip f0cb33e579c21ecb79bdb5b47970de5ca27a5fb09b6e7376a8d96357a7019f4e
 Expected: exit 0. Verification does not execute delivered JavaScript.
 Extract verified ZIP into a fresh folder; inspect README.md.
 From that folder, run the full fictional delivery check:
@@ -20,3 +20,7 @@ This runs CLI tests; it does not establish browser or caller integration.
 For an authorized repair: inspect and agree the fixture, retain its hash,
 then use release_repair.py as documented in README.md.
 No client submission, booking or payment is performed by this tool.
+
+Toolkit source revision: 35e03c3. Standalone handoff exports are created
+with owner-only read/write permissions (0600, subject to a stricter umask).
+This does not encrypt ZIPs or control permissions after copying/extraction.

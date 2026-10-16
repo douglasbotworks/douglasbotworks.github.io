@@ -88,7 +88,8 @@ def verify(path, expected):
         for entry in entries:
             if (entry.orig_filename != entry.filename or entry.file_size > LIMITS[entry.filename]
                     or entry.compress_type != zipfile.ZIP_STORED or entry.flag_bits & 1
-                    or stat.S_IFMT(entry.external_attr >> 16) not in (0, stat.S_IFREG)):
+                    or stat.S_IFMT(entry.external_attr >> 16) not in (0, stat.S_IFREG)
+                    or entry.external_attr & 0x10):
                 raise ValueError('Unsupported archive member')
             contents[entry.filename] = archive.read(entry)
     return {**check_contents(contents), 'sha256': expected}

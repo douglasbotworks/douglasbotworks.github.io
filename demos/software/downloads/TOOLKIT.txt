@@ -8,7 +8,7 @@ Hashes establish consistency, not sender identity or customer acceptance.
 
 Download verify_demo.py and package_demo.py using the software page links.
 Keep both files together beside toolkit.zip before verification.
-python3 verify_demo.py toolkit.zip a4ec667ead0cae4bb689cd2664d8bdfabea40d2ec0ddd9f355d82dbc0e707651
+python3 verify_demo.py toolkit.zip 22e0f96e7d87bda2e7e9e51bbef862a867ac8e50b3809addce94ef4a49c87941
 Expected: exit 0. Verification does not execute delivered JavaScript.
 Extract verified ZIP into a fresh folder; inspect README.md.
 From that folder, run the full fictional delivery check:

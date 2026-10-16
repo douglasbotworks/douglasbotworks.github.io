@@ -38,7 +38,7 @@ Expected: exit 0; beforeFailures=5, afterPasses=8, caseCount=8, executionErrors=
 Compare fixture/module hashes and every case with report.json. Node-version
 metadata can differ across runtimes. Do not mix the two extraction directories.
 
-Verifier SHA256: 5bd79799939554742ad5f2ef00ce42f269f53e8de2239a2e688a88bfc10f409d
+Verifier SHA256: b661e57a6f5d4fa784cdab6ce0aed8c0d53e03255bfd59f70c68632ff7067ddb
 
 Order-total: decimal string contract, shipping per line. No taxes, discounts,
 refunds, multiple currencies or payment processing.

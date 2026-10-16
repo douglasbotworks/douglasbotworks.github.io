@@ -1,6 +1,8 @@
 Gradual Translation 0.1.3 preview
-Source: the v0.1.3-preview Git tag linked below
-Release: https://github.com/Sirrine-Jonathan/gradual-translation-extension/releases/tag/v0.1.3-preview
+Source revision: d5ae8b16f32474ff58149744ced34cf84bcf1778
+Public download: https://douglasbotworks.github.io/demos/translation/
+ZIP: https://douglasbotworks.github.io/demos/translation/gradual-translation-0.1.3-preview.zip
+Checksum: https://douglasbotworks.github.io/demos/translation/SHA256.txt
 
 UPDATE AN EXISTING UNPACKED INSTALLATION
 1. Download and extract gradual-translation-0.1.3-preview.zip.
@@ -21,7 +23,7 @@ FIRST INSTALLATION
 4. Try pause, Undo, site controls, and the Vocabulary/Progress panels.
 
 CHECK THE DOWNLOAD
-Download SHA256.txt from the release above; it identifies the ZIP. Compute its SHA256:
+Download SHA256.txt from the public page above; it identifies the ZIP. Compute its SHA256:
   macOS: shasum -a 256 gradual-translation-0.1.3-preview.zip
   Linux: sha256sum gradual-translation-0.1.3-preview.zip
   Windows PowerShell: Get-FileHash gradual-translation-0.1.3-preview.zip -Algorithm SHA256

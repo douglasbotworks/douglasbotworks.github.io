@@ -58,9 +58,9 @@ get('save-progress').addEventListener('click', () => {
     link = document.createElement('a');
     link.href = url; link.download = 'whispering-evidence-checkpoint.json';
     document.body.append(link); link.click();
-    get('checkpoint-status').textContent = 'Checkpoint download requested. Check that your browser saved the JSON file before leaving; this page cannot confirm it was saved.';
+    get('download-status').textContent = 'Checkpoint download requested. Check that your browser saved the JSON file before leaving; this page cannot confirm it was saved.';
   } catch {
-    get('checkpoint-status').textContent = 'Checkpoint download could not be requested. Your investigation is unchanged. Try Download checkpoint again before leaving.';
+    get('download-status').textContent = 'Checkpoint download could not be requested. Your investigation is unchanged. Try Download checkpoint again before leaving.';
   } finally {
     link?.remove();
     if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);

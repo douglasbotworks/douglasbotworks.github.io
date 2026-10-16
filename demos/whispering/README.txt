@@ -42,3 +42,7 @@ progress after cancellation, timeout, new gameplay or a newer load. Cancellation
 stops applying the result; it does not promise to abort the browser's file read.
 If a restored checkpoint hides the focused deduction or ending, focus returns
 to Load checkpoint. Focus elsewhere stays in place.
+
+Load and download feedback appear separately. Downloading the current case notes
+does not cancel a pending import; that import may still replace the investigation.
+Use Cancel checkpoint load to keep the current investigation.

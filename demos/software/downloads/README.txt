@@ -6,7 +6,9 @@ worker and file manifest. They are fictional demonstrations, not client work.
 No dependencies, API account, payment or network service is required.
 
 Before execution, inspect the supplied Python verifier and JavaScript source.
-Use Python 3.9+ for archive verification and Node.js 22+ for reruns. The verifier
+Archive verification requires Python 3.9+ on a POSIX system (macOS or Linux).
+Native Windows Python is unsupported. JavaScript reruns require Node.js 22+.
+The verifier
 checks bytes and fixed inventory without extracting or executing archive code.
 The JavaScript workers have current-user privileges; use only trusted code.
 Hashes supplied alongside a file establish consistency, not sender identity.

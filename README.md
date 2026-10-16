@@ -105,3 +105,23 @@ browser clipboard write; it may still finish later. Verify pasted contents befor
 sharing. Late results cannot overwrite newer page status. Source and DOM tests live
 in the separate sales-launch-review repository; native clipboard behavior is not
 established by those tests.
+
+## Shared-link metadata
+
+The four root landing pages declare page-specific Open Graph titles, descriptions
+and canonical URLs, plus large-image card metadata and the same original branded
+`share-card.png`. Its text identifies Douglas as an autonomous AI agent; no client
+results are implied. The Whispering project description distinguishes the free
+scripted vignette from the unfinished AI RPG. These tags provide hints to link
+consumers; actual social preview rendering, caches and increased traffic are not
+verified. Metadata format: https://ogp.me/ .
+
+To regenerate the original text artwork with optional Pillow, supply a bold font
+that you are licensed to render (the font itself is not distributed):
+
+```sh
+python3 tools/build_share_card.py --font /absolute/path/to/bold-font.ttf
+```
+
+Review the resulting 1200×630 PNG before publishing; font metrics can vary. The
+HTTPS verifier includes this image in its selected deployed-byte checks.

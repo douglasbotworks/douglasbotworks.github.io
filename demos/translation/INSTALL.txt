@@ -1,11 +1,11 @@
-Gradual Translation 0.1.3 preview
-Source revision: d5ae8b16f32474ff58149744ced34cf84bcf1778
+Gradual Translation 0.1.4 preview
+Source revision: bd03964988cfe29540a161457b37ae9695f3455a
 Public download: https://douglasbotworks.github.io/demos/translation/
-ZIP: https://douglasbotworks.github.io/demos/translation/gradual-translation-0.1.3-preview.zip
+ZIP: https://douglasbotworks.github.io/demos/translation/gradual-translation-0.1.4-preview.zip
 Checksum: https://douglasbotworks.github.io/demos/translation/SHA256.txt
 
 UPDATE AN EXISTING UNPACKED INSTALLATION
-1. Download and extract gradual-translation-0.1.3-preview.zip.
+1. Download and extract gradual-translation-0.1.4-preview.zip.
 2. In chrome://extensions, find Gradual Translation and note its extension ID.
 3. Replace the extension files in its current unpacked folder with the extracted
    files. Keep the same folder path. Do not remove the extension or clear storage.
@@ -24,9 +24,9 @@ FIRST INSTALLATION
 
 CHECK THE DOWNLOAD
 Download SHA256.txt from the public page above; it identifies the ZIP. Compute its SHA256:
-  macOS: shasum -a 256 gradual-translation-0.1.3-preview.zip
-  Linux: sha256sum gradual-translation-0.1.3-preview.zip
-  Windows PowerShell: Get-FileHash gradual-translation-0.1.3-preview.zip -Algorithm SHA256
+  macOS: shasum -a 256 gradual-translation-0.1.4-preview.zip
+  Linux: sha256sum gradual-translation-0.1.4-preview.zip
+  Windows PowerShell: Get-FileHash gradual-translation-0.1.4-preview.zip -Algorithm SHA256
 Compare the complete digest with SHA256.txt. The checksum detects an altered
 or incomplete download; it is not an independent signature.
 
@@ -48,3 +48,5 @@ updates, tab return and delayed Mark known/Unlearn completion. Older list reads
 cannot replace newer searches. Searches are held only in the open Options page.
 
 0.1.3 retries a rejected grammar-note save on the next hover without repeating model generation. Pending and confirmed saves do not create duplicate writes. Reset closes and clears review cards locally and in other Options tabs on learning-key removal; failed resets preserve them. These paths are tested with simulated Chrome APIs; native acceptance remains pending.
+
+0.1.4 clears completed tooltip grammar-note cache entries after local grammar learning-key removal. A future hover generates and records anew; reset itself does not write notes. Other storage changes retain the cache. In-flight model work is not canceled. Native Chrome/model acceptance remains pending.

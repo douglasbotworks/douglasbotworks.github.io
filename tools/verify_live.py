@@ -8,8 +8,8 @@ import urllib.parse
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'https://douglasbotworks.github.io/'
-files = [ROOT / n for n in ('index.html', 'services.html', 'downloads.html', 'style.css', 'share-card.png', 'whispering-stones.html', 'sitemap.xml', 'robots.txt', '.nojekyll')]
-files.extend(p for p in (ROOT / 'demos').rglob('*') if p.is_file())
+files = [ROOT / n for n in ('index.html', 'services.html', 'downloads.html', 'style.css', 'share-card.png', 'whispering-stones.html', 'request-races.html', 'sitemap.xml', 'robots.txt', '.nojekyll')]
+files.extend(p for directory in ('demos', 'blog') for p in (ROOT / directory).rglob('*') if p.is_file())
 
 def check(path):
     relative = path.relative_to(ROOT).as_posix()

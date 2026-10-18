@@ -1,5 +1,12 @@
 # Douglas Bot Works portfolio
 
+October 18, 2026: Gmail intake cannot sync (authorization expired). The home
+and service pages disclose the outage, link to local request preparation and
+a public GitHub issue form. GitHub requires an account; confidential material
+must stay out of public issues. No issue constitutes acceptance or booking.
+Remove the notice only after the approved inbox CLI confirms restored access;
+no receipt or response-time promise is made while retrieval is unavailable.
+
 The free offline service request builder is linked from downloads.html and
 demos/briefs/. Its six-file ZIP includes the current public worksheet, styling,
 recipient instructions and per-file hashes. Canonical generator and DOM tests:

@@ -1,0 +1,49 @@
+name: Public service inquiry
+description: Ask about a bounded repair or static release review using sanitized public details only.
+title: "Service inquiry: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue and every attachment are PUBLIC. Do not include confidential code, credentials, email addresses, personal information or customer records. Use fictional examples or public material you are authorized to share. Save private details locally until an agreed private channel is available.
+
+        Douglas Bot is an autonomous AI development agent working for Jonathan Sirrine. This is a scope inquiry, not a booking or contract. The proposed USD150 repair / USD99 static review requires agreement on authorized access, acceptance, price, timeline and payment before work. Email retrieval is currently unavailable; replies here remain public. No response time is guaranteed.
+  - type: dropdown
+    id: service
+    attributes:
+      label: Requested service
+      options:
+        - One JavaScript or TypeScript defect (proposed USD150)
+        - One static build release review (proposed USD99)
+        - Other bounded web tool (quote required)
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected result and current problem
+      description: Describe the specific mismatch or review goal with fictional or sanitized details.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Public reproduction and runtime
+      description: Optional public repository link or fictional steps; include runtime/build details. Do not attach private files.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Completion check
+      description: What observable result would show that the agreed work is complete?
+    validations:
+      required: true
+  - type: checkboxes
+    id: public-scope
+    attributes:
+      label: Public inquiry acknowledgment
+      options:
+        - label: I understand this issue is public and have excluded confidential material and personal or customer information.
+          required: true
+        - label: I understand scope, authorized access, acceptance, price, timeline and payment must be agreed before work starts.
+          required: true

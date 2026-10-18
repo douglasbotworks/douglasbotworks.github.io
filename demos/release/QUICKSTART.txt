@@ -84,3 +84,9 @@ a distinct ID, update its intended links, and rerun into a new output directory.
 `examples/unique-sections` contains the repaired build; checking it with the same
 flags exits 0 and produces a ZIP. Without the strict warning gate, the duplicate
 example can still be packaged, so read the warnings before upload.
+
+Encoding review: text is checked as UTF-8. HTML meta declarations and initial CSS
+`@charset` declarations outside UTF-8 labels warn and skip that file's reference
+checks; strict mode blocks packaging. Correct the declaration and verify actual
+server/browser decoding. BOM/header precedence and inherited encodings are not
+simulated; a passing report does not establish served text encoding.

@@ -159,6 +159,81 @@
       if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
   });
+  const saveDraft = document.getElementById('save-draft');
+  const openDraft = document.getElementById('open-draft');
+  const draftStatus = document.getElementById('draft-status');
+  let importRequest = 0;
+  function forgetDraftNotice() {
+    importRequest++;
+    openDraft.value = '';
+    draftStatus.textContent = '';
+  }
+  form.addEventListener('input', forgetDraftNotice);
+  form.addEventListener('change', forgetDraftNotice);
+  form.addEventListener('reset', forgetDraftNotice);
+  form.addEventListener('submit', forgetDraftNotice);
+  function exactKeys(value, keys) {
+    return value !== null && typeof value === 'object' && !Array.isArray(value)
+      && Object.keys(value).length === keys.length
+      && keys.every(key => Object.hasOwn(value, key));
+  }
+  function validDraft(value) {
+    return exactKeys(value, ['format', 'version', 'offer', 'fields'])
+      && value.format === 'douglas-service-draft' && value.version === 1
+      && typeof value.offer === 'string' && Object.hasOwn(scopes, value.offer)
+      && exactKeys(value.fields, fields.map(([key]) => key))
+      && fields.every(([key]) => typeof value.fields[key] === 'string'
+        && value.fields[key].length <= 4000);
+  }
+  saveDraft.addEventListener('click', () => {
+    const draft = {format: 'douglas-service-draft', version: 1,
+      offer: form.elements.offer.value, fields: {}};
+    for (const [key] of fields) draft.fields[key] = form.elements[key].value;
+    if (!validDraft(draft)) {
+      draftStatus.textContent = 'Choose an available service and keep each field within 4000 characters before saving.';
+      return;
+    }
+    let url;
+    try {
+      url = URL.createObjectURL(new Blob([JSON.stringify(draft, null, 2) + '\n'],
+        {type: 'application/json;charset=utf-8'}));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'douglas-service-draft.json';
+      document.body.append(link);
+      try { link.click(); } finally { link.remove(); }
+      draftStatus.textContent = 'Draft download requested. Check the saved file before closing this page. Nothing was sent.';
+    } catch {
+      draftStatus.textContent = 'Draft download unavailable. Keep this page open or copy your entries manually.';
+    } finally {
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  });
+  openDraft.addEventListener('change', async () => {
+    const file = openDraft.files?.[0];
+    if (!file) return;
+    const request = ++importRequest;
+    const currentRevision = revision;
+    draftStatus.textContent = 'Reading local draft…';
+    try {
+      if (file.size > 256 * 1024) throw new Error('Draft too large');
+      const draft = JSON.parse(await file.text());
+      if (request !== importRequest || currentRevision !== revision) return;
+      if (!validDraft(draft)) throw new Error('Unsupported draft');
+      form.elements.offer.value = draft.offer;
+      for (const [key] of fields) form.elements[key].value = draft.fields[key];
+      invalidate();
+      draftStatus.textContent = 'Draft reopened locally. Review the form, then preview a new brief. Nothing was sent.';
+    } catch {
+      if (request === importRequest && currentRevision === revision) {
+        draftStatus.textContent = 'Draft could not be reopened. Choose a supported editable draft (.json, up to 256 KiB, at most 4000 characters per field). Current entries were kept.';
+      }
+    } finally {
+      if (request === importRequest) openDraft.value = '';
+    }
+  });
   invalidate();
   document.getElementById('builder-fields').disabled = false;
+  saveDraft.disabled = false;
+  openDraft.disabled = false;
 })();

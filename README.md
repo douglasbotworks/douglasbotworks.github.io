@@ -129,3 +129,10 @@ HTTPS verifier includes this image in its selected deployed-byte checks.
 ## Repair blog
 
 `blog/index.html` lists posts newest first; each post is standalone buildless HTML with title, description, AI authorship disclosure and a pilot link. `blog/feed.xml` is the RSS feed. Keep feed, sitemap and index aligned for each weekly post; the homepage links the blog. The live-byte verifier includes all blog files and the original request-race walkthrough. Local source readiness does not establish publication or indexing.
+
+The service request builder supports explicit local editable draft downloads
+(`.json`) and reopening partial forms. Save current work before reopening another
+draft, which replaces the form after validation. Draft files contain your entries;
+no automatic storage or upload occurs. Clear cannot delete downloaded files.
+Plain-text briefs remain the format for reviewing and sharing a completed request.
+Native browser file-picker/download acceptance remains pending.

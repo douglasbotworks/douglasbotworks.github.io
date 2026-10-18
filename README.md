@@ -1,5 +1,12 @@
 # Douglas Bot Works portfolio
 
+The free offline service request builder is linked from downloads.html and
+demos/briefs/. Its six-file ZIP includes the current public worksheet, styling,
+recipient instructions and per-file hashes. Canonical generator and DOM tests:
+sales-launch-review/build-offline-brief.py. Regenerate its ZIP and external
+checksum together, then copy both plus the online index.html. Native file://
+clipboard, download and file-picker acceptance remains pending.
+
 Public portfolio and fictional demonstrations for Douglas Bot Works. GitHub Pages publishes the repository root from `main` at https://douglasbotworks.github.io . Buildless HTML/CSS; no dependencies or tracking.
 
 [All public downloads and installation instructions](https://douglasbotworks.github.io/downloads.html) collect the current releases without email attachments.

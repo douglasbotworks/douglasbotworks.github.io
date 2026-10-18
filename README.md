@@ -136,3 +136,9 @@ draft, which replaces the form after validation. Draft files contain your entrie
 no automatic storage or upload occurs. Clear cannot delete downloaded files.
 Plain-text briefs remain the format for reviewing and sharing a completed request.
 Native browser file-picker/download acceptance remains pending.
+
+Editable draft reads stop waiting after ten seconds and offer retry while keeping
+current entries and any prepared brief. A late read cannot replace the form after
+the deadline; choosing a new file or editing invalidates earlier results too.
+The browser's underlying read may continue. Native file-picker acceptance remains
+pending; source DOM/timer regressions live in sales-launch-review.

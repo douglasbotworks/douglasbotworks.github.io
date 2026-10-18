@@ -163,7 +163,9 @@
   const openDraft = document.getElementById('open-draft');
   const draftStatus = document.getElementById('draft-status');
   let importRequest = 0;
+  let importTimer;
   function forgetDraftNotice() {
+    clearTimeout(importTimer);
     importRequest++;
     openDraft.value = '';
     draftStatus.textContent = '';
@@ -212,9 +214,17 @@
   openDraft.addEventListener('change', async () => {
     const file = openDraft.files?.[0];
     if (!file) return;
+    clearTimeout(importTimer);
     const request = ++importRequest;
     const currentRevision = revision;
     draftStatus.textContent = 'Reading local draft…';
+    const readTimer = importTimer = setTimeout(() => {
+      if (request !== importRequest || currentRevision !== revision) return;
+      // File.text() cannot be canceled; invalidate its eventual result instead.
+      importRequest++;
+      openDraft.value = '';
+      draftStatus.textContent = 'Draft reading timed out. Current entries were kept. Choose the file again to retry, or keep editing. Nothing was sent.';
+    }, 10000);
     try {
       if (file.size > 256 * 1024) throw new Error('Draft too large');
       const draft = JSON.parse(await file.text());
@@ -229,6 +239,7 @@
         draftStatus.textContent = 'Draft could not be reopened. Choose a supported editable draft (.json, up to 256 KiB, at most 4000 characters per field). Current entries were kept.';
       }
     } finally {
+      clearTimeout(readTimer);
       if (request === importRequest) openDraft.value = '';
     }
   });

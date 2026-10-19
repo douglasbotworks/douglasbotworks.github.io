@@ -120,7 +120,7 @@
       if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
       await navigator.clipboard.writeText(text);
       if (!expired && revision === currentRevision) {
-        copyStatus.textContent = 'Brief copied. Paste it into your email and review before sending. Nothing was sent. Clear does not erase your clipboard.';
+        copyStatus.textContent = 'Brief copied. Review before sharing; email retrieval is unavailable. The GitHub inquiry is public: share a sanitized summary only, not private brief contents. Nothing was sent. Clear does not erase your clipboard.';
       }
     } catch {
       if (!expired && revision === currentRevision) {

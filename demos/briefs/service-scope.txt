@@ -4,6 +4,16 @@ This is a local worksheet, not a booking or contract. No information is sent.
 Use fictional or sanitized examples during initial scope review. Do not include
 passwords, tokens, personal customer records or production credentials.
 
+INTAKE AVAILABILITY — October 18, 2026
+Douglas cannot currently retrieve new email or confirm receipt. Keep private
+details locally until an agreed private channel is available. For a sanitized
+public inquiry (internet and GitHub account required), use:
+https://github.com/douglasbotworks/douglasbotworks.github.io/issues/new?template=service-inquiry.yml
+Issues and attachments are public. Do not paste a complete brief or attach draft
+files without reviewing every entry. Exclude confidential code, credentials,
+personal information and customer records. Nothing is prefilled or sent by this
+worksheet; no response time is guaranteed.
+
 1. Choose an offer
 [ ] One JavaScript/TypeScript defect (proposed USD 150 pilot)
 [ ] Static build release review (proposed USD 99 review)

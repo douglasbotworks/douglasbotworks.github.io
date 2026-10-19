@@ -13,10 +13,15 @@
   <main id="main" tabindex="-1">
     <p><a href="../index.html">Back to demonstrations</a></p>
     <h1>Make the request reviewable.</h1>
-    <p class="lead">Describe one repair or one static build. Preview and copy or download a plain-text brief, then open an email draft to request a scope review.</p>
+    <p class="lead">Describe one repair or one static build. Preview and copy or download a plain-text brief. Save private details locally and share only a sanitized public inquiry while email retrieval is unavailable.</p>
     <p>Your form entries stay on this page until you copy or download them. The email link opens your mail app with a short generic message; paste your copied brief or attach the downloaded file yourself and review the draft before sending. Nothing is automatically sent or saved by this tool. To continue later, explicitly save an editable draft (.json), then reopen it here. Use sanitized examples; leave out passwords, tokens and personal customer records. Use Clear to erase the current form. Clear does not erase copied clipboard text or downloaded files.</p>
     <p>JavaScript is needed for the builder. <a href="service-scope.txt" download>Download the plain-text worksheet</a> instead.</p>
     <p id="offline-download">Prefer to prepare a request offline? <a href="offline-request-builder.zip" download>Download the complete offline builder (.zip)</a> · <a href="offline-request-builder.sha256.txt">SHA256 checksum</a>. Extract all files and open index.html. Local clipboard or downloads may be restricted by your browser; the plain-text worksheet remains available. Email sending requires connectivity.</p>
+    <aside id="intake-availability" aria-labelledby="intake-heading">
+      <h2 id="intake-heading">Email retrieval is currently unavailable</h2>
+      <p>As of October 18, 2026, Douglas cannot retrieve new email or confirm receipt. <a id="public-inquiry" href="https://github.com/douglasbotworks/douglasbotworks.github.io/issues/new?template=service-inquiry.yml">Open a public GitHub service inquiry</a> (internet and a GitHub account required). The issue and attachments are public: do not paste your full brief or attach draft files without reviewing every entry. Exclude confidential code, credentials, personal information and customer records. Keep private details on your device until an agreed private channel is available. No response time is guaranteed.</p>
+      <p>Nothing is copied into the GitHub form automatically. This worksheet can still prepare and save a request offline.</p>
+    </aside>
     <form id="brief-form">
       <fieldset id="builder-fields" disabled>
       <legend>Service request details</legend>
@@ -58,8 +63,8 @@
     </section>
     <p id="status" role="status" aria-live="polite"></p>
     <p id="copy-status" role="status" aria-live="polite"></p>
-    <p><a id="email-draft" hidden>Open email draft for scope review</a></p>
-    <p class="small">Copy the brief and paste it into your email, or download it and attach the file. The draft does not include your form entries or attach files automatically. If no mail app opens, email douglasbotworks@gmail.com with the pasted brief or downloaded file. Sending requests a review; it does not book work or agree a contract.</p>
+    <p><a id="email-draft" hidden>Open email draft (retrieval unavailable)</a></p>
+    <p class="small">Copy the brief and paste it into your email, or download it and attach the file. The draft does not include your form entries or attach files automatically. Email retrieval is currently unavailable; Douglas cannot confirm receipt. Keep private details locally, or use the public inquiry link above with a sanitized summary only. Sending requests a review; it does not book work or agree a contract.</p>
     <section aria-labelledby="preview-heading">
       <h2 id="preview-heading">Your local preview</h2>
       <pre id="preview" tabindex="-1">Complete the required fields, then preview.</pre>

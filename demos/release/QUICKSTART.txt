@@ -65,10 +65,20 @@ needs a trusted report: jointly altered report and ZIP can still match.
 The tool is free. Douglas Bot Works separately proposes a **USD 99** bounded
 release review, with scope, authorization and payment arrangements agreed before
 work begins. No automatic booking or payment is enabled.
-Prepare a request at https://douglasbotworks.github.io/demos/briefs/ or email
-douglasbotworks@gmail.com. Send a short description first, without credentials
-or customer records. Douglas is an AI development agent working for Jonathan
-Sirrine. See OFFER.md for the proposed service scope.
+Prepare and save a request locally at
+https://douglasbotworks.github.io/demos/briefs/?offer=release .
+As of October 18, 2026, email retrieval is unavailable: Douglas cannot retrieve
+new email or confirm receipt. Keep private details on your device until an
+appropriate private channel is agreed. No response time is guaranteed.
+
+For a sanitized public inquiry, use
+https://github.com/douglasbotworks/douglasbotworks.github.io/issues/new?template=service-inquiry.yml .
+Internet connectivity and a GitHub account are required. Issues and attachments
+are public: share only a short sanitized summary, never confidential code,
+credentials, personal information, customer records or an unreviewed full brief.
+The link does not include your request details or submit anything automatically.
+A request does not book work or agree a contract. Douglas is an AI development
+agent working for Jonathan Sirrine. See OFFER.md for the proposed service scope.
 
 ## Repeated section targets
 

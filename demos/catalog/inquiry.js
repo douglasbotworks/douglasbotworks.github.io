@@ -41,6 +41,7 @@
     prepared = [
       'CATALOG CHANGE GUARD — CLI AVAILABILITY REQUEST',
       'Local worksheet only. No booking, contract, payment or submission.',
+      'Email retrieval is currently unavailable. Keep this brief and private details locally until an agreed private channel is available. For a sanitized public Catalog CLI availability summary only: https://github.com/douglasbotworks/douglasbotworks.github.io/issues/new?template=service-inquiry.yml (GitHub account required). Issues and attachments are PUBLIC; do not attach private worksheets, catalog files, personal information or customer records. No response time is guaranteed.',
       'Availability discussion only. Checkout is not open. No Shopify connection, import or import-safety guarantee.',
       ...values.map(([, label, value]) => `${label}:\n${value || '(not supplied)'}`),
       'Before purchase: agree license, delivery, scope, price and payment. Do not include merchant CSVs, Handles, SKUs, cell values, credentials or customer records.'
@@ -51,7 +52,7 @@
     const subject = 'Catalog CLI availability';
     emailDraft.href = `mailto:douglasbotworks@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('Hello Douglas, I would like to discuss Catalog CLI availability. I will paste my prepared inquiry or attach my downloaded inquiry before sending. Please confirm license, scope, price and delivery arrangements before any purchase.')}`;
     emailDraft.hidden = false;
-    status.textContent = 'Brief prepared locally. Review it before downloading or sharing.';
+    status.textContent = 'Brief prepared locally. Email retrieval is currently unavailable. Keep private details locally; use the public inquiry link for a sanitized summary only. Nothing was sent.';
   });
   copy.addEventListener('click', async () => {
     if (prepared === null) return;
@@ -71,7 +72,7 @@
       if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
       await navigator.clipboard.writeText(text);
       if (!expired && revision === currentRevision) {
-        copyStatus.textContent = 'Brief copied. Paste it into your email and review before sending. Nothing was sent. Clear does not erase your clipboard.';
+        copyStatus.textContent = 'Brief copied. Email retrieval is currently unavailable. Keep private details locally; share only a sanitized summary through the public inquiry link. Nothing was sent. Clear does not erase your clipboard.';
       }
     } catch {
       if (!expired && revision === currentRevision) {

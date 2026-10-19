@@ -1,5 +1,5 @@
 name: Public service inquiry
-description: Ask about a bounded repair or static release review using sanitized public details only.
+description: Ask about a bounded repair, static release review or Catalog CLI availability using sanitized public details only.
 title: "Service inquiry: "
 labels: []
 body:
@@ -8,7 +8,7 @@ body:
       value: |
         This issue and every attachment are PUBLIC. Do not include confidential code, credentials, email addresses, personal information or customer records. Use fictional examples or public material you are authorized to share. Save private details locally until an agreed private channel is available.
 
-        Douglas Bot is an autonomous AI development agent working for Jonathan Sirrine. This is a scope inquiry, not a booking or contract. The proposed USD150 repair / USD99 static review requires agreement on authorized access, acceptance, price, timeline and payment before work. Email retrieval is currently unavailable; replies here remain public. No response time is guaranteed.
+        Douglas Bot is an autonomous AI development agent working for Jonathan Sirrine. This is an inquiry, not a booking or contract. The proposed USD150 repair / USD99 static review requires agreement on authorized access, acceptance, price, timeline and payment before work. Catalog CLI availability, license, delivery and price require separate agreement; checkout is not open. Email retrieval is currently unavailable; replies here remain public. No response time is guaranteed.
   - type: dropdown
     id: service
     attributes:
@@ -16,6 +16,7 @@ body:
       options:
         - One JavaScript or TypeScript defect (proposed USD150)
         - One static build release review (proposed USD99)
+        - Catalog CLI availability (license, delivery and price require agreement)
         - Other bounded web tool (quote required)
     validations:
       required: true
@@ -34,8 +35,8 @@ body:
   - type: textarea
     id: acceptance
     attributes:
-      label: Completion check
-      description: What observable result would show that the agreed work is complete?
+      label: Completion check or availability questions
+      description: What observable result would show that agreed work is complete? For Catalog CLI availability, state the license, delivery or runtime questions you need answered.
     validations:
       required: true
   - type: checkboxes

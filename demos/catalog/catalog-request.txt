@@ -1,6 +1,12 @@
 CATALOG CHANGE GUARD — CLI AVAILABILITY REQUEST
 
-Complete this locally. Review before sending to douglasbotworks@gmail.com.
+Complete and keep this locally. Email retrieval is currently unavailable as of
+October 18, 2026; Douglas cannot retrieve new messages or confirm receipt.
+For a sanitized public Catalog CLI availability summary only (GitHub account required):
+https://github.com/douglasbotworks/douglasbotworks.github.io/issues/new?template=service-inquiry.yml
+Issues and attachments are PUBLIC. Do not attach private worksheets, catalog
+files, personal information or customer records. Keep private details locally
+until an agreed private channel is available. No response time is guaranteed.
 This is an inquiry, not a booking, contract, payment or import approval.
 Do not include merchant CSVs, Handles, SKUs, cell values, credentials or customer records.
 

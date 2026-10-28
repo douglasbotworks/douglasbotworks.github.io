@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skybound Quest — Authentic VR Paragliding for Meta Quest</title>
+  <meta name="description" content="Authentic first-principles VR paragliding flight simulator for Meta Quest 3, Quest Pro, and Quest 2. Download the standalone APK now.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #070b12;
+      --bg-card: rgba(15, 23, 38, 0.75);
+      --bg-card-hover: rgba(22, 34, 56, 0.85);
+      --border-color: rgba(64, 196, 255, 0.18);
+      --text-main: #f0f6fc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #00e5ff;
+      --accent-green: #00e676;
+      --accent-gold: #ffd54f;
+      --accent-purple: #b388ff;
+      --glow-cyan: 0 0 30px rgba(0, 229, 255, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Canvas */
+    #ambient-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      backdrop-filter: blur(12px);
+      background: rgba(7, 11, 18, 0.7);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .brand-badge {
+      font-size: 0.7rem;
+      background: rgba(0, 229, 255, 0.15);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-cyan);
+    }
+
+    .btn-nav-download {
+      background: linear-gradient(135deg, #00b4db, #0083b0);
+      color: #fff !important;
+      padding: 0.55rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600 !important;
+      transition: transform 0.2s, box-shadow 0.2s !important;
+    }
+
+    .btn-nav-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 180, 219, 0.4);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 5rem 0 6rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-badge-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0, 230, 118, 0.12);
+      border: 1px solid rgba(0, 230, 118, 0.35);
+      color: var(--accent-green);
+      padding: 0.4rem 1.1rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 0 20px rgba(0, 230, 118, 0.15);
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 5.5vw, 4.2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(180deg, #ffffff 40%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-title span {
+      background: linear-gradient(90deg, #00e5ff, #80d8ff, #00e676);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      color: var(--text-muted);
+      max-width: 780px;
+      margin: 0 auto 2.75rem;
+      font-weight: 400;
+    }
+
+    .cta-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: linear-gradient(135deg, #00e5ff, #00b0ff);
+      color: #070b12;
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 1rem 2.25rem;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: var(--glow-cyan);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 0 40px rgba(0, 229, 255, 0.6);
+      background: linear-gradient(135deg, #26ebff, #29b6f6);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(15, 23, 38, 0.85);
+      color: var(--text-main);
+      font-size: 1.15rem;
+      font-weight: 600;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(22, 34, 56, 0.95);
+      border-color: rgba(0, 229, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .release-meta {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .release-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* Section Headers */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-tag {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 3.5vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .section-description {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 6rem;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      backdrop-filter: blur(16px);
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(0, 229, 255, 0.45);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .feature-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1.25rem;
+      display: inline-block;
+      width: 54px;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 229, 255, 0.1);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 229, 255, 0.2);
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Installation Box */
+    .install-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      backdrop-filter: blur(16px);
+      margin-bottom: 6rem;
+    }
+
+    .install-methods {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .method-card {
+      background: rgba(7, 11, 18, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 1.75rem;
+    }
+
+    .method-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .steps-list {
+      list-style-position: inside;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .steps-list li {
+      margin-bottom: 0.75rem;
+    }
+
+    .steps-list strong {
+      color: var(--text-main);
+    }
+
+    .code-box {
+      background: #04070c;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 0.85rem 1.1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--accent-green);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    /* Controls Section */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 6rem;
+    }
+
+    .control-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .control-action {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    .control-bind {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .control-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 3rem 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      background: rgba(7, 11, 18, 0.8);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-cyan);
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem 1.25rem;
+      }
+      .nav-links {
+        display: none;
+      }
+      .hero {
+        padding: 3rem 0 4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="ambient-canvas"></canvas>
+
+  <nav>
+    <a href="#" class="nav-brand">
+      🪂 Skybound Quest
+      <span class="brand-badge">v1.0.0</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#install">Install</a></li>
+      <li><a href="#controls">Controls</a></li>
+      <li><a href="https://github.com/douglasbotworks/skybound-quest" target="_blank">GitHub</a></li>
+      <li>
+        <a href="SkyboundQuest-v1.0.0.apk" download class="btn-nav-download">
+          Download APK
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-badge-top">
+        <span>●</span> Built for Meta Quest 3, Quest Pro & Quest 2
+      </div>
+      <h1 class="hero-title">
+        Soar The Alpine Skies<br>in <span>Pure First-Principles VR</span>.
+      </h1>
+      <p class="hero-subtitle">
+        Skybound Quest is an authentic, unscripted VR paragliding flight simulator. Feel the natural pendulum swing under the wing, ride convective thermal columns to cloudbase, scrape lift along jagged mountain ridges, and race against 30+ autonomous pilots.
+      </p>
+
+      <div class="cta-group">
+        <a href="SkyboundQuest-v1.0.0.apk" download class="btn-primary">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download APK (v1.0.0)
+        </a>
+        <a href="https://github.com/douglasbotworks/skybound-quest" target="_blank" class="btn-secondary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          View Source on GitHub
+        </a>
+      </div>
+
+      <div class="release-meta">
+        <span>📦 <strong>File Size:</strong> 42.2 MB</span>
+        <span>🏷️ <strong>Version:</strong> 1.0.0 Release</span>
+        <span>👓 <strong>XR Runtime:</strong> OpenXR 6DOF Stereo</span>
+        <span>⚙️ <strong>Architecture:</strong> ARM64 (Vulkan / URP)</span>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features">
+      <div class="section-header">
+        <span class="section-tag">First-Principles Simulation</span>
+        <h2 class="section-title">Built From Aerodynamic Fundamentals</h2>
+        <p class="section-description">
+          Zero canned animation states or artificial rails. Everything that happens in the air emerges directly from multi-station aerodynamics and coupled pendulum dynamics.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🪂</div>
+          <h3>Canopy-Suspended Pendulum</h3>
+          <p>The aerodynamic center of lift and drag is located overhead at the canopy, while you hang 6.6m below in a speedbag pod harness, naturally swinging outward in banked turns and surging on pitch dives.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🌪️</div>
+          <h3>Convective Thermals & Ridge Lift</h3>
+          <p>Hundreds of dynamic thermal columns scale with daytime solar heating, accompanied by orographic ridge lift hugging windward mountain cliffs. Lift indicators only appear when net positive climb is guaranteed.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🧭</div>
+          <h3>4-Page Cockpit Flight Deck</h3>
+          <p>A lap-mounted avionics suite featuring a radar-style minimap, digital FlyTec variometer with filtered acoustic beeper, live competition leaderboards, and wing AoA diagnostics.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🏆</div>
+          <h3>PWCA Competition Racing</h3>
+          <p>Compete in authentic Paragliding World Cup tasks with timed start cylinders, translucent waypoint pillars, and 30+ tactical NPC pilots who thermal and make cross-valley transitions.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🦅</div>
+          <h3>Cuervo the Raven Companion</h3>
+          <p>Your loyal guide bird Cuervo flies in formation with you, leads you to active thermal updrafts along the course, and glides ahead to scout optimal routes.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🎵</div>
+          <h3>Spotify & Left Stick Audio</h3>
+          <p>Full in-VR Spotify music integration and built-in ambient soaring synth tracks. Adjust volume with Left Stick Up/Down, skip tracks with Left/Right flick, or pick custom playlists.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Installation -->
+    <section id="install" class="install-box">
+      <div class="section-header" style="margin-bottom: 2rem;">
+        <span class="section-tag">Fast Sideloading</span>
+        <h2 class="section-title">How To Install on Meta Quest</h2>
+        <p class="section-description">
+          Skybound Quest is distributed as a standalone APK candidate ready to install on Quest 3, Quest Pro, and Quest 2 headsets.
+        </p>
+      </div>
+
+      <div class="install-methods">
+        <div class="method-card">
+          <h3 class="method-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+            Method 1: SideQuest (Recommended)
+          </h3>
+          <ol class="steps-list">
+            <li>Download <strong>SkyboundQuest-v1.0.0.apk</strong>.</li>
+            <li>Connect your Quest headset to your computer via USB (make sure Developer Mode is enabled in your Meta Horizon phone app).</li>
+            <li>Open <strong>SideQuest</strong> on your PC or Mac.</li>
+            <li>Click the <strong>"Install APK file from folder"</strong> button (icon with a tray and down arrow on the top toolbar).</li>
+            <li>Select the downloaded APK and wait for the success notification.</li>
+            <li>Put on your headset, navigate to <strong>App Library ➔ Unknown Sources</strong>, and launch <strong>Skybound Quest</strong>!</li>
+          </ol>
+        </div>
+
+        <div class="method-card">
+          <h3 class="method-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            Method 2: ADB Command Line
+          </h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.75rem;">
+            If you have the Android Platform Tools installed, you can stream-install the APK in seconds:
+          </p>
+          <div class="code-box">
+            <span>adb install -r SkyboundQuest-v1.0.0.apk</span>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">
+            To launch immediately over USB:
+          </p>
+          <div class="code-box">
+            <span>adb shell am start -n works.douglasbot.skybound/com.unity3d.player.UnityPlayerGameActivity</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls -->
+    <section id="controls">
+      <div class="section-header">
+        <span class="section-tag">Quest Touch Plus / Pro</span>
+        <h2 class="section-title">Intuitive Flight Controls</h2>
+        <p class="section-description">
+          Natural hand controls modeled directly after authentic paraglider steering toggles and cocoon harness ergonomics.
+        </p>
+      </div>
+
+      <div class="controls-grid">
+        <div class="control-item">
+          <span class="control-action">Brakes & Steering</span>
+          <span class="control-bind">Left / Right Trigger or Grip</span>
+          <span class="control-desc">Pull down to deflect trailing edge brake lines. Pull both to flare and slow down; pull one side to bank and carve turns.</span>
+        </div>
+
+        <div class="control-item">
+          <span class="control-action">Weight Shift</span>
+          <span class="control-bind">Lean Body / Tilt Head</span>
+          <span class="control-desc">Leaning into the turn shifts weight across the carabiners, initiating smooth, energy-conserving coordinated carving.</span>
+        </div>
+
+        <div class="control-item">
+          <span class="control-action">Takeoff Launch</span>
+          <span class="control-bind">Hold BOTH Grips for 3 Seconds</span>
+          <span class="control-desc">A 3-second safety countdown initiates flight, automatically dismissing menu billboards for an unobstructed view.</span>
+        </div>
+
+        <div class="control-item">
+          <span class="control-action">In-Flight Music DJ</span>
+          <span class="control-bind">Left Thumbstick</span>
+          <span class="control-desc">Push Up/Down to adjust audio volume smoothly. Flick Left/Right to skip backward or forward through your playlist.</span>
+        </div>
+
+        <div class="control-item">
+          <span class="control-action">Pause & Menu</span>
+          <span class="control-bind">Left Menu Button (≡) or Right B</span>
+          <span class="control-desc">Brings up the large flight billboard, unfreezes simulation, and activates laser pointer rays for menu interaction.</span>
+        </div>
+
+        <div class="control-item">
+          <span class="control-action">Flight Deck Pages</span>
+          <span class="control-bind">Point & Click Deck Tabs</span>
+          <span class="control-desc">Switch between Nav Radar, FlyTec Vario, Competition Standings, and Wing Diagnostics on your lap instrument tray.</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="https://github.com/douglasbotworks/skybound-quest" target="_blank">GitHub Repository</a>
+        <a href="https://github.com/douglasbotworks/skybound-quest/releases" target="_blank">All Releases</a>
+        <a href="https://github.com/douglasbotworks/skybound-quest/blob/main/LICENSE" target="_blank">MIT License</a>
+      </div>
+      <p>© 2026 DouglasBot / Jonathan Sirrine. Skybound Quest is an open-source flight simulation prototype.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Subtle ambient particle background
+    const canvas = document.getElementById('ambient-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+    for (let i = 0; i < 45; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        speed: 0.2 + Math.random() * 0.6,
+        radius: 1 + Math.random() * 2,
+        alpha: 0.1 + Math.random() * 0.35,
+        drift: (Math.random() - 0.5) * 0.3
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      particles.forEach(p => {
+        p.y -= p.speed;
+        p.x += p.drift;
+        if (p.y < 0) {
+          p.y = height;
+          p.x = Math.random() * width;
+        }
+        ctx.fillStyle = `rgba(0, 229, 255, ${p.alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>

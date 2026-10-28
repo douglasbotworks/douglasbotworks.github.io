@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connect Spotify — Skybound Quest VR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070b12;
+      --card-bg: rgba(15, 23, 38, 0.85);
+      --border: rgba(0, 229, 255, 0.2);
+      --accent-cyan: #00e5ff;
+      --accent-green: #1db954; /* Spotify green */
+      --text: #f0f6fc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.75rem 2.25rem;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(16px);
+    }
+
+    .logo {
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #fff, var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn-spotify {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: #1db954;
+      color: #000;
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 1rem 2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      width: 100%;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(29, 185, 84, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-spotify:hover {
+      background: #1ed760;
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(29, 185, 84, 0.6);
+    }
+
+    .client-id-box {
+      margin-top: 1.75rem;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .client-id-box label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+    }
+
+    .client-id-box input {
+      width: 100%;
+      background: #04070c;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      padding: 0.6rem 0.85rem;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+    }
+
+    .status-box {
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      border-radius: 12px;
+      display: none;
+      text-align: left;
+    }
+
+    .status-success {
+      background: rgba(29, 185, 84, 0.15);
+      border: 1px solid rgba(29, 185, 84, 0.4);
+      color: #1ed760;
+    }
+
+    .token-display {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      background: #04070c;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.6rem;
+      border-radius: 6px;
+      word-break: break-all;
+      color: #94a3b8;
+      margin: 0.75rem 0;
+      max-height: 80px;
+      overflow-y: auto;
+    }
+
+    .btn-return {
+      display: inline-block;
+      margin-top: 1rem;
+      background: linear-gradient(135deg, #00e5ff, #00b0ff);
+      color: #070b12;
+      font-weight: 700;
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      text-decoration: none;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">🪂 ♫</div>
+    <h1>Skybound Quest</h1>
+    <p class="subtitle">Connect your Spotify account for in-flight soaring music & playlist controls in VR.</p>
+
+    <div id="auth-section">
+      <button id="btn-login" class="btn-spotify" onclick="startSpotifyOAuth()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        Log In with Spotify
+      </button>
+
+      <div class="client-id-box">
+        <label for="client-id">Spotify Client ID:</label>
+        <input type="text" id="client-id" placeholder="Optional: Enter Spotify Client ID" />
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem;">
+          Default public bridge uses preset client. If you have your own app from developer.spotify.com, paste it here.
+        </p>
+      </div>
+    </div>
+
+    <div id="success-box" class="status-box status-success">
+      <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.4rem;">✅ Spotify Authenticated!</h3>
+      <p style="font-size: 0.9rem;">
+        Your OAuth access token has been automatically copied to your Quest clipboard.
+      </p>
+      <div id="token-text" class="token-display"></div>
+      <button id="btn-copy-token" class="btn-spotify" style="font-size:0.9rem; padding:0.6rem 1.2rem; margin-bottom:0.75rem; width: auto;" onclick="copyTokenManual()">
+        📋 Copy Token to Clipboard
+      </button>
+      <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">
+        Switch back to <strong>Skybound Quest</strong> in your headset. The game will automatically detect the token and connect your library!
+      </p>
+      <a href="skybound://auth" id="btn-deep-link" class="btn-return">
+        Return to Skybound Quest 🪂
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Registered or fallback Spotify client IDs
+    const DEFAULT_CLIENT_ID = '3f0b2f5b61534b12a865b4c65330e70a'; // Public paragliding music helper
+    const REDIRECT_URI = window.location.origin + window.location.pathname;
+    const SCOPES = [
+      'user-read-playback-state',
+      'user-modify-playback-state',
+      'user-read-currently-playing',
+      'playlist-read-private',
+      'playlist-read-collaborative',
+      'user-library-read'
+    ].join(' ');
+
+    // Check saved Client ID in localStorage
+    const savedClientId = localStorage.getItem('skybound_spotify_client_id');
+    if (savedClientId) {
+      document.getElementById('client-id').value = savedClientId;
+    }
+
+    // Check if returning from Spotify OAuth with access_token in URL hash
+    function checkOAuthCallback() {
+      const hash = window.location.hash.substring(1);
+      if (!hash) return;
+
+      const params = new URLSearchParams(hash);
+      const token = params.get('access_token');
+
+      if (token) {
+        document.getElementById('auth-section').style.display = 'none';
+        const successBox = document.getElementById('success-box');
+        successBox.style.display = 'block';
+        document.getElementById('token-text').innerText = token;
+
+        // Auto copy token to clipboard
+        navigator.clipboard.writeText(token).then(() => {
+          console.log('Token copied to clipboard successfully');
+        }).catch(err => {
+          console.warn('Clipboard write failed, manual copy required', err);
+        });
+
+        // Set deep link href
+        const deepLinkBtn = document.getElementById('btn-deep-link');
+        deepLinkBtn.href = `skybound://auth?access_token=${token}`;
+
+        // Attempt automatic deep link return
+        setTimeout(() => {
+          window.location.href = `skybound://auth?access_token=${token}`;
+        }, 1200);
+
+        // Clear hash from URL for privacy
+        window.history.replaceState(null, null, window.location.pathname);
+      }
+    }
+
+    function copyTokenManual() {
+      const token = document.getElementById('token-text').innerText.trim();
+      if (token) {
+        navigator.clipboard.writeText(token).then(() => {
+          const btn = document.getElementById('btn-copy-token');
+          btn.innerText = '✅ Copied to Clipboard!';
+          setTimeout(() => { btn.innerText = '📋 Copy Token to Clipboard'; }, 2500);
+        });
+      }
+    }
+
+    function startSpotifyOAuth() {
+      let clientId = document.getElementById('client-id').value.trim();
+      if (!clientId) {
+        clientId = DEFAULT_CLIENT_ID;
+      } else {
+        localStorage.setItem('skybound_spotify_client_id', clientId);
+      }
+
+      const authUrl = `https://accounts.spotify.com/authorize?client_id=${encodeURIComponent(clientId)}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}&show_dialog=true`;
+      window.location.href = authUrl;
+    }
+
+    checkOAuthCallback();
+  </script>
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skybound Quest — Authentic VR Paragliding for Meta Quest</title>
-  <meta name="description" content="Authentic first-principles VR paragliding flight simulator for Meta Quest 3, Quest Pro, and Quest 2. Download the standalone APK now.">
+  <meta name="description" content="Request access to the Skybound Quest Alpha on Meta Quest and experience first-principles VR paragliding across the Swiss Alps.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -73,16 +73,11 @@
       text-decoration: none;
     }
 
-    .brand-badge {
-      font-size: 0.7rem;
-      background: rgba(0, 229, 255, 0.15);
-      color: var(--accent-cyan);
-      border: 1px solid rgba(0, 229, 255, 0.4);
-      padding: 0.2rem 0.6rem;
-      border-radius: 999px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: block;
     }
 
     .nav-links {
@@ -104,7 +99,7 @@
       color: var(--accent-cyan);
     }
 
-    .btn-nav-download {
+    .btn-nav-alpha {
       background: linear-gradient(135deg, #00b4db, #0083b0);
       color: #fff !important;
       padding: 0.55rem 1.25rem;
@@ -113,7 +108,7 @@
       transition: transform 0.2s, box-shadow 0.2s !important;
     }
 
-    .btn-nav-download:hover {
+    .btn-nav-alpha:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 16px rgba(0, 180, 219, 0.4);
     }
@@ -127,9 +122,28 @@
 
     /* Hero Section */
     .hero {
-      padding: 5rem 0 6rem;
-      text-align: center;
+      padding: clamp(4rem, 9vw, 7rem) 0 4rem;
+      text-align: left;
       position: relative;
+      isolation: isolate;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      bottom: 0;
+      left: calc((100vw - 100%) / -2);
+      right: calc((100vw - 100%) / -2);
+      background:
+        linear-gradient(90deg, rgba(7, 11, 18, 0.92) 0%, rgba(7, 11, 18, 0.78) 42%, rgba(7, 11, 18, 0.15) 100%),
+        url("./assets/hero_cover_3000x900.png") center 47% / cover no-repeat;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .hero-content {
+      max-width: 760px;
     }
 
     .hero-badge-top {
@@ -167,14 +181,14 @@
     .hero-subtitle {
       font-size: clamp(1.1rem, 2vw, 1.35rem);
       color: var(--text-muted);
-      max-width: 780px;
-      margin: 0 auto 2.75rem;
+      max-width: 700px;
+      margin: 0 0 2.75rem;
       font-weight: 400;
     }
 
     .cta-group {
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       gap: 1.25rem;
       flex-wrap: wrap;
@@ -227,7 +241,7 @@
       font-size: 0.88rem;
       color: var(--text-muted);
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 1.5rem;
       flex-wrap: wrap;
     }
@@ -294,17 +308,20 @@
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
     }
 
-    .feature-icon {
-      font-size: 2.2rem;
+    .feature-marker {
+      font-size: 0.78rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--accent-cyan);
       margin-bottom: 1.25rem;
-      display: inline-block;
-      width: 54px;
-      height: 54px;
-      display: flex;
+      display: grid;
+      width: 44px;
+      height: 44px;
       align-items: center;
       justify-content: center;
       background: rgba(0, 229, 255, 0.1);
-      border-radius: 12px;
+      border-radius: 10px;
       border: 1px solid rgba(0, 229, 255, 0.2);
     }
 
@@ -321,8 +338,57 @@
       line-height: 1.6;
     }
 
-    /* Installation Box */
-    .install-box {
+    .store-gallery {
+      margin: 0 0 6rem;
+    }
+
+    .gallery-heading {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .gallery-heading img {
+      width: 64px;
+      height: 64px;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.36);
+    }
+
+    .gallery-heading p {
+      color: var(--text-muted);
+    }
+
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+
+    .screenshot-card {
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+    }
+
+    .screenshot-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .screenshot-card figcaption {
+      padding: 0.85rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Meta Alpha access */
+    .alpha-box {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 20px;
@@ -331,56 +397,24 @@
       margin-bottom: 6rem;
     }
 
-    .install-methods {
+    .alpha-access-content {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .method-card {
-      background: rgba(7, 11, 18, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 1.75rem;
-    }
-
-    .method-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--accent-cyan);
-      margin-bottom: 1rem;
-      display: flex;
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: 1.5rem;
       align-items: center;
-      gap: 0.5rem;
+      max-width: 850px;
+      margin: 0 auto;
     }
 
-    .steps-list {
-      list-style-position: inside;
+    .alpha-access-content img {
+      display: block;
+      width: 96px;
+      height: 96px;
+      border-radius: 20px;
+    }
+
+    .alpha-access-content p {
       color: var(--text-muted);
-      font-size: 0.95rem;
-    }
-
-    .steps-list li {
-      margin-bottom: 0.75rem;
-    }
-
-    .steps-list strong {
-      color: var(--text-main);
-    }
-
-    .code-box {
-      background: #04070c;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 0.85rem 1.1rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
-      color: var(--accent-green);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 1rem;
     }
 
     /* Controls Section */
@@ -457,6 +491,22 @@
       .hero {
         padding: 3rem 0 4rem;
       }
+      .hero::before {
+        background-position: 58% center;
+      }
+      .screenshot-grid {
+        grid-template-columns: 1fr;
+      }
+      .alpha-access-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .alpha-access-content img {
+        margin: 0 auto;
+      }
+      .alpha-box .cta-group {
+        justify-content: center;
+      }
     }
   </style>
 </head>
@@ -465,17 +515,17 @@
 
   <nav>
     <a href="#" class="nav-brand">
-      🪂 Skybound Quest
-      <span class="brand-badge">v1.1.0</span>
+      <img class="brand-icon" src="./assets/app_icon_512x512.png" alt="">
+      <span>Skybound Quest</span>
     </a>
     <ul class="nav-links">
       <li><a href="#features">Features</a></li>
-      <li><a href="#install">Install</a></li>
+      <li><a href="#alpha-access">Get Alpha Access</a></li>
       <li><a href="#controls">Controls</a></li>
       <li><a href="https://github.com/douglasbotworks/skybound-quest" target="_blank">GitHub</a></li>
       <li>
-        <a href="SkyboundQuest-v1.1.0.apk" download class="btn-nav-download">
-          Download APK
+        <a href="https://www.oculus.com/experiences/1120517883894304/release-channels/1299463058973578/?token=SrSUU0b8" class="btn-nav-alpha" target="_blank" rel="noopener noreferrer">
+          Request Alpha Access
         </a>
       </li>
     </ul>
@@ -484,32 +534,50 @@
   <main class="container">
     <!-- Hero -->
     <section class="hero">
-      <div class="hero-badge-top">
-        <span>●</span> Built for Meta Quest 3, Quest Pro & Quest 2
-      </div>
-      <h1 class="hero-title">
-        Soar The Alpine Skies<br>in <span>Pure First-Principles VR</span>.
-      </h1>
-      <p class="hero-subtitle">
-        Skybound Quest is an authentic, unscripted VR paragliding flight simulator. Feel the natural pendulum swing under the wing, ride convective thermal columns to cloudbase, scrape lift along jagged mountain ridges, and soar together in cross-country multiplayer gaggles.
-      </p>
+      <div class="hero-content">
+        <div class="hero-badge-top">Meta Quest Alpha</div>
+        <h1 class="hero-title">
+          Soar the Alpine Skies<br>in <span>Pure First-Principles VR</span>.
+        </h1>
+        <p class="hero-subtitle">
+          Skybound Quest is an unscripted VR paragliding flight simulator. Ride thermals to cloudbase, follow lift along alpine ridges, and experience the natural swing of a wing-suspended harness across the Swiss Alps.
+        </p>
 
-      <div class="cta-group">
-        <a href="SkyboundQuest-v1.1.0.apk" download class="btn-primary">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download APK (v1.1.0)
-        </a>
-        <a href="https://github.com/douglasbotworks/skybound-quest" target="_blank" class="btn-secondary">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          View Source on GitHub
-        </a>
-      </div>
+        <div class="cta-group">
+          <a href="https://www.oculus.com/experiences/1120517883894304/release-channels/1299463058973578/?token=SrSUU0b8" class="btn-primary" target="_blank" rel="noopener noreferrer">
+            Request Alpha Access
+          </a>
+          <a href="https://www.meta.com/experiences/skybound-quest/1120517883894304/?require_login=true" target="_blank" class="btn-secondary" rel="noopener noreferrer">
+            View Meta Store Listing
+          </a>
+        </div>
 
-      <div class="release-meta">
-        <span>📦 <strong>File Size:</strong> 49.6 MB</span>
-        <span>🏷️ <strong>Version:</strong> 1.1.0 Release</span>
-        <span>👓 <strong>XR Runtime:</strong> OpenXR 6DOF Stereo</span>
-        <span>⚙️ <strong>Architecture:</strong> ARM64 (Vulkan / URP)</span>
+        <div class="release-meta">
+          <span><strong>Release:</strong> Meta Quest Alpha</span>
+          <span><strong>Supported:</strong> Quest 2, Quest 3, Quest Pro</span>
+          <span><strong>Runtime:</strong> OpenXR</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="store-gallery" aria-label="Meta Store artwork and gameplay screenshots">
+      <div class="gallery-heading">
+        <img src="./assets/app_icon_512x512.png" alt="Skybound Quest app icon">
+        <div>
+          <span class="section-tag">From the Meta Store listing</span>
+          <h2 class="section-title">A view from the harness</h2>
+          <p>Explore alpine flight from the cockpit or fly alongside other pilots.</p>
+        </div>
+      </div>
+      <div class="screenshot-grid">
+        <figure class="screenshot-card">
+          <img src="./assets/screenshot_1_cockpit_2560x1440.png" alt="Paraglider cockpit view over the Swiss Alps">
+          <figcaption>Read your flight instruments while looking out over the Alps.</figcaption>
+        </figure>
+        <figure class="screenshot-card">
+          <img src="./assets/screenshot_2_gaggle_2560x1440.png" alt="Several paraglider pilots flying together over an alpine valley">
+          <figcaption>Join other pilots in a cross-country gaggle.</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -525,111 +593,63 @@
 
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">🌐</div>
-          <h3>Cross-Country Multiplayer Gaggle</h3>
-          <p>Soar together across state lines (e.g. Utah to Minnesota) with 2–16 pilots. Features Unity Relay NAT traversal, 1-click cloud family discovery (zero IP typing or router port forwarding), synchronized convective thermals, realistic wake turbulence downwash, 2m VHF radio with PTT, and cockpit radar tracking.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">🪂</div>
+          <div class="feature-marker" aria-hidden="true">01</div>
           <h3>Canopy-Suspended Pendulum</h3>
           <p>The aerodynamic center of lift and drag is located overhead at the canopy, while you hang 6.6m below in a speedbag pod harness, naturally swinging outward in banked turns and surging on pitch dives.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🌪️</div>
+          <div class="feature-marker" aria-hidden="true">02</div>
           <h3>Convective Thermals & Ridge Lift</h3>
           <p>Hundreds of dynamic thermal columns scale with daytime solar heating, accompanied by orographic ridge lift hugging windward mountain cliffs. Lift indicators only appear when net positive climb is guaranteed.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🧭</div>
+          <div class="feature-marker" aria-hidden="true">03</div>
           <h3>4-Page Cockpit Flight Deck</h3>
           <p>A lap-mounted avionics suite featuring a radar-style minimap, digital FlyTec variometer with filtered acoustic beeper, live competition leaderboards, and wing AoA diagnostics.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🏆</div>
+          <div class="feature-marker" aria-hidden="true">04</div>
           <h3>PWCA Competition Racing</h3>
           <p>Compete in authentic Paragliding World Cup tasks with timed start cylinders, translucent waypoint pillars, and 30+ tactical NPC pilots who thermal and make cross-valley transitions.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🦅</div>
+          <div class="feature-marker" aria-hidden="true">05</div>
           <h3>Cuervo the Raven Companion</h3>
           <p>Your loyal guide bird Cuervo flies in formation with you, leads you to active thermal updrafts along the course, and glides ahead to scout optimal routes.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🎵</div>
-          <h3>Spotify & Left Stick Audio</h3>
-          <p>Full in-VR Spotify music integration and built-in ambient soaring synth tracks. Adjust volume with Left Stick Up/Down, skip tracks with Left/Right flick, or pick custom playlists. Seamless <a href="spotify-auth.html" style="color: var(--accent-green); text-decoration: underline;">OAuth login bridge</a> requires zero typing in VR.</p>
+          <div class="feature-marker" aria-hidden="true">06</div>
+          <h3>In-Game Music</h3>
+          <p>Listen to the built-in soundtrack and browse available tracks from the music controls.</p>
         </div>
       </div>
     </section>
 
-    <!-- Installation -->
-    <section id="install" class="install-box">
+    <!-- Meta Alpha access -->
+    <section id="alpha-access" class="alpha-box">
       <div class="section-header" style="margin-bottom: 2rem;">
-        <span class="section-tag">Fast Sideloading</span>
-        <h2 class="section-title">How To Install on Meta Quest</h2>
-        <p class="section-description">
-          Skybound Quest is distributed as a standalone APK candidate ready to install on Quest 3, Quest Pro, and Quest 2 headsets.
-        </p>
+        <span class="section-tag">Meta Quest Alpha</span>
+        <h2 class="section-title">Request Access to Skybound Quest</h2>
+        <div class="alpha-access-content">
+          <img src="./assets/app_icon_512x512.png" alt="Skybound Quest app icon">
+          <p>
+            Open the Meta Alpha release channel while signed in with the Meta account you use on your headset, then request access. Once access is granted, install Skybound Quest from your Quest library.
+          </p>
+        </div>
       </div>
 
-      <div class="install-methods">
-        <div class="method-card" style="border-color: rgba(0, 230, 118, 0.45); background: rgba(0, 230, 118, 0.05); box-shadow: 0 0 25px rgba(0, 230, 118, 0.1);">
-          <div style="display: inline-block; background: rgba(0, 230, 118, 0.2); color: var(--accent-green); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.65rem; border-radius: 999px; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
-            ★ Easiest • No Computer Required
-          </div>
-          <h3 class="method-title" style="color: var(--accent-green);">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-            Method 0: Direct on Meta Quest
-          </h3>
-          <ol class="steps-list">
-            <li>In your headset, install <strong>Mobile VR Station</strong> (free on the official Meta Quest Store).</li>
-            <li>Open the <strong>Meta Quest Browser</strong>, visit this page (<strong>douglasbotworks.github.io/skybound</strong>), and click <strong>"Download Standalone APK"</strong>.</li>
-            <li>Launch <strong>Mobile VR Station</strong> inside your headset.</li>
-            <li>Navigate to: <strong>Local Files ➔ Downloads</strong>.</li>
-            <li>Click <strong>SkyboundQuest-v1.1.0.apk</strong> and choose <strong>Install</strong>.</li>
-            <li>Confirm the standard Android prompt. You can now launch Skybound Quest directly from <strong>App Library ➔ Unknown Sources</strong>!</li>
-          </ol>
-        </div>
-
-        <div class="method-card">
-          <h3 class="method-title">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-            Method 1: SideQuest (PC / Mac)
-          </h3>
-          <ol class="steps-list">
-            <li>Download <strong>SkyboundQuest-v1.1.0.apk</strong>.</li>
-            <li>Connect your Quest headset to your computer via USB (make sure Developer Mode is enabled in your Meta Horizon phone app).</li>
-            <li>Open <strong>SideQuest</strong> on your PC or Mac.</li>
-            <li>Click the <strong>"Install APK file from folder"</strong> button (icon with a tray and down arrow on the top toolbar).</li>
-            <li>Select the downloaded APK and wait for the success notification.</li>
-            <li>Put on your headset, navigate to <strong>App Library ➔ Unknown Sources</strong>, and launch <strong>Skybound Quest</strong>!</li>
-          </ol>
-        </div>
-
-        <div class="method-card">
-          <h3 class="method-title">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-            Method 2: ADB Command Line
-          </h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.75rem;">
-            If you have the Android Platform Tools installed, you can stream-install the APK in seconds:
-          </p>
-          <div class="code-box">
-            <span>adb install -r SkyboundQuest-v1.1.0.apk</span>
-          </div>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">
-            To launch immediately over USB:
-          </p>
-          <div class="code-box">
-            <span>adb shell am start -n works.douglasbot.skybound/com.unity3d.player.UnityPlayerGameActivity</span>
-          </div>
-        </div>
+      <div class="cta-group">
+        <a href="https://www.oculus.com/experiences/1120517883894304/release-channels/1299463058973578/?token=SrSUU0b8" class="btn-primary" target="_blank" rel="noopener noreferrer">
+          Request Alpha Access on Meta
+        </a>
+        <a href="https://www.meta.com/experiences/skybound-quest/1120517883894304/?require_login=true" class="btn-secondary" target="_blank" rel="noopener noreferrer">
+          View Meta Store Listing
+        </a>
       </div>
     </section>
 
@@ -663,14 +683,14 @@
         </div>
 
         <div class="control-item">
-          <span class="control-action">In-Flight Music DJ</span>
-          <span class="control-bind">Left Thumbstick</span>
-          <span class="control-desc">Push Up/Down to adjust audio volume smoothly. Flick Left/Right to skip backward or forward through your playlist.</span>
+          <span class="control-action">Music</span>
+          <span class="control-bind">Pause Menu Music Controls</span>
+          <span class="control-desc">Browse and play the available in-game music tracks from the pause menu.</span>
         </div>
 
         <div class="control-item">
           <span class="control-action">Pause & Menu</span>
-          <span class="control-bind">Left Menu Button (≡) or Right B</span>
+          <span class="control-bind">Left Menu Button or Right B</span>
           <span class="control-desc">Brings up the large flight billboard, unfreezes simulation, and activates laser pointer rays for menu interaction.</span>
         </div>
 
@@ -687,8 +707,7 @@
     <div class="container">
       <div class="footer-links">
         <a href="https://github.com/douglasbotworks/skybound-quest" target="_blank">GitHub Repository</a>
-        <a href="https://github.com/douglasbotworks/skybound-quest/releases" target="_blank">All Releases</a>
-        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://www.oculus.com/experiences/1120517883894304/release-channels/1299463058973578/?token=SrSUU0b8" target="_blank" rel="noopener noreferrer">Meta Alpha Access</a>
         <a href="https://github.com/douglasbotworks/skybound-quest/blob/main/LICENSE" target="_blank">MIT License</a>
       </div>
       <p>© 2026 DouglasBot / Jonathan Sirrine. Skybound Quest is an open-source flight simulation prototype.</p>

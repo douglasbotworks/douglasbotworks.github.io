@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A synthetic example of a local classification evaluation and regression comparison.">
+  <title>Douglas Bot Works — Agent Evaluation Report</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
+  <style>
+    * { box-sizing: border-box; color: #fff; }
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0b1220; }
+    body { margin: 0; background: #0b1220; color: #fff; line-height: 1.6; }
+    a { color: #fff; text-underline-offset: .22em; }
+    a:focus-visible, summary:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+    .skip { position: absolute; left: 1rem; top: -5rem; z-index: 2; padding: .7rem 1rem; background: #14233d; }
+    .skip:focus { top: 1rem; }
+    header, main, footer { width: min(1120px, calc(100% - 2rem)); margin-inline: auto; }
+    header { padding: 2.1rem 0 1.4rem; border-bottom: 1px solid #40506a; }
+    .brand { font-size: .78rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: .7rem 0 .2rem; font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.1; }
+    .subtitle { margin: .55rem 0 0; font-size: 1rem; }
+    main { padding: 1.7rem 0 3rem; }
+    section { margin: 1.5rem 0; }
+    h2 { margin: 0 0 .8rem; font-size: 1.4rem; line-height: 1.3; }
+    h3 { margin: 0 0 .45rem; font-size: 1.08rem; }
+    p { margin: .45rem 0 .8rem; }
+    .notice, .panel, .metric { border: 1px solid #40506a; border-radius: .85rem; background: #121d30; }
+    .notice { padding: 1.2rem 1.35rem; border-left: .35rem solid #f0a44b; }
+    .notice strong { display: block; margin-bottom: .35rem; }
+    .summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; }
+    .metric { min-height: 150px; padding: 1.1rem; }
+    .metric .label { display: flex; align-items: center; gap: .5rem; font-weight: 700; }
+    .metric .value { margin: .35rem 0; font-size: 2.1rem; font-weight: 800; line-height: 1.2; }
+    .badge { display: inline-block; border: 1px solid #fff; border-radius: 2rem; padding: .1rem .6rem; font-size: .78rem; font-weight: 750; letter-spacing: .04em; }
+    .panel { padding: 1.2rem; }
+    .run-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem; }
+    .run-grid .panel { margin: 0; }
+    .scroll { overflow-x: auto; margin: .7rem 0 1.1rem; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-variant-numeric: tabular-nums; }
+    caption { padding: .5rem 0; text-align: left; font-weight: 700; }
+    th, td { padding: .58rem .65rem; border: 1px solid #40506a; white-space: nowrap; }
+    thead { background: #1b2b45; }
+    tbody tr:nth-child(even) { background: #17243a; }
+    .finding { border-left: .35rem solid #f0a44b; }
+    .scope { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem; }
+    footer { padding: 1.3rem 0 2rem; border-top: 1px solid #40506a; }
+    .small { font-size: .9rem; }
+    @media (max-width: 720px) {
+      header, main, footer { width: min(100% - 1.1rem, 1120px); }
+      .summary, .run-grid, .scope { grid-template-columns: 1fr; }
+      .metric { min-height: 0; }
+      th, td { padding: .48rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to report</a>
+  <header>
+    <div class="brand">Douglas Bot Works · Project Report</div>
+    <h1>Agent Evaluation Report</h1>
+    <p class="subtitle">Synthetic support-routing comparison | Generated 2026-11-10 08:56 MST</p>
+  </header>
+  <main id="main">
+    <section class="notice" aria-labelledby="demo-label">
+      <strong id="demo-label"><i class="bi bi-info-circle" aria-hidden="true"></i> Synthetic mechanics demo</strong>
+      <p>All 50 records and predictions are deterministic fixtures. No model ran and no customer data was used. This report demonstrates evaluation mechanics only; it is not customer evidence, model-quality evidence, or proof of production reliability. Latency and cost were not reported.</p>
+    </section>
+
+    <section class="summary" aria-label="Comparison summary">
+      <article class="metric">
+        <div class="label"><i class="bi bi-clipboard-check" aria-hidden="true"></i> Baseline</div>
+        <div class="value">92%</div>
+        <span class="badge">PASS</span>
+        <p>50 records · minimum accuracy 90% · minimum per-label recall 75%</p>
+      </article>
+      <article class="metric">
+        <div class="label"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Candidate</div>
+        <div class="value">88%</div>
+        <span class="badge">PASS</span>
+        <p>50 records · minimum accuracy 80% · minimum per-label recall 75%</p>
+      </article>
+      <article class="metric finding">
+        <div class="label"><i class="bi bi-exclamation-diamond" aria-hidden="true"></i> Change gate</div>
+        <div class="value">−4 pp</div>
+        <span class="badge">FAIL</span>
+        <p>Allowed accuracy drop: 2 percentage points</p>
+      </article>
+    </section>
+
+    <section class="panel finding" aria-labelledby="finding-heading">
+      <h2 id="finding-heading">What the comparison caught</h2>
+      <p>The candidate met its standalone minimum, but accuracy fell from 92% to 88%. The configured comparison allows a maximum drop of 2 percentage points, so the observed 4 percentage-point drop failed the change gate. This illustrates why an agreed baseline comparison can catch a decline that an absolute candidate threshold alone would allow.</p>
+      <p class="small">The configured maximum per-label recall drop was 15 percentage points; no other configured comparison threshold was exceeded.</p>
+    </section>
+
+    <section aria-labelledby="runs-heading">
+      <h2 id="runs-heading">Run metrics</h2>
+      <div class="run-grid">
+        <article class="panel">
+          <h3>Baseline · 92% accuracy · PASS</h3>
+          <div class="scroll" role="region" aria-label="Baseline per-label metrics table" tabindex="0">
+            <table>
+              <caption>Per-label metrics</caption>
+              <thead><tr><th scope="col">Label</th><th scope="col">Support</th><th scope="col">Predicted</th><th scope="col">Precision</th><th scope="col">Recall</th><th scope="col">F1</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Access</th><td>15</td><td>16</td><td>0.875</td><td>0.933</td><td>0.903</td></tr>
+                <tr><th scope="row">Billing</th><td>20</td><td>20</td><td>0.900</td><td>0.900</td><td>0.900</td></tr>
+                <tr><th scope="row">Refund</th><td>15</td><td>14</td><td>1.000</td><td>0.933</td><td>0.966</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="scroll" role="region" aria-label="Baseline confusion matrix table" tabindex="0">
+            <table>
+              <caption>Confusion matrix · expected rows, predicted columns</caption>
+              <thead><tr><th scope="col">Expected</th><th scope="col">Access</th><th scope="col">Billing</th><th scope="col">Refund</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Access</th><td>14</td><td>1</td><td>0</td></tr>
+                <tr><th scope="row">Billing</th><td>2</td><td>18</td><td>0</td></tr>
+                <tr><th scope="row">Refund</th><td>0</td><td>1</td><td>14</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+        <article class="panel">
+          <h3>Candidate · 88% accuracy · PASS</h3>
+          <div class="scroll" role="region" aria-label="Candidate per-label metrics table" tabindex="0">
+            <table>
+              <caption>Per-label metrics</caption>
+              <thead><tr><th scope="col">Label</th><th scope="col">Support</th><th scope="col">Predicted</th><th scope="col">Precision</th><th scope="col">Recall</th><th scope="col">F1</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Access</th><td>15</td><td>16</td><td>0.875</td><td>0.933</td><td>0.903</td></tr>
+                <tr><th scope="row">Billing</th><td>20</td><td>20</td><td>0.850</td><td>0.850</td><td>0.850</td></tr>
+                <tr><th scope="row">Refund</th><td>15</td><td>14</td><td>0.929</td><td>0.867</td><td>0.897</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="scroll" role="region" aria-label="Candidate confusion matrix table" tabindex="0">
+            <table>
+              <caption>Confusion matrix · expected rows, predicted columns</caption>
+              <thead><tr><th scope="col">Expected</th><th scope="col">Access</th><th scope="col">Billing</th><th scope="col">Refund</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Access</th><td>14</td><td>1</td><td>0</td></tr>
+                <tr><th scope="row">Billing</th><td>2</td><td>17</td><td>1</td></tr>
+                <tr><th scope="row">Refund</th><td>0</td><td>2</td><td>13</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="scope" aria-label="Method and limitations">
+      <article class="panel">
+        <h2>Method</h2>
+        <p>Fifty synthetic gold labels were scored against stored baseline and candidate predictions using the local evaluation CLI. The saved reports were compared with an explicit maximum accuracy drop of 2 percentage points and maximum per-label recall drop of 15 percentage points.</p>
+      </article>
+      <article class="panel">
+        <h2>Limits</h2>
+        <p>Only these 50 fixture rows were measured. Small per-label samples produce unstable rates. Real labels, examples, and acceptance thresholds must be reviewed for a specific workflow. No latency or cost data was supplied, and this sample says nothing about live behavior.</p>
+      </article>
+    </section>
+  </main>
+  <footer>
+    <p>Produced with the local Agent Reliability Harness evaluation and comparison commands. The generated synthetic inputs and reports are retained with private workspace evidence; the linked repository documents the tool and its input formats.</p>
+    <p><a href="https://github.com/douglasbotworks/agent-reliability-harness">Harness source and CLI documentation</a></p>
+  </footer>
+</body>
+</html>

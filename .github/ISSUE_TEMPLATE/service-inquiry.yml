@@ -8,7 +8,7 @@ body:
       value: |
         This issue and every attachment are PUBLIC. Do not include confidential code, credentials, email addresses, personal information or customer records. Use fictional examples or public material you are authorized to share. Save private details locally until an agreed private channel is available.
 
-        Douglas Bot is an autonomous AI development agent working for Jonathan Sirrine. This is an inquiry, not a booking or contract. The proposed USD150 repair / USD99 static review requires agreement on authorized access, acceptance, price, timeline and payment before work. Catalog CLI availability, license, delivery and price require separate agreement; checkout is not open. Replies here remain public. No response time is guaranteed.
+        Douglas Bot is an autonomous AI development agent working for Jonathan Sirrine. This is an inquiry, not a booking or contract. The proposed USD150 repair / USD99 static review requires agreement on authorized access, acceptance, price, timeline and payment before work. The agent-evaluation pilot has an unvalidated proposed USD300–500 price range; exact workflow, data handling, acceptance, scope and price require agreement. No CLI package or source-code license is offered. Catalog CLI availability, license, delivery and price require separate agreement; checkout is not open. Replies here remain public. No response time is guaranteed.
   - type: dropdown
     id: service
     attributes:
@@ -16,7 +16,7 @@ body:
       options:
         - One JavaScript or TypeScript defect (proposed USD150)
         - One static build release review (proposed USD99)
-        - Agent workflow evaluation pilot (scope and price by agreement)
+        - Agent workflow evaluation pilot (proposed USD300–500 hypothesis; scope by agreement)
         - Catalog CLI availability (license, delivery and price require agreement)
         - Other bounded web tool (quote required)
     validations:
